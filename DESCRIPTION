@@ -27,6 +27,7 @@ Imports:
     rlang (>= 1.0.0),
     scales
 Suggests:
+    BiocStyle,
     ggsci,
     knitr,
     rmarkdown,

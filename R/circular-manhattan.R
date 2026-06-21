@@ -46,7 +46,7 @@ circular_manhattan <- function(data,
                                label_snps = NULL,
                                label_top_n = NULL,
                                show_chr_labels = TRUE,
-                               inner_radius = 0.25,
+                               inner_radius = 0.35,
                                chr_gap_fraction = 0.012,
                                ring_labels = NULL,
                                downsample = TRUE,
@@ -210,6 +210,7 @@ circular_manhattan <- function(data,
     data$angle[idx] <- chr_info$start_angle[i] + frac * chr_info$angle_width[i]
     data$radius[idx] <- inner_radius +
       (1 - inner_radius) * (data$LOG10P[idx] / max_logp)
+    data$radius[idx] <- pmin(data$radius[idx], 0.98)
   }
 
   list(data = data, chr_info = chr_info)

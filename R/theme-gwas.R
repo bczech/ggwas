@@ -13,7 +13,7 @@ theme_gwas <- function(base_size = 11, base_family = "") {
       panel.grid.minor = element_blank(),
       axis.line.y = element_line(colour = "grey30", linewidth = 0.3),
       axis.ticks.y = element_line(colour = "grey30", linewidth = 0.3),
-      axis.text.x = element_text(size = base_size * 0.8),
+      axis.text.x = element_text(size = base_size * 0.7, vjust = 0.5),
       plot.title = element_text(face = "bold", size = base_size * 1.2),
       legend.position = "none"
     )

@@ -1,6 +1,14 @@
 ---
 title: "gwasplot: Modern GWAS Visualizations"
-output: rmarkdown::html_vignette
+author:
+  - name: Bartosz Czech
+    affiliation: Wroclaw University of Environmental and Life Sciences
+package: gwasplot
+output:
+  BiocStyle::html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
 vignette: >
   %\VignetteIndexEntry{gwasplot: Modern GWAS Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
@@ -11,9 +19,10 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 7,
+  fig.width = 8,
   fig.height = 5,
-  dpi = 96
+  out.width = "100%",
+  dpi = 120
 )
 ```
 
@@ -134,7 +143,7 @@ volcano_plot(example_gwas, label_top_n = 5)
 
 Circos-style layout, also supports multiple rings for multi-trait comparison:
 
-```{r circular}
+```{r circular, fig.width=8, fig.height=8}
 circular_manhattan(example_gwas, colors = gwas_palette("nature"))
 ```
 
