@@ -1,0 +1,22 @@
+#' Example GWAS dataset
+#'
+#' A simulated GWAS dataset with 5000 variants across 22 autosomal
+#' chromosomes. Contains 15 variants with genome-wide significant
+#' p-values for demonstration purposes.
+#'
+#' @format A `gwas_data` data.frame with 5000 rows and 9 columns:
+#' \describe{
+#'   \item{CHR}{Chromosome (integer, 1-22)}
+#'   \item{BP}{Base pair position}
+#'   \item{SNP}{Variant identifier (rs ID)}
+#'   \item{P}{P-value}
+#'   \item{BETA}{Effect size}
+#'   \item{SE}{Standard error}
+#'   \item{A1}{Effect allele}
+#'   \item{A2}{Other allele}
+#'   \item{AF}{Allele frequency}
+#' }
+#' @examples
+#' data(example_gwas)
+#' manhattan_plot(example_gwas)
+"example_gwas"
