@@ -2,6 +2,12 @@ url: https://bczech.github.io/gwasplot/
 
 template:
   bootstrap: 5
+  bslib:
+    primary: "#1A5276"
+
+home:
+  sidebar:
+    structure: [links, license, community, authors, dev]
 
 navbar:
   structure:
