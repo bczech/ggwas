@@ -1,0 +1,323 @@
+---
+title: "gwasplot: Modern GWAS Visualizations"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{gwasplot: Modern GWAS Visualizations}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  dpi = 96
+)
+```
+
+# Getting started
+
+## Installation
+
+```{r eval=FALSE}
+pak::pak("bczech/gwasplot")
+```
+
+## Reading data
+
+`read_gwas_table()` auto-detects column names from any delimited file:
+
+```{r}
+library(gwasplot)
+library(ggplot2)
+
+data(example_gwas)
+example_gwas
+```
+
+Format-specific readers are also available:
+
+```{r eval=FALSE}
+gwas <- read_gwas_table("results.txt")
+gwas <- read_plink_assoc("results.assoc")
+gwas <- read_plink_linear("results.assoc.linear")
+gwas <- read_regenie("results.regenie")
+gwas <- read_gcta_mlma("results.mlma")
+gwas <- read_gemma("results.assoc.txt")
+```
+
+Any `data.frame` works directly — just map the columns if needed:
+
+```{r eval=FALSE}
+manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
+```
+
+# Core plots
+
+## Manhattan plot
+
+```{r manhattan-basic}
+manhattan_plot(example_gwas)
+```
+
+Label the top hits and adjust colors:
+
+```{r manhattan-custom}
+manhattan_plot(
+  example_gwas,
+  label_top_n = 5,
+  colors = gwas_palette("vibrant")
+)
+```
+
+## QQ plot
+
+P-value distribution with confidence bands and genomic inflation factor:
+
+```{r qq}
+qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
+```
+
+Stratify by MAF to check whether inflation is driven by rare variants:
+
+```{r qq-stratified}
+example_gwas$MAF_bin <- cut(
+  example_gwas$AF,
+  breaks = c(0, 0.05, 0.2, 0.5),
+  labels = c("Rare (<5%)", "Low (5-20%)", "Common (>20%)")
+)
+qq_plot(example_gwas, group = "MAF_bin")
+```
+
+## Miami plot
+
+Two GWAS results mirrored vertically — handy for discovery vs replication:
+
+```{r miami}
+miami_plot(
+  example_gwas, example_gwas,
+  top_title = "Discovery",
+  bottom_title = "Replication"
+)
+```
+
+## Locus zoom
+
+Zoom into a region of interest:
+
+```{r locus}
+locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
+```
+
+# Novel visualizations
+
+## Genome-wide p-value heatmap
+
+Each cell is a genomic bin colored by the minimum p-value it contains.
+Handles millions of variants without downsampling because it pre-aggregates:
+
+```{r heatmap}
+pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
+```
+
+## Effect-size volcano
+
+BETA vs -log10(p) — see direction and magnitude of effect at a glance:
+
+```{r volcano}
+volcano_plot(example_gwas, label_top_n = 5)
+```
+
+## Circular Manhattan
+
+Circos-style layout, also supports multiple rings for multi-trait comparison:
+
+```{r circular}
+circular_manhattan(example_gwas, colors = gwas_palette("nature"))
+```
+
+## Summary dashboard
+
+Multi-panel figure with automatic panel tags (A, B, C, D):
+
+```{r summary, fig.height=8}
+gwas_summary(example_gwas)
+```
+
+# Gene annotation and top hits
+
+## Gene labels on peaks
+
+`manhattan_genes()` replaces rs IDs with the nearest gene name from a
+user-supplied table. In practice you would load this from a GTF file
+or via biomaRt — here we define a small set by hand:
+
+```{r gene-labels}
+genes <- data.frame(
+  chr = c(1, 2, 5, 7, 11, 15, 19, 22),
+  start = c(2e6, 50e6, 80e6, 30e6, 60e6, 40e6, 10e6, 20e6),
+  end = c(3e6, 52e6, 85e6, 35e6, 65e6, 45e6, 15e6, 25e6),
+  gene = c("MTOR", "NRXN1", "TCF7L2", "CDKAL1", "KCNQ1", "FTO", "LDLR", "COMT")
+)
+
+manhattan_genes(example_gwas, genes = genes, gene_p_threshold = 0.001)
+```
+
+Arrow-style labels work better when peaks are close together:
+
+```{r gene-arrows}
+manhattan_genes(
+  example_gwas, genes = genes,
+  gene_p_threshold = 0.001,
+  arrow = TRUE, label_face = "italic"
+)
+```
+
+## Top hits table
+
+`top_hits()` clumps significant SNPs (keeping one lead per 1 Mb window),
+estimates the cytoband, and optionally maps each to the nearest gene:
+
+```{r top-hits}
+top_hits(example_gwas, p_threshold = 0.001, genes = genes, n = 10)
+```
+
+## Region highlights
+
+Draw a colored band behind a genomic region — useful for marking the MHC,
+known GWAS loci, or any region of interest:
+
+```{r regions}
+plt <- manhattan_plot(example_gwas)
+
+regions <- data.frame(
+  chr = c(6, 1),
+  start = c(25e6, 5e6),
+  end = c(35e6, 30e6),
+  label = c("MHC", "1p36")
+)
+
+highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
+```
+
+# Multi-study comparisons
+
+## Multi-trait Manhattan
+
+Overlay multiple GWAS on one plot. Variants reaching significance in
+more than one trait are flagged automatically:
+
+```{r multitrait}
+set.seed(123)
+trait2 <- example_gwas
+trait2$P <- runif(nrow(trait2))^3
+trait2$P[sample(nrow(trait2), 10)] <- 10^(-runif(10, 5, 10))
+
+multitrait_manhattan(
+  BMI = example_gwas,
+  Height = trait2,
+  colors = "nature",
+  highlight_shared = TRUE
+)
+```
+
+## Enrichment Manhattan
+
+Color SNPs by whether they fall in annotated functional regions
+(enhancers, promoters, eQTLs). Pass a data.frame or a named list:
+
+```{r enrichment}
+annotations <- data.frame(
+  chr = c(1, 3, 5, 7, 11, 15, 19),
+  start = c(5e6, 20e6, 50e6, 30e6, 60e6, 40e6, 10e6),
+  end = c(30e6, 50e6, 120e6, 80e6, 100e6, 80e6, 40e6),
+  category = c("Enhancer", "Gene", "eQTL", "Gene",
+               "Enhancer", "eQTL", "Gene")
+)
+
+enrichment_manhattan(example_gwas, annotations = annotations, palette = "nature")
+```
+
+## Circular Manhattan (multi-ring)
+
+```{r circular-multi, fig.height=7}
+circular_manhattan(
+  list(BMI = example_gwas, Height = trait2),
+  colors = "nature", point_size = 0.6
+)
+```
+
+# Themes, palettes, and presets
+
+## Color palettes
+
+14 built-in palettes, all colorblind-safe:
+
+```{r}
+gwas_palettes()
+gwas_palette("nature", n = 5)
+```
+
+## Journal themes
+
+```{r theme-demo}
+manhattan_plot(example_gwas, label_top_n = 3) + theme_nature()
+```
+
+Available: `theme_nature()`, `theme_science()`, `theme_cell()`,
+`theme_plos()`, `theme_presentation()`, `theme_poster()`.
+
+## Presets
+
+A preset bundles a theme, palette, and point sizes:
+
+```{r preset}
+p <- gwas_preset("publication")
+manhattan_plot(example_gwas, colors = p$colors, point_size = p$point_size) + p$theme
+```
+
+Options: `"publication"`, `"presentation"`, `"poster"`, `"exploratory"`.
+
+# Performance
+
+Smart downsampling kicks in automatically above 200k variants. It keeps
+every significant SNP and bins the rest — the plot looks identical but
+renders much faster:
+
+```{r eval=FALSE}
+manhattan_plot(large_gwas)                       # auto
+manhattan_plot(large_gwas, downsample = FALSE)   # all points
+manhattan_plot(large_gwas, downsample_n = 500000) # custom target
+```
+
+# Multi-panel figures
+
+Every function returns a ggplot, so `patchwork` works out of the box:
+
+```{r patchwork, fig.height=8}
+library(patchwork)
+
+p1 <- manhattan_plot(example_gwas, label_top_n = 3) +
+  labs(tag = "A") + theme_nature()
+p2 <- qq_plot(example_gwas) +
+  labs(tag = "B") + theme_nature()
+p3 <- volcano_plot(example_gwas, label_top_n = 5) +
+  labs(tag = "C") + theme_nature()
+
+p1 / (p2 | p3) + plot_layout(heights = c(2, 1))
+```
+
+# Saving
+
+```{r eval=FALSE}
+fig <- manhattan_plot(example_gwas, label_top_n = 5) + theme_nature()
+ggsave("figure1.pdf", fig, width = 89, height = 55, units = "mm")
+```
+
+# Session info
+
+```{r}
+sessionInfo()
+```
