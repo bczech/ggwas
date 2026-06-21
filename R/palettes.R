@@ -17,7 +17,7 @@
 #' manhattan_plot(example_gwas, colors = gwas_palette("vibrant"))
 gwas_palette <- function(name = "default", n = NULL, type = "alternating") {
   pal <- switch(name,
-    "default" = c("#2C3E50", "#7F8C8D"),
+    "default" = c("#1A5276", "#76D7C4"),
     "colorblind" = c("#0072B2", "#E69F00"),
     "vibrant" = c("#E64B35", "#4DBBD5"),
     "pastel" = c("#8DA0CB", "#FC8D62"),

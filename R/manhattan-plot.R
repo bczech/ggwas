@@ -33,7 +33,7 @@ manhattan_plot <- function(data,
                            bp = NULL,
                            p = NULL,
                            snp = NULL,
-                           colors = c("#2C3E50", "#7F8C8D"),
+                           colors = c("#1A5276", "#76D7C4"),
                            point_size = 0.8,
                            alpha = 1,
                            genome_wide = 5e-8,
@@ -72,18 +72,23 @@ manhattan_plot <- function(data,
   chr_info <- attr(data, "chr_info")
   data$CHR_F <- factor(data$CHR)
 
+  chr_labels <- int_to_chr(chr_info$CHR)
+  n_chr_displayed <- nrow(chr_info)
+  chr_label_size <- if (n_chr_displayed > 18) 2.2 else if (n_chr_displayed > 10) 2.8 else 3.2
+
   plt <- ggplot(data, aes(x = .data$BP_CUM, y = .data$LOG10P,
                            color = .data$CHR_F)) +
     geom_point(size = point_size, alpha = alpha, shape = 16) +
     scale_color_chromosome(colors = colors, guide = "none") +
     scale_x_continuous(
       breaks = chr_info$center,
-      labels = int_to_chr(chr_info$CHR),
+      labels = chr_labels,
       expand = c(0.01, 0)
     ) +
     labs(x = "Chromosome",
          y = expression(-log[10](italic(p))),
          title = title) +
+    ggplot2::theme(axis.text.x = element_text(size = ggplot2::rel(chr_label_size / 3.5))) +
     theme_gwas()
 
   if (!is.null(genome_wide)) {

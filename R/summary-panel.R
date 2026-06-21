@@ -27,12 +27,12 @@ gwas_summary <- function(data,
                          p = NULL,
                          snp = NULL,
                          panels = c("manhattan", "qq", "top_hits", "density"),
-                         n_top = 10,
+                         n_top = 5,
                          genome_wide = 5e-8,
                          suggestive = 1e-5,
                          colors = NULL,
                          palette = "colorblind",
-                         label_top_n = 5,
+                         label_top_n = 3,
                          title = NULL,
                          theme_fn = NULL,
                          layout = "auto") {
@@ -89,13 +89,14 @@ gwas_summary <- function(data,
       design <- patchwork::wrap_plots(
         plot_list[[1]],
         patchwork::wrap_plots(plot_list[[2]], plot_list[[3]], ncol = 2),
-        ncol = 1, heights = c(2, 1)
+        ncol = 1, heights = c(3, 2)
       )
     } else {
+      bottom_ncol <- min(n_panels - 1, 3)
       design <- patchwork::wrap_plots(
         plot_list[[1]],
-        patchwork::wrap_plots(plot_list[2:n_panels], ncol = n_panels - 1),
-        ncol = 1, heights = c(2, 1)
+        patchwork::wrap_plots(plot_list[2:n_panels], ncol = bottom_ncol),
+        ncol = 1, heights = c(3, 2)
       )
     }
   } else if (layout == "wide") {
@@ -136,7 +137,8 @@ gwas_summary <- function(data,
   if ("AF" %in% names(top)) top$AF <- round(top$AF, 3)
 
   table_theme <- gridExtra::ttheme_minimal(
-    base_size = 7,
+    base_size = 6,
+    padding = ggplot2::unit(c(2, 2), "mm"),
     core = list(fg_params = list(hjust = 0, x = 0.05)),
     colhead = list(
       fg_params = list(hjust = 0, x = 0.05, fontface = "bold"),

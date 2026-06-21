@@ -27,7 +27,7 @@ theme_gwas <- function(base_size = 11, base_family = "") {
 #' @param ... Additional arguments passed to [ggplot2::scale_color_manual()].
 #' @return A ggplot2 color scale.
 #' @export
-scale_color_chromosome <- function(colors = c("#2C3E50", "#7F8C8D"), ...) {
+scale_color_chromosome <- function(colors = c("#1A5276", "#76D7C4"), ...) {
   n_chr <- 26
   chr_colors <- rep_len(colors, n_chr)
   names(chr_colors) <- as.character(seq_len(n_chr))
@@ -36,7 +36,7 @@ scale_color_chromosome <- function(colors = c("#2C3E50", "#7F8C8D"), ...) {
 
 #' @rdname scale_color_chromosome
 #' @export
-scale_fill_chromosome <- function(colors = c("#2C3E50", "#7F8C8D"), ...) {
+scale_fill_chromosome <- function(colors = c("#1A5276", "#76D7C4"), ...) {
   n_chr <- 26
   chr_colors <- rep_len(colors, n_chr)
   names(chr_colors) <- as.character(seq_len(n_chr))

@@ -104,7 +104,7 @@ add_cumulative_bp <- function(data) {
   chr_lengths <- chr_lengths[order(chr_lengths$CHR), ]
   chr_lengths$cumstart <- cumsum(c(0, chr_lengths$max_bp[-nrow(chr_lengths)]))
 
-  gap <- max(chr_lengths$max_bp) * 0.02
+  gap <- max(chr_lengths$max_bp) * 0.05
   chr_lengths$cumstart <- chr_lengths$cumstart +
     (seq_len(nrow(chr_lengths)) - 1) * gap
 

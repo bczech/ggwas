@@ -96,7 +96,7 @@ locus_plot <- function(data,
       ggplot2::theme(legend.position = "right")
   } else {
     plt <- ggplot(region, aes(x = .data$BP / 1e6, y = .data$LOG10P)) +
-      geom_point(size = point_size, color = "#7F8C8D", shape = 16)
+      geom_point(size = point_size, color = "#76D7C4", shape = 16)
   }
 
   if (!is.null(lead_snp) && "SNP" %in% names(region)) {
@@ -150,7 +150,7 @@ locus_plot <- function(data,
     geom_segment(
       aes(x = .data$start / 1e6, xend = .data$end / 1e6,
           y = .data$y, yend = .data$y),
-      linewidth = 3, color = "#2C3E50"
+      linewidth = 3, color = "#1A5276"
     ) +
     ggrepel::geom_text_repel(
       aes(x = (.data$start + .data$end) / 2e6, y = .data$y,

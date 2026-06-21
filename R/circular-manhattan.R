@@ -35,9 +35,9 @@ circular_manhattan <- function(data,
                                bp = NULL,
                                p = NULL,
                                snp = NULL,
-                               colors = c("#2C3E50", "#7F8C8D"),
-                               point_size = 0.5,
-                               alpha = 0.8,
+                               colors = c("#1A5276", "#76D7C4"),
+                               point_size = 1.2,
+                               alpha = 0.85,
                                genome_wide = 5e-8,
                                threshold_color = "#E74C3C",
                                highlight_snps = NULL,
@@ -46,8 +46,8 @@ circular_manhattan <- function(data,
                                label_snps = NULL,
                                label_top_n = NULL,
                                show_chr_labels = TRUE,
-                               inner_radius = 0.3,
-                               chr_gap_fraction = 0.01,
+                               inner_radius = 0.2,
+                               chr_gap_fraction = 0.015,
                                ring_labels = NULL,
                                downsample = TRUE,
                                downsample_n = 100000,
@@ -132,9 +132,9 @@ circular_manhattan <- function(data,
   if (show_chr_labels) {
     plt <- plt + ggplot2::geom_text(
       data = chr_info,
-      aes(x = .data$mid_angle, y = inner_radius * 0.7,
+      aes(x = .data$mid_angle, y = inner_radius * 0.55,
           label = .data$label),
-      size = 2.5, inherit.aes = FALSE
+      size = 3, fontface = "bold", inherit.aes = FALSE
     )
   }
 
