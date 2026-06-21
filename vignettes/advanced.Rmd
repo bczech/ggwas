@@ -23,6 +23,59 @@ library(ggplot2)
 data(example_gwas)
 ```
 
+## Gene labels on peaks
+
+By default, Manhattan plots label SNPs by their rs ID. In manuscripts you
+typically want gene names instead. `manhattan_genes()` maps lead SNPs to
+the nearest gene from a user-supplied table:
+
+```{r gene-labels}
+genes <- data.frame(
+  chr = c(1, 2, 5, 7, 11, 15, 19, 22),
+  start = c(2e6, 50e6, 80e6, 30e6, 60e6, 40e6, 10e6, 20e6),
+  end = c(3e6, 52e6, 85e6, 35e6, 65e6, 45e6, 15e6, 25e6),
+  gene = c("MTOR", "NRXN1", "TCF7L2", "CDKAL1", "KCNQ1", "FTO", "LDLR", "COMT")
+)
+
+manhattan_genes(example_gwas, genes = genes, gene_p_threshold = 0.001)
+```
+
+Use `arrow = TRUE` for a cleaner look when peaks are close together:
+
+```{r gene-arrows}
+manhattan_genes(example_gwas, genes = genes, gene_p_threshold = 0.001,
+                arrow = TRUE, label_face = "italic")
+```
+
+## Top hits table
+
+`top_hits()` extracts independent lead SNPs (window-based clumping),
+adds a cytoband estimate, and optionally maps each to the nearest gene:
+
+```{r top-hits}
+top_hits(example_gwas, p_threshold = 0.001, genes = genes, n = 10)
+```
+
+The result is a plain data.frame — easy to export or paste into a manuscript.
+
+## Highlighting genomic regions
+
+Mark known regions (MHC, previously reported loci, CNVs) with a colored
+band behind the Manhattan plot:
+
+```{r regions}
+plt <- manhattan_plot(example_gwas)
+
+regions <- data.frame(
+  chr = c(6, 1),
+  start = c(25e6, 5e6),
+  end = c(35e6, 30e6),
+  label = c("MHC", "1p36")
+)
+
+highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
+```
+
 ## Multi-trait Manhattan
 
 Compare multiple GWAS results on a single plot to identify shared loci

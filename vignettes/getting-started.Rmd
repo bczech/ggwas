@@ -154,5 +154,5 @@ gwas_summary(example_gwas)
 ## Next steps
 
 - See `vignette("customization")` for themes, palettes, and publication presets
-- See `vignette("advanced")` for enrichment Manhattan, multi-trait plots, and
-  performance tips
+- See `vignette("advanced")` for gene labels on peaks, region highlights,
+  top hits tables, multi-trait overlays, enrichment plots, and performance tips
