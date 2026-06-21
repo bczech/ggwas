@@ -22,7 +22,10 @@
 #' data(example_gwas, package = "gwasplot")
 #' miami_plot(example_gwas, example_gwas, top_title = "Study 1", bottom_title = "Study 2")
 miami_plot <- function(top, bottom,
-                       chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                       chr = NULL,
+                       bp = NULL,
+                       p = NULL,
+                       snp = NULL,
                        colors = c("#2C3E50", "#7F8C8D"),
                        genome_wide = 5e-8,
                        suggestive = 1e-5,

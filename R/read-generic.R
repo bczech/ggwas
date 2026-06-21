@@ -15,10 +15,21 @@
 #' f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
 #' gwas <- read_gwas_table(f)
 #' gwas
-read_gwas_table <- function(file, chr = NULL, bp = NULL, snp = NULL, p = NULL,
-                            beta = NULL, se = NULL, a1 = NULL, a2 = NULL,
-                            af = NULL, n = NULL, info = NULL,
-                            sep = "auto", log_p = FALSE, ...) {
+read_gwas_table <- function(file,
+                            chr = NULL,
+                            bp = NULL,
+                            snp = NULL,
+                            p = NULL,
+                            beta = NULL,
+                            se = NULL,
+                            a1 = NULL,
+                            a2 = NULL,
+                            af = NULL,
+                            n = NULL,
+                            info = NULL,
+                            sep = "auto",
+                            log_p = FALSE,
+                            ...) {
   if (!file.exists(file)) {
     cli_abort("File not found: {.file {file}}")
   }

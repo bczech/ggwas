@@ -22,7 +22,9 @@
 #' data(example_gwas, package = "gwasplot")
 #' pvalue_heatmap(example_gwas, bin_size = 10000)
 pvalue_heatmap <- function(data,
-                           chr = NULL, bp = NULL, p = NULL,
+                           chr = NULL,
+                           bp = NULL,
+                           p = NULL,
                            bin_size = 1e6,
                            summary_fun = "min",
                            palette = "viridis",

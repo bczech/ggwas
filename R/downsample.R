@@ -11,8 +11,11 @@
 #' @param seed Random seed for reproducibility.
 #' @return Downsampled data.frame.
 #' @noRd
-smart_downsample <- function(data, target_n = 200000, p_keep = 1e-3,
-                             keep_snps = NULL, seed = 42) {
+smart_downsample <- function(data,
+                             target_n = 200000,
+                             p_keep = 1e-3,
+                             keep_snps = NULL,
+                             seed = 42) {
   n <- nrow(data)
   if (n <= target_n) return(data)
 

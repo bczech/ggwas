@@ -10,9 +10,19 @@
 #'   will be back-transformed.
 #' @return A tibble with class `gwas_data`.
 #' @export
-as_gwas_data <- function(x, chr = NULL, bp = NULL, snp = NULL, p = NULL,
-                         beta = NULL, se = NULL, a1 = NULL, a2 = NULL,
-                         af = NULL, n = NULL, info = NULL, log_p = FALSE) {
+as_gwas_data <- function(x,
+                         chr = NULL,
+                         bp = NULL,
+                         snp = NULL,
+                         p = NULL,
+                         beta = NULL,
+                         se = NULL,
+                         a1 = NULL,
+                         a2 = NULL,
+                         af = NULL,
+                         n = NULL,
+                         info = NULL,
+                         log_p = FALSE) {
   if (!is.data.frame(x)) {
     cli_abort("{.arg x} must be a data.frame, tibble, or data.table.")
   }

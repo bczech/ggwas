@@ -42,7 +42,10 @@
 #' enrichment_manhattan(example_gwas, annotations = annot)
 enrichment_manhattan <- function(data,
                                  annotations,
-                                 chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                                 chr = NULL,
+                                 bp = NULL,
+                                 p = NULL,
+                                 snp = NULL,
                                  background_color = "grey75",
                                  background_alpha = 0.4,
                                  annotation_colors = NULL,

@@ -26,7 +26,10 @@
 #' locus_plot(example_gwas, region_chr = 1,
 #'            region_start = 1e6, region_end = 20e6)
 locus_plot <- function(data,
-                       chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                       chr = NULL,
+                       bp = NULL,
+                       p = NULL,
+                       snp = NULL,
                        region_chr = NULL,
                        region_start = NULL,
                        region_end = NULL,

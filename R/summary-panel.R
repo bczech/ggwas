@@ -22,7 +22,10 @@
 #' data(example_gwas)
 #' gwas_summary(example_gwas)
 gwas_summary <- function(data,
-                         chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                         chr = NULL,
+                         bp = NULL,
+                         p = NULL,
+                         snp = NULL,
                          panels = c("manhattan", "qq", "top_hits", "density"),
                          n_top = 10,
                          genome_wide = 5e-8,

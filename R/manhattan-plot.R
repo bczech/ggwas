@@ -29,7 +29,10 @@
 #' manhattan_plot(example_gwas)
 #' manhattan_plot(example_gwas, highlight_snps = "rs12345", label_top_n = 3)
 manhattan_plot <- function(data,
-                           chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                           chr = NULL,
+                           bp = NULL,
+                           p = NULL,
+                           snp = NULL,
                            colors = c("#2C3E50", "#7F8C8D"),
                            point_size = 0.8,
                            alpha = 1,

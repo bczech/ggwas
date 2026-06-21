@@ -136,8 +136,16 @@ qq_plot <- function(data,
 
 #' Grouped QQ plot
 #' @noRd
-.qq_grouped <- function(data, group, ci, ci_fill, ci_alpha,
-                        show_lambda, point_size, alpha, line_color, title) {
+.qq_grouped <- function(data,
+                        group,
+                        ci,
+                        ci_fill,
+                        ci_alpha,
+                        show_lambda,
+                        point_size,
+                        alpha,
+                        line_color,
+                        title) {
   groups <- unique(data[[group]])
   qq_list <- lapply(groups, function(g) {
     pvals <- data$P[data[[group]] == g]

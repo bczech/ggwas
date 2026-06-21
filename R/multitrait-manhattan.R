@@ -35,7 +35,10 @@
 #' trait2$P <- runif(nrow(trait2))^3
 #' multitrait_manhattan(Trait1 = trait1, Trait2 = trait2)
 multitrait_manhattan <- function(...,
-                                chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                                chr = NULL,
+                                bp = NULL,
+                                p = NULL,
+                                snp = NULL,
                                 colors = "nature",
                                 shapes = NULL,
                                 point_size = 0.8,

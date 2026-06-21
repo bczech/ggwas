@@ -31,7 +31,10 @@
 #' data(example_gwas)
 #' circular_manhattan(example_gwas)
 circular_manhattan <- function(data,
-                               chr = NULL, bp = NULL, p = NULL, snp = NULL,
+                               chr = NULL,
+                               bp = NULL,
+                               p = NULL,
+                               snp = NULL,
                                colors = c("#2C3E50", "#7F8C8D"),
                                point_size = 0.5,
                                alpha = 0.8,
@@ -159,7 +162,9 @@ circular_manhattan <- function(data,
 
 #' Compute circular coordinates for variants
 #' @noRd
-.compute_circular_coords <- function(data, inner_radius, max_logp,
+.compute_circular_coords <- function(data,
+                                     inner_radius,
+                                     max_logp,
                                      chr_gap_fraction) {
   chrs <- sort(unique(data$CHR))
   chr_lengths <- vapply(chrs, function(ch) max(data$BP[data$CHR == ch]), numeric(1))
@@ -197,12 +202,23 @@ circular_manhattan <- function(data,
 
 #' Multi-ring circular Manhattan
 #' @noRd
-.circular_multiring <- function(datasets, chr, bp, p, snp,
-                                colors, point_size, alpha,
-                                genome_wide, threshold_color,
-                                show_chr_labels, inner_radius,
-                                chr_gap_fraction, ring_labels,
-                                downsample, downsample_n, title) {
+.circular_multiring <- function(datasets,
+                                chr,
+                                bp,
+                                p,
+                                snp,
+                                colors,
+                                point_size,
+                                alpha,
+                                genome_wide,
+                                threshold_color,
+                                show_chr_labels,
+                                inner_radius,
+                                chr_gap_fraction,
+                                ring_labels,
+                                downsample,
+                                downsample_n,
+                                title) {
 
   trait_names <- names(datasets)
   n_rings <- length(trait_names)
