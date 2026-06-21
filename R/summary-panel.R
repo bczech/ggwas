@@ -49,8 +49,10 @@ gwas_summary <- function(data,
     p_man <- manhattan_plot(data, colors = colors,
                            genome_wide = genome_wide,
                            suggestive = suggestive,
-                           label_top_n = label_top_n) +
-      labs(title = NULL)
+                           label_top_n = label_top_n,
+                           point_size = 0.6) +
+      labs(title = NULL) +
+      ggplot2::theme(plot.margin = ggplot2::margin(10, 5, 5, 5))
     if (!is.null(theme_fn)) p_man <- p_man + theme_fn()
     plot_list$manhattan <- p_man
   }
@@ -89,13 +91,19 @@ gwas_summary <- function(data,
       design <- patchwork::wrap_plots(
         plot_list[[1]],
         patchwork::wrap_plots(plot_list[[2]], plot_list[[3]], ncol = 2),
-        ncol = 1, heights = c(3, 2)
+        ncol = 1, heights = c(2, 1.5)
       )
-    } else {
-      bottom_ncol <- min(n_panels - 1, 3)
+    } else if (n_panels == 4) {
       design <- patchwork::wrap_plots(
         plot_list[[1]],
-        patchwork::wrap_plots(plot_list[2:n_panels], ncol = bottom_ncol),
+        patchwork::wrap_plots(plot_list[[2]], plot_list[[4]], ncol = 2),
+        plot_list[[3]],
+        ncol = 1, heights = c(3, 2, 1.5)
+      )
+    } else {
+      design <- patchwork::wrap_plots(
+        plot_list[[1]],
+        patchwork::wrap_plots(plot_list[2:n_panels], ncol = 2),
         ncol = 1, heights = c(3, 2)
       )
     }
@@ -125,8 +133,7 @@ gwas_summary <- function(data,
   top <- data[order(data$P), , drop = FALSE]
   top <- utils::head(top, n_top)
 
-  display_cols <- intersect(c("SNP", "CHR", "BP", "P", "BETA", "SE", "AF"),
-                            names(top))
+  display_cols <- intersect(c("SNP", "CHR", "P", "BETA"), names(top))
   top <- top[, display_cols, drop = FALSE]
 
   top$CHR <- int_to_chr(top$CHR)
@@ -137,8 +144,8 @@ gwas_summary <- function(data,
   if ("AF" %in% names(top)) top$AF <- round(top$AF, 3)
 
   table_theme <- gridExtra::ttheme_minimal(
-    base_size = 6,
-    padding = ggplot2::unit(c(2, 2), "mm"),
+    base_size = 8,
+    padding = ggplot2::unit(c(3, 4), "mm"),
     core = list(fg_params = list(hjust = 0, x = 0.05)),
     colhead = list(
       fg_params = list(hjust = 0, x = 0.05, fontface = "bold"),

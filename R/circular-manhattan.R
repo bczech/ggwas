@@ -46,8 +46,8 @@ circular_manhattan <- function(data,
                                label_snps = NULL,
                                label_top_n = NULL,
                                show_chr_labels = TRUE,
-                               inner_radius = 0.2,
-                               chr_gap_fraction = 0.015,
+                               inner_radius = 0.25,
+                               chr_gap_fraction = 0.012,
                                ring_labels = NULL,
                                downsample = TRUE,
                                downsample_n = 100000,
@@ -96,7 +96,7 @@ circular_manhattan <- function(data,
     scale_color_manual(values = chr_cols, guide = "none") +
     ggplot2::coord_polar(start = -pi / 2, direction = 1) +
     scale_x_continuous(limits = c(0, 2 * pi), expand = c(0, 0)) +
-    scale_y_continuous(limits = c(0, 1), expand = c(0, 0)) +
+    scale_y_continuous(limits = c(0, 1.15), expand = c(0, 0)) +
     ggplot2::theme_void() +
     ggplot2::theme(
       plot.title = element_text(hjust = 0.5, face = "bold", size = 14),
@@ -130,11 +130,26 @@ circular_manhattan <- function(data,
   }
 
   if (show_chr_labels) {
+    label_info <- chr_info
+    label_info$label_y <- 1.06
+    label_info$label_angle <- label_info$mid_angle * 180 / pi - 90
+    label_info$hjust_val <- ifelse(
+      label_info$mid_angle > pi, 1, 0
+    )
+    label_info$label_angle <- ifelse(
+      label_info$mid_angle > pi,
+      label_info$label_angle + 180,
+      label_info$label_angle
+    )
+    n_chrs <- nrow(label_info)
+    label_sz <- if (n_chrs > 18) 2.5 else 3
+
     plt <- plt + ggplot2::geom_text(
-      data = chr_info,
-      aes(x = .data$mid_angle, y = inner_radius * 0.55,
-          label = .data$label),
-      size = 3, fontface = "bold", inherit.aes = FALSE
+      data = label_info,
+      aes(x = .data$mid_angle, y = .data$label_y,
+          label = .data$label, angle = .data$label_angle,
+          hjust = .data$hjust_val),
+      size = label_sz, inherit.aes = FALSE
     )
   }
 
