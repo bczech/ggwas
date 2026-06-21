@@ -1,204 +1,168 @@
-# gwasplot <img src="man/figures/logo.png" align="right" height="139" alt="" />
+# gwasplot <img src="man/figures/logo.png" align="right" height="139" alt="gwasplot logo" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
-Modern, fast, and customizable GWAS visualizations built on **ggplot2**.
+Modern, fast, and fully customizable GWAS visualizations built on
+**ggplot2**. Designed for publication-ready figures with sensible defaults
+and journal-specific themes.
 
-## Why gwasplot?
+## Key features
+
+- **10 plot types** including novel visualizations not available elsewhere
+- **Smart downsampling** for 10M+ variant datasets
+- **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
+- **Gene annotation** with automatic nearest-gene mapping
+- **Auto-detects** column names from PLINK, REGENIE, GCTA, GEMMA, and generic files
+- **Fully composable** — every function returns a ggplot object
+
+## Comparison
 
 | Feature | qqman | CMplot | **gwasplot** |
 |---|---|---|---|
 | ggplot2-native | No | No | **Yes** |
-| Manhattan plot | Yes | Yes | **Yes** |
-| QQ plot | Yes | Yes | **Yes + CI + lambda + stratified** |
+| Manhattan + QQ | Yes | Yes | **Yes + CI + lambda + stratified** |
 | Miami plot | No | No | **Yes** |
-| Locus Zoom | No | No | **Yes** |
+| Locus Zoom | No | No | **Yes (with LD + gene track)** |
 | Circular Manhattan | No | Yes (base R) | **Yes (ggplot2, multi-ring)** |
 | Enrichment Manhattan | No | No | **Yes (novel)** |
-| Multi-trait Manhattan | No | No | **Yes (novel)** |
-| Genome Heatmap | No | No | **Yes (novel)** |
-| Effect Volcano | No | No | **Yes (novel)** |
-| Summary Dashboard | No | No | **Yes (novel)** |
-| Journal themes | No | No | **Nature/Science/Cell/PLOS** |
-| Color palettes | Limited | Limited | **RColorBrewer + ggsci + 14 presets** |
-| Publication presets | No | No | **Yes** |
+| Multi-trait overlay | No | No | **Yes (novel, pleiotropy)** |
+| Genome-wide heatmap | No | No | **Yes (novel)** |
+| Effect-size volcano | No | No | **Yes (novel)** |
+| Summary dashboard | No | No | **Yes (novel)** |
+| Gene labels on peaks | No | No | **Yes** |
+| Region highlights | No | No | **Yes** |
+| Top hits table | No | No | **Yes (with clumping)** |
+| Journal themes | No | No | **6 themes + 4 presets** |
+| Color palettes | Limited | Limited | **14 palettes (colorblind-safe)** |
 | Auto-detect formats | No | No | **Yes** |
 | Smart downsampling | No | No | **Yes** |
 
 ## Installation
 
 ```r
-# Install from GitHub
-# install.packages("pak")
 pak::pak("bczech/gwasplot")
 ```
 
-## Quick Start
+## Quick start
 
 ```r
 library(gwasplot)
 
-# Read any GWAS format — columns are auto-detected
+# Read any GWAS results file — columns auto-detected
 gwas <- read_gwas_table("my_results.txt")
 
-# Manhattan plot in one line
+# Manhattan plot
 manhattan_plot(gwas)
 
-# QQ plot with confidence bands and lambda
+# Label top hits with gene names
+manhattan_genes(gwas, genes = my_gene_table, gene_top_n = 10)
+
+# QQ plot with confidence band and lambda
 qq_plot(gwas, show_lambda = TRUE)
 
-# Label top hits
-manhattan_plot(gwas, label_top_n = 5)
+# Miami plot — discovery vs replication
+miami_plot(discovery, replication,
+           top_title = "Discovery", bottom_title = "Replication")
 
-# Miami plot — compare two studies
-miami_plot(
-  top = read_regenie("study1.regenie"),
-  bottom = read_regenie("study2.regenie"),
-  top_title = "Discovery",
-  bottom_title = "Replication"
-)
-
-# Novel: genome-wide p-value heatmap
-pvalue_heatmap(gwas, bin_size = 500000, palette = "magma")
-
-# Novel: effect-size volcano
-volcano_plot(gwas, label_top_n = 10)
-```
-
-## Supported Input Formats
-
-| Format | Reader | Tool |
-|---|---|---|
-| Generic (auto-detect) | `read_gwas_table()` | Any |
-| PLINK `.assoc` | `read_plink_assoc()` | PLINK |
-| PLINK `.assoc.linear` | `read_plink_linear()` | PLINK |
-| PLINK `.assoc.logistic` | `read_plink_logistic()` | PLINK |
-| REGENIE `.regenie` | `read_regenie()` | REGENIE |
-| GCTA `.mlma` | `read_gcta_mlma()` | GCTA |
-| GEMMA `.assoc.txt` | `read_gemma()` | GEMMA |
-
-Or pass any `data.frame` directly — column names are auto-matched:
-
-```r
-manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
-```
-
-## Plot Gallery
-
-### Manhattan Plot
-
-```r
-data(example_gwas)
-manhattan_plot(example_gwas, label_top_n = 3)
-```
-
-### QQ Plot with Confidence Bands
-
-```r
-qq_plot(example_gwas, ci = 0.95, show_lambda = TRUE)
-```
-
-### Miami Plot
-
-```r
-miami_plot(example_gwas, example_gwas,
-           top_title = "Trait 1", bottom_title = "Trait 2")
-```
-
-### Genome-Wide Heatmap (Novel)
-
-```r
-pvalue_heatmap(example_gwas, bin_size = 5e6, palette = "magma")
-```
-
-### Effect-Size Volcano (Novel)
-
-```r
-volcano_plot(example_gwas, label_top_n = 5, color_by = "chromosome")
-```
-
-### Circular Manhattan
-
-```r
-circular_manhattan(example_gwas, colors = gwas_palette("vibrant"))
-
-# Multi-ring: compare traits
-circular_manhattan(list(BMI = gwas1, Height = gwas2, WHR = gwas3))
-```
-
-### Enrichment Manhattan (Novel)
-
-```r
-# Overlay functional annotations
-annotations <- data.frame(
-  chr = c(1, 6, 17), start = c(1e6, 25e6, 40e6),
-  end = c(5e6, 35e6, 45e6), category = c("Enhancer", "MHC", "Gene")
-)
-enrichment_manhattan(gwas, annotations = annotations, palette = "nature")
-```
-
-### Multi-trait Manhattan (Novel)
-
-```r
-# Compare multiple GWAS on one plot
-multitrait_manhattan(BMI = gwas_bmi, Height = gwas_height, WHR = gwas_whr,
-                     colors = "nature", highlight_shared = TRUE)
-```
-
-### Summary Dashboard (Novel)
-
-```r
-# Publication-ready multi-panel figure with automatic panel labels (A, B, C, D)
-gwas_summary(gwas, panels = c("manhattan", "qq", "top_hits", "density"))
-```
-
-## Themes and Palettes
-
-```r
-# Journal-specific themes
-manhattan_plot(gwas) + theme_nature()
-manhattan_plot(gwas) + theme_science()
-manhattan_plot(gwas) + theme_cell()
-manhattan_plot(gwas) + theme_plos()
-manhattan_plot(gwas) + theme_presentation()  # talks
-manhattan_plot(gwas) + theme_poster()        # posters
-
-# 14 built-in palettes (colorblind-safe, journal-inspired)
-gwas_palettes()  # list all
-manhattan_plot(gwas, colors = gwas_palette("nature"))
-manhattan_plot(gwas, colors = gwas_palette("brewer_set1"))
-
-# Publication presets (theme + colors + sizes in one call)
+# Publication preset
 p <- gwas_preset("publication")
 manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 ```
 
+## Supported input formats
+
+| Format | Function |
+|---|---|
+| Generic (auto-detect) | `read_gwas_table()` |
+| PLINK .assoc/.linear/.logistic | `read_plink_assoc()` / `_linear()` / `_logistic()` |
+| REGENIE | `read_regenie()` |
+| GCTA MLMA | `read_gcta_mlma()` |
+| GEMMA | `read_gemma()` |
+| Any data.frame | Pass directly with column mapping |
+
+## Plot gallery
+
+### Core plots
+
+```r
+manhattan_plot(gwas, label_top_n = 5)
+qq_plot(gwas, show_lambda = TRUE, ci = 0.95)
+miami_plot(gwas1, gwas2, top_title = "Study 1", bottom_title = "Study 2")
+locus_plot(gwas, lead_snp = "rs12345", flank = 500000)
+```
+
+### Novel visualizations
+
+```r
+pvalue_heatmap(gwas, bin_size = 1e6, palette = "magma")
+volcano_plot(gwas, label_top_n = 10, color_by = "chromosome")
+circular_manhattan(gwas, colors = gwas_palette("nature"))
+circular_manhattan(list(BMI = gwas1, Height = gwas2))  # multi-ring
+enrichment_manhattan(gwas, annotations = functional_regions)
+multitrait_manhattan(BMI = gwas1, Height = gwas2, highlight_shared = TRUE)
+gwas_summary(gwas)  # multi-panel dashboard
+```
+
+### Gene annotation
+
+```r
+# Label peaks with nearest gene names (instead of rs IDs)
+manhattan_genes(gwas, genes = gene_table, arrow = TRUE)
+
+# Extract independent top hits with gene mapping
+top_hits(gwas, genes = gene_table, p_threshold = 5e-8)
+
+# Highlight genomic regions
+plt <- manhattan_plot(gwas)
+highlight_regions(plt, data.frame(chr = 6, start = 25e6, end = 34e6, label = "MHC"))
+```
+
+### Themes and palettes
+
+```r
+# Journal themes
+manhattan_plot(gwas) + theme_nature()
+manhattan_plot(gwas) + theme_science()
+manhattan_plot(gwas) + theme_cell()
+manhattan_plot(gwas) + theme_plos()
+
+# Presentation / poster
+manhattan_plot(gwas) + theme_presentation()
+manhattan_plot(gwas) + theme_poster()
+
+# 14 color palettes
+gwas_palettes()
+manhattan_plot(gwas, colors = gwas_palette("nature"))
+```
+
 ## Performance
 
-Smart downsampling preserves all significant and near-significant variants
-while reducing non-significant variants through spatial binning:
+Smart downsampling kicks in automatically for large datasets. It preserves
+all significant variants and bins the non-significant background — the plot
+looks identical but renders in seconds instead of minutes:
 
 ```r
-# 10M+ SNPs — downsampled to ~200k points automatically
-manhattan_plot(large_gwas)  # fast rendering, visually identical
+manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
 ```
 
-## Customization
+## Documentation
 
-Every function returns a `ggplot` object — add layers, themes, and scales:
+See the package vignette for full documentation with worked examples:
 
 ```r
-manhattan_plot(gwas) +
-  ggplot2::theme_minimal() +
-  ggplot2::labs(title = "My GWAS Results")
+vignette("gwasplot")
 ```
+
+## Contributing
+
+Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md)
+for guidelines.
 
 ## Citation
-
-If you use gwasplot in your research, please cite:
 
 ```
 Czech B (2026). gwasplot: Modern ggplot2 Visualizations for Genome-Wide
