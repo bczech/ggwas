@@ -1,4 +1,4 @@
-# gwasplot <img src="man/figures/logo.png" align="right" height="139" alt="gwasplot logo" />
+# gwasplot <img src="man/figures/logo.png" align="right" height="180" alt="gwasplot logo" />
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml)
