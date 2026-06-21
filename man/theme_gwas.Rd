@@ -17,3 +17,7 @@ A ggplot2 theme object.
 \description{
 A clean, publication-ready theme optimized for GWAS plots.
 }
+\examples{
+data(example_gwas)
+manhattan_plot(example_gwas) + theme_gwas()
+}

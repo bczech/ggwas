@@ -10,6 +10,11 @@
 #'   will be back-transformed.
 #' @return A tibble with class `gwas_data`.
 #' @export
+#' @examples
+#' df <- data.frame(CHR = c(1, 1, 2), BP = c(1e6, 2e6, 5e6),
+#'                  P = c(1e-8, 0.5, 0.01), SNP = c("rs1", "rs2", "rs3"))
+#' gd <- as_gwas_data(df)
+#' gd
 as_gwas_data <- function(x,
                          chr = NULL,
                          bp = NULL,
@@ -86,6 +91,9 @@ as_gwas_data <- function(x,
 #'
 #' @param x A gwas_data object.
 #' @return Invisible x (raises warnings/errors on invalid data).
+#' @examples
+#' data(example_gwas)
+#' validate_gwas_data(example_gwas)
 #' @export
 validate_gwas_data <- function(x) {
   if (!"CHR" %in% names(x)) cli_abort("Missing required column: {.field CHR}")

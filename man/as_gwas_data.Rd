@@ -36,3 +36,9 @@ A tibble with class \code{gwas_data}.
 Convert a data.frame to the standardized gwas_data format used by all
 gwasplot plotting functions.
 }
+\examples{
+df <- data.frame(CHR = c(1, 1, 2), BP = c(1e6, 2e6, 5e6),
+                 P = c(1e-8, 0.5, 0.01), SNP = c("rs1", "rs2", "rs3"))
+gd <- as_gwas_data(df)
+gd
+}

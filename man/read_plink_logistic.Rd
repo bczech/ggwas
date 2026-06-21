@@ -19,3 +19,8 @@ A \code{gwas_data} object.
 \description{
 Read PLINK logistic regression results
 }
+\examples{
+\donttest{
+gwas <- read_plink_logistic("my_results.assoc.logistic")
+}
+}

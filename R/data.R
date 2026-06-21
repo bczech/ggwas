@@ -1,10 +1,10 @@
 #' Example GWAS dataset
 #'
-#' A simulated GWAS dataset with 5000 variants across 22 autosomal
-#' chromosomes. Contains 15 variants with genome-wide significant
-#' p-values for demonstration purposes.
+#' A simulated GWAS dataset with 8000 variants across 22 autosomal
+#' chromosomes, sized proportionally to real human chromosome lengths.
+#' Contains 20 genome-wide significant variants for demonstration.
 #'
-#' @format A `gwas_data` data.frame with 5000 rows and 9 columns:
+#' @format A `gwas_data` data.frame with 8000 rows and 9 columns:
 #' \describe{
 #'   \item{CHR}{Chromosome (integer, 1-22)}
 #'   \item{BP}{Base pair position}

@@ -15,3 +15,7 @@ Genomic inflation factor (lambda).
 \description{
 Calculate genomic inflation factor (lambda GC)
 }
+\examples{
+data(example_gwas)
+calc_lambda(example_gwas$P)
+}

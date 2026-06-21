@@ -29,7 +29,8 @@
 #' @examples
 #' data(example_gwas, package = "gwasplot")
 #' manhattan_plot(example_gwas)
-#' manhattan_plot(example_gwas, highlight_snps = "rs12345", label_top_n = 3)
+#' manhattan_plot(example_gwas, label_top_n = 5, colors = gwas_palette("vibrant"))
+#' manhattan_plot(example_gwas, chromosomes = 1:10) + theme_nature()
 manhattan_plot <- function(data,
                            chr = NULL,
                            bp = NULL,

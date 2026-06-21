@@ -19,3 +19,8 @@ A \code{gwas_data} object.
 \description{
 Read GEMMA association results
 }
+\examples{
+\donttest{
+gwas <- read_gemma("my_results.assoc.txt")
+}
+}

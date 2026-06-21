@@ -5,6 +5,10 @@
 #' @param ... Additional arguments passed to [data.table::fread()].
 #' @return A `gwas_data` object.
 #' @export
+#' @examples
+#' \donttest{
+#' gwas <- read_gemma("my_results.assoc.txt")
+#' }
 read_gemma <- function(file, p_column = "p_wald", ...) {
   dt <- data.table::fread(file, header = TRUE, data.table = FALSE, ...)
   cli_inform("Read {format(nrow(dt), big.mark = ',')} variants from {.file {basename(file)}}")

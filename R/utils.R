@@ -86,6 +86,9 @@ int_to_chr <- function(x) {
 #' @param p Numeric vector of p-values.
 #' @return Genomic inflation factor (lambda).
 #' @export
+#' @examples
+#' data(example_gwas)
+#' calc_lambda(example_gwas$P)
 calc_lambda <- function(p) {
   p <- p[!is.na(p) & p > 0 & p <= 1]
   chisq <- qchisq(p, df = 1, lower.tail = FALSE)

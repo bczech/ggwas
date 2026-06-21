@@ -17,3 +17,8 @@ A \code{gwas_data} object.
 \description{
 Read PLINK association results
 }
+\examples{
+f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
+gwas <- read_plink_assoc(f)
+gwas
+}

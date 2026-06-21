@@ -20,3 +20,7 @@ A ggplot2 color scale.
 \description{
 Alternating color scale for chromosomes in Manhattan plots.
 }
+\examples{
+data(example_gwas)
+manhattan_plot(example_gwas, colors = c("#E64B35", "#4DBBD5"))
+}

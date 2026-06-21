@@ -17,3 +17,8 @@ A \code{gwas_data} object.
 \description{
 Read REGENIE results
 }
+\examples{
+\donttest{
+gwas <- read_regenie("my_results.regenie")
+}
+}

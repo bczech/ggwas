@@ -15,3 +15,7 @@ Invisible x (raises warnings/errors on invalid data).
 \description{
 Validate a gwas_data object
 }
+\examples{
+data(example_gwas)
+validate_gwas_data(example_gwas)
+}

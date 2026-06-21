@@ -4,6 +4,10 @@
 #' @param ... Additional arguments passed to [data.table::fread()].
 #' @return A `gwas_data` object.
 #' @export
+#' @examples
+#' f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
+#' gwas <- read_plink_assoc(f)
+#' gwas
 read_plink_assoc <- function(file, ...) {
   dt <- data.table::fread(file, header = TRUE, data.table = FALSE, ...)
   cli_inform("Read {format(nrow(dt), big.mark = ',')} variants from {.file {basename(file)}}")
@@ -17,6 +21,10 @@ read_plink_assoc <- function(file, ...) {
 #' @param ... Additional arguments passed to [data.table::fread()].
 #' @return A `gwas_data` object.
 #' @export
+#' @examples
+#' \donttest{
+#' gwas <- read_plink_linear("my_results.assoc.linear")
+#' }
 read_plink_linear <- function(file, test = "ADD", ...) {
   dt <- data.table::fread(file, header = TRUE, data.table = FALSE, ...)
   if ("TEST" %in% names(dt) && !is.null(test)) {
@@ -33,6 +41,10 @@ read_plink_linear <- function(file, test = "ADD", ...) {
 #' @param ... Additional arguments passed to [data.table::fread()].
 #' @return A `gwas_data` object.
 #' @export
+#' @examples
+#' \donttest{
+#' gwas <- read_plink_logistic("my_results.assoc.logistic")
+#' }
 read_plink_logistic <- function(file, test = "ADD", ...) {
 
   dt <- data.table::fread(file, header = TRUE, data.table = FALSE, ...)

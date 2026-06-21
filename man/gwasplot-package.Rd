@@ -19,11 +19,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Bartosz Czech \email{bartosz.czech@upwr.edu.pl} (\href{https://orcid.org/0000-0002-9908-3007}{ORCID})
+\strong{Maintainer}: Bartosz Czech \email{bartosz.w.czech@gmail.com} (\href{https://orcid.org/0000-0002-9908-3007}{ORCID})
 
 Authors:
 \itemize{
-  \item Bartosz Czech \email{bartosz.czech@upwr.edu.pl} (\href{https://orcid.org/0000-0002-9908-3007}{ORCID})
+  \item Bartosz Czech \email{bartosz.w.czech@gmail.com} (\href{https://orcid.org/0000-0002-9908-3007}{ORCID})
 }
 
 }

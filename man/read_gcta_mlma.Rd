@@ -17,3 +17,8 @@ A \code{gwas_data} object.
 \description{
 Read GCTA MLMA results
 }
+\examples{
+\donttest{
+gwas <- read_gcta_mlma("my_results.mlma")
+}
+}

@@ -19,3 +19,8 @@ A \code{gwas_data} object.
 \description{
 Read PLINK linear regression results
 }
+\examples{
+\donttest{
+gwas <- read_plink_linear("my_results.assoc.linear")
+}
+}
