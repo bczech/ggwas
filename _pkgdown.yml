@@ -1,0 +1,65 @@
+url: https://bczech.github.io/gwasplot/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left: [intro, reference, articles]
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github
+      href: https://github.com/bczech/gwasplot
+
+reference:
+  - title: "Plot functions"
+    desc: "Core GWAS visualizations"
+    contents:
+      - manhattan_plot
+      - qq_plot
+      - miami_plot
+      - locus_plot
+      - volcano_plot
+      - pvalue_heatmap
+      - circular_manhattan
+      - gwas_summary
+      - enrichment_manhattan
+      - multitrait_manhattan
+      - manhattan_genes
+
+  - title: "Annotation and analysis"
+    desc: "Gene annotation, region highlights, top hits"
+    contents:
+      - annotate_genes
+      - highlight_regions
+      - top_hits
+
+  - title: "Data I/O"
+    desc: "Reading GWAS summary statistics"
+    contents:
+      - read_gwas_table
+      - read_plink_assoc
+      - read_plink_linear
+      - read_plink_logistic
+      - read_regenie
+      - read_gcta_mlma
+      - read_gemma
+      - as_gwas_data
+      - validate_gwas_data
+
+  - title: "Themes and palettes"
+    desc: "Publication-ready styling"
+    contents:
+      - theme_gwas
+      - starts_with("theme_")
+      - gwas_palette
+      - gwas_palettes
+      - gwas_preset
+      - starts_with("scale_color")
+      - starts_with("scale_fill")
+
+  - title: "Utilities"
+    contents:
+      - calc_lambda
+      - example_gwas
