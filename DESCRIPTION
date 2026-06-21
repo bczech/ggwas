@@ -2,7 +2,7 @@ Package: gwasplot
 Title: Modern 'ggplot2' Visualizations for Genome-Wide Association Studies
 Version: 0.1.0
 Authors@R: person("Bartosz", "Czech", email = "bartosz.czech@upwr.edu.pl",
-                  role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9908-7084"))
+                  role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9908-3007"))
 Description: Create publication-ready Manhattan plots, QQ plots, Miami plots,
     locus zoom plots, and novel genome-wide heatmaps from GWAS summary
     statistics. Reads PLINK, REGENIE, GCTA, and GEMMA formats natively.
