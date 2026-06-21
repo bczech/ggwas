@@ -5,9 +5,9 @@
 \alias{scale_fill_chromosome}
 \title{Chromosome color scale}
 \usage{
-scale_color_chromosome(colors = c("#2C3E50", "#7F8C8D"), ...)
+scale_color_chromosome(colors = c("#1A5276", "#76D7C4"), ...)
 
-scale_fill_chromosome(colors = c("#2C3E50", "#7F8C8D"), ...)
+scale_fill_chromosome(colors = c("#1A5276", "#76D7C4"), ...)
 }
 \arguments{
 \item{colors}{Two-element character vector of alternating colors.}

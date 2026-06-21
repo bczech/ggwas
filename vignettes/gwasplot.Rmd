@@ -2,13 +2,23 @@
 title: "gwasplot: Modern GWAS Visualizations"
 author:
   - name: Bartosz Czech
-    affiliation: Wroclaw University of Environmental and Life Sciences
+    affiliation: GeneStat
+    email: bartosz.czech@upwr.edu.pl
+date: "`r Sys.Date()`"
 package: gwasplot
+abstract: >
+  gwasplot provides a comprehensive, ggplot2-based toolkit for visualizing
+  genome-wide association study results. It covers the full spectrum of GWAS
+  plots — from standard Manhattan and QQ plots to novel visualizations like
+  genome-wide heatmaps and enrichment overlays. All functions return ggplot
+  objects, making them fully composable with the tidyverse graphics ecosystem.
+  This vignette demonstrates the main functionality with worked examples.
 output:
   BiocStyle::html_document:
     toc: true
     toc_depth: 3
     number_sections: true
+    toc_float: true
 vignette: >
   %\VignetteIndexEntry{gwasplot: Modern GWAS Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
@@ -26,17 +36,47 @@ knitr::opts_chunk$set(
 )
 ```
 
+# Introduction
+
+Genome-wide association studies (GWAS) generate large amounts of summary
+statistics that require effective visualization for interpretation and
+publication. The standard tools in R (`qqman`, `CMplot`) rely on base R
+graphics and offer limited customization. Modern genomics workflows benefit
+from a plotting system that integrates with ggplot2 — enabling layered
+customization, journal-specific theming, and seamless composition of
+multi-panel figures.
+
+`gwasplot` was designed with three goals:
+
+1. **Comprehensive coverage** — all common GWAS plot types in one package,
+   plus novel visualizations not available elsewhere.
+2. **Publication-ready defaults** — sensible colors, proper axis formatting,
+   and built-in journal themes so plots look good without tweaking.
+3. **Performance at scale** — smart downsampling handles 10M+ variant datasets
+   without manual intervention.
+
+The package reads output from PLINK, REGENIE, GCTA, GEMMA, and any generic
+tab-separated file. All plot functions return standard ggplot objects, so
+you can add layers, override themes, or combine panels with `patchwork`
+exactly as you would with any other ggplot.
+
 # Getting started
 
 ## Installation
 
 ```{r eval=FALSE}
+# From GitHub
 pak::pak("bczech/gwasplot")
+
+# Once available on Bioconductor:
+# BiocManager::install("gwasplot")
 ```
 
 ## Reading data
 
-`read_gwas_table()` auto-detects column names from any delimited file:
+The fastest way to load GWAS results is `read_gwas_table()`, which
+auto-detects common column naming conventions (CHR/CHROM/#CHROM,
+BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 
 ```{r}
 library(gwasplot)
@@ -46,18 +86,22 @@ data(example_gwas)
 example_gwas
 ```
 
-Format-specific readers are also available:
+The result is a `gwas_data` object — a data.frame with validated columns
+and a custom print method showing key QC metrics at a glance.
+
+For specific tools, dedicated readers handle format quirks automatically:
 
 ```{r eval=FALSE}
-gwas <- read_gwas_table("results.txt")
-gwas <- read_plink_assoc("results.assoc")
+gwas <- read_gwas_table("results.txt")       # auto-detect
+gwas <- read_plink_assoc("results.assoc")    # PLINK
 gwas <- read_plink_linear("results.assoc.linear")
-gwas <- read_regenie("results.regenie")
-gwas <- read_gcta_mlma("results.mlma")
-gwas <- read_gemma("results.assoc.txt")
+gwas <- read_regenie("results.regenie")      # REGENIE (handles LOG10P)
+gwas <- read_gcta_mlma("results.mlma")       # GCTA
+gwas <- read_gemma("results.assoc.txt")      # GEMMA
 ```
 
-Any `data.frame` works directly — just map the columns if needed:
+You can also pass any `data.frame` directly — just specify non-standard
+column names:
 
 ```{r eval=FALSE}
 manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
@@ -67,11 +111,17 @@ manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
 
 ## Manhattan plot
 
+The Manhattan plot is the workhorse of GWAS visualization — each point is a
+tested variant, plotted by genomic position (x) against its association
+strength as -log10(p-value) (y). Chromosomes alternate in color for visual
+separation. Dashed lines mark genome-wide significance (5×10⁻⁸) and the
+suggestive threshold (10⁻⁵).
+
 ```{r manhattan-basic}
 manhattan_plot(example_gwas)
 ```
 
-Label the top hits and adjust colors:
+Label the strongest signals and switch to a different palette:
 
 ```{r manhattan-custom}
 manhattan_plot(
@@ -83,13 +133,18 @@ manhattan_plot(
 
 ## QQ plot
 
-P-value distribution with confidence bands and genomic inflation factor:
+The quantile-quantile plot compares observed p-value distribution against the
+expectation under the null hypothesis. Deviation from the diagonal (especially
+in the tail) indicates true signal, while early departure suggests population
+stratification or technical artifacts. The grey band shows the 95% confidence
+interval, and λ_GC quantifies genomic inflation.
 
 ```{r qq}
 qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
 ```
 
-Stratify by MAF to check whether inflation is driven by rare variants:
+Stratifying by minor allele frequency helps diagnose whether inflation is
+driven by rare variants (common in imputed data) or is uniform:
 
 ```{r qq-stratified}
 example_gwas$MAF_bin <- cut(
@@ -102,7 +157,9 @@ qq_plot(example_gwas, group = "MAF_bin")
 
 ## Miami plot
 
-Two GWAS results mirrored vertically — handy for discovery vs replication:
+The Miami plot mirrors two Manhattan plots vertically — one pointing up, one
+pointing down. This is the standard way to compare discovery and replication
+cohorts, or two related traits, on a shared genomic coordinate axis:
 
 ```{r miami}
 miami_plot(
@@ -114,7 +171,9 @@ miami_plot(
 
 ## Locus zoom
 
-Zoom into a region of interest:
+Once you identify a significant region, a locus plot shows the fine structure
+of association within that locus. Optional LD coloring and gene tracks add
+biological context:
 
 ```{r locus}
 locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
@@ -124,8 +183,12 @@ locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
 
 ## Genome-wide p-value heatmap
 
-Each cell is a genomic bin colored by the minimum p-value it contains.
-Handles millions of variants without downsampling because it pre-aggregates:
+A compact representation of association signals across the entire genome.
+The x-axis is binned genomic position, the y-axis is chromosome, and color
+intensity reflects the strongest signal in each bin. This works well as an
+overview figure when you want to show genome-wide patterns without
+overplotting thousands of points. It also handles very large datasets
+efficiently because it pre-aggregates before plotting.
 
 ```{r heatmap}
 pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
@@ -133,7 +196,11 @@ pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
 
 ## Effect-size volcano
 
-BETA vs -log10(p) — see direction and magnitude of effect at a glance:
+Unlike the RNA-seq volcano plot (which uses fold change), this plots GWAS
+effect size (BETA) against significance. You see at once which signals are
+protective vs risk-increasing, and how large the effects are relative to
+their statistical evidence. Points can be colored by significance status
+or by chromosome:
 
 ```{r volcano}
 volcano_plot(example_gwas, label_top_n = 5)
@@ -141,7 +208,9 @@ volcano_plot(example_gwas, label_top_n = 5)
 
 ## Circular Manhattan
 
-Circos-style layout, also supports multiple rings for multi-trait comparison:
+The circular (circos-style) Manhattan arranges chromosomes around a ring.
+This layout is compact and works particularly well for multi-trait
+comparisons where each trait occupies its own ring:
 
 ```{r circular, fig.width=8, fig.height=8}
 circular_manhattan(example_gwas, colors = gwas_palette("nature"))
@@ -149,9 +218,12 @@ circular_manhattan(example_gwas, colors = gwas_palette("nature"))
 
 ## Summary dashboard
 
-Multi-panel figure with automatic panel tags (A, B, C, D):
+When you need a single figure that shows the full picture — Manhattan, QQ,
+top hits table, and p-value distribution — `gwas_summary()` assembles them
+into a multi-panel layout with automatic tags (A, B, C, D) suitable for
+supplementary figures:
 
-```{r summary, fig.height=8}
+```{r summary, fig.height=9}
 gwas_summary(example_gwas)
 ```
 
@@ -159,9 +231,10 @@ gwas_summary(example_gwas)
 
 ## Gene labels on peaks
 
-`manhattan_genes()` replaces rs IDs with the nearest gene name from a
-user-supplied table. In practice you would load this from a GTF file
-or via biomaRt — here we define a small set by hand:
+In manuscripts, rs IDs are less informative than gene names.
+`manhattan_genes()` takes a gene annotation table and labels each lead SNP
+with its nearest gene. In practice, you would extract this table from a GTF
+file or via `biomaRt` — here we define a small set manually:
 
 ```{r gene-labels}
 genes <- data.frame(
@@ -174,7 +247,7 @@ genes <- data.frame(
 manhattan_genes(example_gwas, genes = genes, gene_p_threshold = 0.001)
 ```
 
-Arrow-style labels work better when peaks are close together:
+When peaks are close together, arrow-style annotations avoid label overlap:
 
 ```{r gene-arrows}
 manhattan_genes(
@@ -186,8 +259,10 @@ manhattan_genes(
 
 ## Top hits table
 
-`top_hits()` clumps significant SNPs (keeping one lead per 1 Mb window),
-estimates the cytoband, and optionally maps each to the nearest gene:
+`top_hits()` extracts independent lead SNPs using window-based clumping
+(1 Mb by default), annotates each with an estimated cytoband, and optionally
+maps to the nearest gene. The result is a plain data.frame ready for export
+to a manuscript table:
 
 ```{r top-hits}
 top_hits(example_gwas, p_threshold = 0.001, genes = genes, n = 10)
@@ -195,8 +270,9 @@ top_hits(example_gwas, p_threshold = 0.001, genes = genes, n = 10)
 
 ## Region highlights
 
-Draw a colored band behind a genomic region — useful for marking the MHC,
-known GWAS loci, or any region of interest:
+Mark specific genomic regions with a colored band — for example the MHC
+(chr6:25-34 Mb), known risk loci from prior GWAS, or candidate regions
+from linkage studies:
 
 ```{r regions}
 plt <- manhattan_plot(example_gwas)
@@ -215,8 +291,10 @@ highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
 
 ## Multi-trait Manhattan
 
-Overlay multiple GWAS on one plot. Variants reaching significance in
-more than one trait are flagged automatically:
+Comparing GWAS results across traits on a single plot reveals shared
+genetic architecture (pleiotropy). `multitrait_manhattan()` overlays
+multiple datasets with distinct colors and automatically highlights variants
+that are genome-wide significant in more than one trait:
 
 ```{r multitrait}
 set.seed(123)
@@ -234,8 +312,10 @@ multitrait_manhattan(
 
 ## Enrichment Manhattan
 
-Color SNPs by whether they fall in annotated functional regions
-(enhancers, promoters, eQTLs). Pass a data.frame or a named list:
+Functional genomic annotations (enhancers, promoters, eQTLs, open chromatin
+regions) help interpret whether GWAS signals cluster in biologically
+meaningful parts of the genome. `enrichment_manhattan()` colors variants
+by their overlap with user-supplied annotation regions:
 
 ```{r enrichment}
 annotations <- data.frame(
@@ -251,7 +331,10 @@ enrichment_manhattan(example_gwas, annotations = annotations, palette = "nature"
 
 ## Circular Manhattan (multi-ring)
 
-```{r circular-multi, fig.height=7}
+The multi-ring layout stacks traits concentrically — each ring is an
+independent GWAS, sharing the same angular coordinate system:
+
+```{r circular-multi, fig.width=8, fig.height=8}
 circular_manhattan(
   list(BMI = example_gwas, Height = trait2),
   colors = "nature", point_size = 0.6
@@ -262,48 +345,65 @@ circular_manhattan(
 
 ## Color palettes
 
-14 built-in palettes, all colorblind-safe:
+gwasplot ships with 14 palettes covering different use cases — colorblind-safe
+defaults, journal-inspired schemes, and RColorBrewer integrations:
 
 ```{r}
 gwas_palettes()
 gwas_palette("nature", n = 5)
 ```
 
+Any palette can be passed directly to plot functions via the `colors` argument.
+Use `gwas_palette(name, n = k)` to interpolate when you need a specific number
+of colors (e.g., for multi-trait plots).
+
 ## Journal themes
+
+Each journal has its own style requirements for figure fonts, sizes, and axis
+formatting. Built-in themes handle this so you don't need to manually adjust
+parameters for each submission:
 
 ```{r theme-demo}
 manhattan_plot(example_gwas, label_top_n = 3) + theme_nature()
 ```
 
-Available: `theme_nature()`, `theme_science()`, `theme_cell()`,
+Available themes: `theme_nature()`, `theme_science()`, `theme_cell()`,
 `theme_plos()`, `theme_presentation()`, `theme_poster()`.
 
 ## Presets
 
-A preset bundles a theme, palette, and point sizes:
+A preset bundles together a theme, color palette, and appropriate point sizes
+for a given context. This is the fastest way to switch between exploratory
+analysis and publication-ready output:
 
 ```{r preset}
 p <- gwas_preset("publication")
 manhattan_plot(example_gwas, colors = p$colors, point_size = p$point_size) + p$theme
 ```
 
-Options: `"publication"`, `"presentation"`, `"poster"`, `"exploratory"`.
+Available presets: `"publication"`, `"presentation"`, `"poster"`,
+`"exploratory"`.
 
 # Performance
 
-Smart downsampling kicks in automatically above 200k variants. It keeps
-every significant SNP and bins the rest — the plot looks identical but
-renders much faster:
+For large datasets (common in imputed GWAS with 10-40M variants),
+gwasplot applies smart downsampling by default. The algorithm preserves all
+significant and near-significant variants while spatially binning the dense
+cloud of non-significant points. The resulting plot is visually
+indistinguishable from plotting all points, but renders in seconds rather
+than minutes:
 
 ```{r eval=FALSE}
-manhattan_plot(large_gwas)                       # auto
-manhattan_plot(large_gwas, downsample = FALSE)   # all points
+manhattan_plot(large_gwas)                        # auto (target: 200k points)
+manhattan_plot(large_gwas, downsample = FALSE)    # all points (slow)
 manhattan_plot(large_gwas, downsample_n = 500000) # custom target
 ```
 
 # Multi-panel figures
 
-Every function returns a ggplot, so `patchwork` works out of the box:
+Since every gwasplot function returns a standard ggplot object, you can
+compose multi-panel figures using `patchwork` the same way you would with
+any other ggplot:
 
 ```{r patchwork, fig.height=8}
 library(patchwork)
@@ -318,11 +418,21 @@ p3 <- volcano_plot(example_gwas, label_top_n = 5) +
 p1 / (p2 | p3) + plot_layout(heights = c(2, 1))
 ```
 
-# Saving
+# Saving figures
+
+Standard ggplot2 export with dimensions matching journal requirements:
 
 ```{r eval=FALSE}
 fig <- manhattan_plot(example_gwas, label_top_n = 5) + theme_nature()
+
+# Nature — single column (89 mm width)
 ggsave("figure1.pdf", fig, width = 89, height = 55, units = "mm")
+
+# Full-width figure (183 mm)
+ggsave("figure1_wide.pdf", fig, width = 183, height = 80, units = "mm")
+
+# High-res PNG for presentations
+ggsave("figure1.png", fig, width = 10, height = 5, dpi = 300)
 ```
 
 # Session info

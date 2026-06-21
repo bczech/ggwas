@@ -10,7 +10,7 @@ manhattan_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  colors = c("#2C3E50", "#7F8C8D"),
+  colors = c("#1A5276", "#76D7C4"),
   point_size = 0.8,
   alpha = 1,
   genome_wide = 5e-08,
@@ -25,6 +25,7 @@ manhattan_plot(
   downsample = TRUE,
   downsample_n = 2e+05,
   chromosomes = NULL,
+  chr_labels = NULL,
   y_limit = NULL,
   title = NULL
 )
@@ -63,6 +64,9 @@ manhattan_plot(
 \item{downsample_n}{Target number of points after downsampling.}
 
 \item{chromosomes}{Subset of chromosomes to plot (integer vector).}
+
+\item{chr_labels}{Custom chromosome labels (character vector, same length
+as displayed chromosomes). If NULL, auto-generated from chromosome numbers.}
 
 \item{y_limit}{Upper y-axis limit for -log10(p).}
 

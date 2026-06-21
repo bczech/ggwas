@@ -11,7 +11,7 @@ miami_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  colors = c("#2C3E50", "#7F8C8D"),
+  colors = c("#1A5276", "#76D7C4"),
   genome_wide = 5e-08,
   suggestive = 1e-05,
   top_highlight = NULL,

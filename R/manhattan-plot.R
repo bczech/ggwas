@@ -20,6 +20,8 @@
 #' @param downsample Enable smart downsampling for large datasets.
 #' @param downsample_n Target number of points after downsampling.
 #' @param chromosomes Subset of chromosomes to plot (integer vector).
+#' @param chr_labels Custom chromosome labels (character vector, same length
+#'   as displayed chromosomes). If NULL, auto-generated from chromosome numbers.
 #' @param y_limit Upper y-axis limit for -log10(p).
 #' @param title Plot title.
 #' @return A ggplot object.
