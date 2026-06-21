@@ -1,0 +1,10 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^README\.Rmd$
+^data-raw$
+^\.github$
+^pkgdown$
+^cran-comments\.md$
+^_pkgdown\.yml$
+gwasplot.Rcheck/

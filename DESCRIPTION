@@ -1,0 +1,34 @@
+Package: gwasplot
+Title: Modern 'ggplot2' Visualizations for Genome-Wide Association Studies
+Version: 0.1.0
+Authors@R: person("Bartosz", "Czech", email = "bartosz.czech@upwr.edu.pl",
+                  role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9908-7084"))
+Description: Create publication-ready Manhattan plots, QQ plots, Miami plots,
+    locus zoom plots, and novel genome-wide heatmaps from GWAS summary
+    statistics. Reads PLINK, REGENIE, GCTA, and GEMMA formats natively.
+    All plot functions return 'ggplot2' objects for full customization.
+    Smart downsampling handles datasets with 10 million+ variants efficiently.
+License: MIT + file LICENSE
+URL: https://github.com/bczech/gwasplot
+BugReports: https://github.com/bczech/gwasplot/issues
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+Depends: R (>= 4.1.0)
+Imports:
+    cli,
+    data.table (>= 1.14.0),
+    ggplot2 (>= 3.5.0),
+    ggrepel (>= 0.9.0),
+    grDevices,
+    gridExtra,
+    patchwork (>= 1.2.0),
+    RColorBrewer,
+    rlang (>= 1.0.0),
+    scales
+Suggests:
+    ggsci,
+    testthat (>= 3.0.0),
+    withr
+Config/testthat/edition: 3
+Config/roxygen2/version: 8.0.0
