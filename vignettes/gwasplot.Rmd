@@ -3,7 +3,7 @@ title: "gwasplot: Modern GWAS Visualizations"
 author:
   - name: Bartosz Czech
     affiliation: GeneStat
-    email: bartosz.czech@upwr.edu.pl
+    email: bartosz.w.czech@gmail.com
 date: "`r Sys.Date()`"
 package: gwasplot
 abstract: >
