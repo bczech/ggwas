@@ -342,6 +342,98 @@ circular_manhattan(
 )
 ```
 
+# Post-GWAS analysis plots
+
+## PheWAS plot
+
+Phenome-wide association studies test one variant against hundreds or
+thousands of phenotypes. The PheWAS plot arranges phenotypes by category
+along the x-axis, with -log10(p) on the y-axis. Triangle direction
+indicates whether the effect is positive or negative — immediately showing
+which phenotype domains are enriched for associations:
+
+```{r phewas, fig.height=5}
+phewas_data <- data.frame(
+  phenotype = paste0("Pheno_", 1:60),
+  p = 10^(-runif(60, 0, 10)),
+  category = rep(c("Metabolic", "Immune", "Neurological",
+                    "Cardiovascular", "Musculoskeletal", "Other"), 10),
+  beta = rnorm(60, 0, 0.3)
+)
+
+phewas_plot(phewas_data, label_top_n = 5)
+```
+
+## Colocalization locus plot
+
+When a GWAS signal and an eQTL signal overlap at the same locus, a
+colocalization plot helps judge visually whether they share the same
+causal variant. The two panels share a genomic coordinate axis — if the
+peaks line up, colocalization is likely:
+
+```{r coloc}
+set.seed(42)
+eqtl_data <- example_gwas
+eqtl_data$P <- runif(nrow(eqtl_data))^2
+
+coloc_plot(
+  example_gwas, eqtl_data,
+  region_chr = 1, region_start = 1e6, region_end = 30e6,
+  top_title = "GWAS", bottom_title = "eQTL"
+)
+```
+
+## Fine-mapping credible set
+
+After statistical fine-mapping (SuSiE, FINEMAP), each variant has a
+posterior inclusion probability (PIP) indicating how likely it is to be
+causal. `finemapping_plot()` encodes PIP as point size and credible set
+membership as color — the emerging standard for fine-mapping figures:
+
+```{r finemapping}
+fm_data <- example_gwas
+fm_data$PIP <- runif(nrow(fm_data))^5
+fm_data$PIP[which.min(fm_data$P)] <- 0.92
+fm_data$PIP[order(fm_data$P)[2:3]] <- c(0.65, 0.4)
+fm_data$credible_set <- NA_integer_
+fm_data$credible_set[fm_data$PIP > 0.05] <- 1L
+
+finemapping_plot(
+  fm_data,
+  region_chr = 1, region_start = 1e6, region_end = 50e6,
+  label_pip_above = 0.3
+)
+```
+
+## Genetic correlation matrix
+
+LD Score Regression (LDSC) estimates genetic correlations between traits.
+`genetic_correlation()` displays them as a clustered heatmap with
+significance markers — one of the most common figures in cross-trait
+genomics papers:
+
+```{r rg-matrix, fig.height=6}
+traits <- c("BMI", "Height", "WHR", "T2D", "CAD", "SBP", "HDL")
+set.seed(123)
+rg <- matrix(0, 7, 7, dimnames = list(traits, traits))
+rg[lower.tri(rg)] <- runif(21, -0.6, 0.8)
+rg <- rg + t(rg)
+diag(rg) <- 1
+
+genetic_correlation(rg, show_values = TRUE, palette = "RdBu")
+```
+
+## Genetic architecture
+
+The relationship between minor allele frequency and effect size reveals
+a trait's genetic architecture. Polygenic traits (height, BMI) show many
+small effects spread across the MAF spectrum. Oligogenic traits have a
+few large-effect variants, often at low frequency:
+
+```{r architecture}
+architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
+```
+
 # Themes, palettes, and presets
 
 ## Color palettes
