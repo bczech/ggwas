@@ -1,0 +1,189 @@
+---
+title: "Advanced: Multi-trait, Enrichment, and Performance"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced: Multi-trait, Enrichment, and Performance}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5,
+  dpi = 96
+)
+```
+
+```{r setup}
+library(gwasplot)
+library(ggplot2)
+data(example_gwas)
+```
+
+## Multi-trait Manhattan
+
+Compare multiple GWAS results on a single plot to identify shared loci
+(pleiotropy):
+
+```{r multitrait}
+# Simulate a second trait
+set.seed(123)
+trait2 <- example_gwas
+trait2$P <- runif(nrow(trait2))^3
+trait2$P[sample(nrow(trait2), 10)] <- 10^(-runif(10, 5, 10))
+
+multitrait_manhattan(
+  BMI = example_gwas,
+  Height = trait2,
+  colors = "nature",
+  highlight_shared = TRUE
+)
+```
+
+### Customizing multi-trait plots
+
+```{r multitrait-custom}
+multitrait_manhattan(
+  Trait1 = example_gwas,
+  Trait2 = trait2,
+  colors = c(Trait1 = "#E64B35", Trait2 = "#4DBBD5"),
+  shapes = c(Trait1 = 16L, Trait2 = 17L),
+  point_size = 1.0,
+  alpha = 0.6,
+  legend_position = "top"
+)
+```
+
+## Enrichment Manhattan
+
+Overlay functional genomic annotations to see if significant variants fall
+in biologically relevant regions:
+
+```{r enrichment}
+# Define annotation regions
+annotations <- data.frame(
+  chr = c(1, 3, 5, 7, 11, 15, 19),
+  start = c(5e6, 20e6, 50e6, 30e6, 60e6, 40e6, 10e6),
+  end = c(30e6, 50e6, 120e6, 80e6, 100e6, 80e6, 40e6),
+  category = c("Enhancer", "Gene", "eQTL", "Gene",
+               "Enhancer", "eQTL", "Gene")
+)
+
+enrichment_manhattan(
+  example_gwas,
+  annotations = annotations,
+  palette = "nature",
+  label_top_n = 3
+)
+```
+
+### Using a named list of annotations
+
+```{r enrichment-list}
+annot_list <- list(
+  Promoters = data.frame(
+    chr = c(1, 5, 10),
+    start = c(2e6, 80e6, 50e6),
+    end = c(10e6, 100e6, 70e6)
+  ),
+  Enhancers = data.frame(
+    chr = c(3, 7, 15),
+    start = c(30e6, 40e6, 20e6),
+    end = c(60e6, 70e6, 50e6)
+  )
+)
+
+enrichment_manhattan(
+  example_gwas,
+  annotations = annot_list,
+  annotation_colors = c(Promoters = "#E64B35", Enhancers = "#4DBBD5")
+)
+```
+
+## Circular Manhattan (multi-ring)
+
+Compare multiple traits in a circos-style layout:
+
+```{r circular-multi, fig.height=7}
+circular_manhattan(
+  list(BMI = example_gwas, Height = trait2),
+  colors = "nature",
+  point_size = 0.6
+)
+```
+
+## Stratified QQ plot
+
+Check for inflation in different subsets of your data:
+
+```{r qq-stratified}
+# Add MAF bins
+example_gwas$MAF_bin <- cut(
+  example_gwas$AF,
+  breaks = c(0, 0.05, 0.2, 0.5),
+  labels = c("Rare (<5%)", "Low (5-20%)", "Common (>20%)")
+)
+
+qq_plot(example_gwas, group = "MAF_bin")
+```
+
+## Performance: handling large datasets
+
+gwasplot uses smart downsampling by default for datasets > 200k variants.
+The algorithm:
+
+1. **Keeps all significant SNPs** (p < 0.001)
+2. **Keeps highlighted/labeled SNPs**
+3. **Bins non-significant SNPs** by position and -log10(p)
+4. **Deduplicates** within bins
+
+This produces visually identical plots 10-100x faster:
+
+```{r eval=FALSE}
+# 10M SNPs — renders in seconds, not minutes
+gwas_large <- read_gwas_table("large_gwas.txt")
+manhattan_plot(gwas_large)  # automatic downsampling
+
+# Disable if you need all points (e.g., for density analysis)
+manhattan_plot(gwas_large, downsample = FALSE)
+
+# Adjust target number of points
+manhattan_plot(gwas_large, downsample_n = 500000)
+```
+
+## Combining plots for publication
+
+Use `patchwork` to create complex multi-panel figures:
+
+```{r patchwork, fig.height=8}
+library(patchwork)
+
+p1 <- manhattan_plot(example_gwas, label_top_n = 3) +
+  labs(title = "A") + theme_nature()
+
+p2 <- qq_plot(example_gwas) +
+  labs(title = "B") + theme_nature()
+
+p3 <- volcano_plot(example_gwas, label_top_n = 5) +
+  labs(title = "C") + theme_nature()
+
+p4 <- pvalue_heatmap(example_gwas, bin_size = 10e6) +
+  labs(title = "D")
+
+(p1 / (p2 | p3 | p4)) + plot_layout(heights = c(2, 1))
+```
+
+## Exporting for publication
+
+```{r eval=FALSE}
+# Nature single-column figure
+fig <- manhattan_plot(example_gwas, label_top_n = 5) + theme_nature()
+ggsave("figure1.pdf", fig, width = 89, height = 55, units = "mm")
+
+# Multi-panel for supplementary
+supp <- gwas_summary(example_gwas)
+ggsave("supplementary_fig1.pdf", supp, width = 183, height = 200, units = "mm")
+```
