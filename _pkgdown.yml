@@ -13,8 +13,8 @@ navbar:
       href: https://github.com/bczech/gwasplot
 
 reference:
-  - title: "Plot functions"
-    desc: "Core GWAS visualizations"
+  - title: "Core plots"
+    desc: "Standard GWAS visualizations"
     contents:
       - manhattan_plot
       - qq_plot
@@ -24,13 +24,22 @@ reference:
       - pvalue_heatmap
       - circular_manhattan
       - gwas_summary
+
+  - title: "Advanced plots"
+    desc: "Multi-trait, enrichment, and post-GWAS visualizations"
+    contents:
       - enrichment_manhattan
       - multitrait_manhattan
-      - manhattan_genes
+      - phewas_plot
+      - coloc_plot
+      - finemapping_plot
+      - genetic_correlation
+      - architecture_plot
 
   - title: "Annotation and analysis"
     desc: "Gene annotation, region highlights, top hits"
     contents:
+      - manhattan_genes
       - annotate_genes
       - highlight_regions
       - top_hits
@@ -59,7 +68,12 @@ reference:
       - starts_with("scale_color")
       - starts_with("scale_fill")
 
-  - title: "Utilities"
+  - title: "Data utilities"
+    desc: "Filtering, merging, and extracting GWAS data"
     contents:
+      - filter_region
+      - maf_filter
+      - merge_gwas
+      - get_loci
       - calc_lambda
       - example_gwas
