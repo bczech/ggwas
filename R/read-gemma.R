@@ -6,7 +6,7 @@
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' gwas <- read_gemma("my_results.assoc.txt")
 #' }
 read_gemma <- function(file, p_column = "p_wald", ...) {
