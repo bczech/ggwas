@@ -98,25 +98,27 @@ calc_lambda <- function(p) {
 #' Add cumulative base pair positions for genome-wide plotting
 #' @noRd
 add_cumulative_bp <- function(data) {
-  chr_lengths <- stats::aggregate(
-    data$BP,
-    by = list(CHR = data$CHR),
-    FUN = max
+  chr_f <- data$CHR
+  max_bp <- tapply(data$BP, chr_f, max)
+  chrs <- as.integer(names(max_bp))
+  ord <- order(chrs)
+  chrs <- chrs[ord]
+  max_bp <- max_bp[ord]
+
+  cumstart <- c(0, cumsum(max_bp[-length(max_bp)]))
+  gap <- max_bp[1] * 0.05
+  cumstart <- cumstart + (seq_along(chrs) - 1) * gap
+
+  chr_lengths <- data.frame(
+    CHR = chrs,
+    max_bp = as.numeric(max_bp),
+    cumstart = cumstart,
+    center = cumstart + as.numeric(max_bp) / 2
   )
-  names(chr_lengths) <- c("CHR", "max_bp")
-  chr_lengths <- chr_lengths[order(chr_lengths$CHR), ]
-  chr_lengths$cumstart <- cumsum(c(0, chr_lengths$max_bp[-nrow(chr_lengths)]))
 
-  gap <- max(chr_lengths$max_bp) * 0.05
-  chr_lengths$cumstart <- chr_lengths$cumstart +
-    (seq_len(nrow(chr_lengths)) - 1) * gap
-
-  chr_lengths$center <- chr_lengths$cumstart + chr_lengths$max_bp / 2
-
-  cumstart_vec <- stats::setNames(chr_lengths$cumstart, chr_lengths$CHR)
-  data$BP_CUM <- data$BP + cumstart_vec[as.character(data$CHR)]
+  cumstart_vec <- stats::setNames(cumstart, chrs)
+  data$BP_CUM <- data$BP + cumstart_vec[as.character(chr_f)]
 
   attr(data, "chr_info") <- chr_lengths
-
   data
 }
