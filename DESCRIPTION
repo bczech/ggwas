@@ -31,6 +31,7 @@ Suggests:
     ggsci,
     knitr,
     rmarkdown,
+    scattermore,
     testthat (>= 3.0.0),
     withr
 VignetteBuilder: knitr
