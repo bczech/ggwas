@@ -146,6 +146,16 @@ Smart downsampling kicks in automatically for large datasets. It preserves
 all significant variants and bins the non-significant background — the plot
 looks identical but renders in seconds instead of minutes:
 
+| Variants | qqman | gwasplot | Speedup |
+|---|---|---|---|
+| 50k | 0.19s | 0.20s | ~1x |
+| 200k | 0.78s | 0.42s | **1.9x** |
+| 500k | 1.81s | 1.03s | **1.8x** |
+| 1M | 4.24s | 1.73s | **2.5x** |
+| 2M | 9.00s | 2.28s | **3.9x** |
+
+<img src="benchmark/benchmark_plot.png" width="600" alt="Benchmark: gwasplot vs qqman" />
+
 ```r
 manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
 ```
