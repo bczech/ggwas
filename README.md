@@ -157,11 +157,6 @@ See the package vignette for full documentation with worked examples:
 vignette("gwasplot")
 ```
 
-## Contributing
-
-Contributions are welcome. Please see [CONTRIBUTING.md](CONTRIBUTING.md)
-for guidelines.
-
 ## Citation
 
 ```
