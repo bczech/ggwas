@@ -115,8 +115,14 @@ manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
 The Manhattan plot is the workhorse of GWAS visualization — each point is a
 tested variant, plotted by genomic position (x) against its association
 strength as -log10(p-value) (y). Chromosomes alternate in color for visual
-separation. Dashed lines mark genome-wide significance (5×10⁻⁸) and the
-suggestive threshold (10⁻⁵).
+separation.
+
+**How to interpret:** Look for "towers" of points rising above the
+genome-wide significance line (red dashed, p = 5×10⁻⁸). Each tower is a
+locus with evidence of true association. Isolated points above the line are
+worth investigating but may be artifacts. A broad signal spanning multiple
+chromosomes equally (rather than discrete peaks) can indicate unresolved
+population stratification — check the QQ plot in that case.
 
 ```{r manhattan-basic}
 manhattan_plot(example_gwas)
@@ -135,10 +141,16 @@ manhattan_plot(
 ## QQ plot
 
 The quantile-quantile plot compares observed p-value distribution against the
-expectation under the null hypothesis. Deviation from the diagonal (especially
-in the tail) indicates true signal, while early departure suggests population
-stratification or technical artifacts. The grey band shows the 95% confidence
-interval, and λ_GC quantifies genomic inflation.
+expectation under the null hypothesis.
+
+**How to interpret:** Points should follow the diagonal closely in the lower
+left (bulk of non-associated variants) and only deviate upward in the tail
+(true signals). If points lift off the diagonal early and uniformly, that
+indicates genomic inflation — either population stratification or cryptic
+relatedness in your sample. The grey band is the 95% confidence interval
+under the null: points inside it are consistent with no association.
+λ_GC > 1.05 in a well-powered GWAS with polygenic signal is expected;
+λ_GC > 1.2 without a clear polygenic explanation warrants investigation.
 
 ```{r qq}
 qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
@@ -160,7 +172,13 @@ qq_plot(example_gwas, group = "MAF_bin")
 
 The Miami plot mirrors two Manhattan plots vertically — one pointing up, one
 pointing down. This is the standard way to compare discovery and replication
-cohorts, or two related traits, on a shared genomic coordinate axis:
+cohorts, or two related traits, on a shared genomic coordinate axis.
+
+**How to interpret:** Peaks at the same genomic position in both panels
+replicate across cohorts. Peaks present in only one panel may be
+cohort-specific (sample composition, ancestry differences) or underpowered
+in the other study. Use this for discovery/replication comparison or for
+two related phenotypes (e.g., BMI vs waist-hip ratio) to see shared loci:
 
 ```{r miami}
 miami_plot(
@@ -173,8 +191,14 @@ miami_plot(
 ## Locus zoom
 
 Once you identify a significant region, a locus plot shows the fine structure
-of association within that locus. Optional LD coloring and gene tracks add
-biological context:
+of association within that locus.
+
+**How to interpret:** The lead SNP (lowest p-value) anchors the plot. When
+LD data is provided, points are colored by r² with the lead — red points
+(high LD) that also reach significance support the same association signal,
+while blue points (low LD) that reach significance independently may
+represent a secondary signal at the locus. The gene track underneath shows
+which genes fall within the region, guiding biological follow-up:
 
 ```{r locus}
 locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
@@ -186,10 +210,13 @@ locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
 
 A compact representation of association signals across the entire genome.
 The x-axis is binned genomic position, the y-axis is chromosome, and color
-intensity reflects the strongest signal in each bin. This works well as an
-overview figure when you want to show genome-wide patterns without
-overplotting thousands of points. It also handles very large datasets
-efficiently because it pre-aggregates before plotting.
+intensity reflects the strongest signal in each bin.
+
+**When to use:** This works well as a supplementary overview figure — it
+shows genome-wide patterns that Manhattan plots can obscure through
+overplotting. Hot spots (bright tiles) across multiple chromosomes suggest
+polygenicity; a single intense cluster points to one major locus. It also
+handles 10M+ variant datasets without downsampling because it pre-aggregates.
 
 ```{r heatmap}
 pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
@@ -292,10 +319,15 @@ highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
 
 ## Multi-trait Manhattan
 
-Comparing GWAS results across traits on a single plot reveals shared
-genetic architecture (pleiotropy). `multitrait_manhattan()` overlays
-multiple datasets with distinct colors and automatically highlights variants
-that are genome-wide significant in more than one trait:
+Pleiotropy — one variant influencing multiple traits — is pervasive in
+complex genetics. Visualizing it requires overlaying GWAS results from
+multiple traits on a shared genomic axis.
+
+**How to interpret:** Diamond-shaped highlighted points are variants reaching
+genome-wide significance in more than one trait simultaneously. Peaks that
+appear in multiple colors at the same position suggest shared genetic
+mechanisms, worth following up with formal colocalization or Mendelian
+randomization:
 
 ```{r multitrait}
 set.seed(123)
@@ -313,10 +345,15 @@ multitrait_manhattan(
 
 ## Enrichment Manhattan
 
-Functional genomic annotations (enhancers, promoters, eQTLs, open chromatin
-regions) help interpret whether GWAS signals cluster in biologically
-meaningful parts of the genome. `enrichment_manhattan()` colors variants
-by their overlap with user-supplied annotation regions:
+Most GWAS hits fall in non-coding regions, making functional interpretation
+challenging. Overlaying genomic annotations (enhancers, promoters, eQTLs,
+open chromatin from ENCODE/Roadmap) helps determine whether signals enrich
+in regulatory elements relevant to the tissue of interest.
+
+**How to interpret:** Colored points fall within annotated functional
+regions; grey background points do not. If significant peaks preferentially
+overlap with one annotation type (e.g., liver enhancers for lipid traits),
+that provides evidence for the regulatory mechanism and tissue of action:
 
 ```{r enrichment}
 annotations <- data.frame(
@@ -347,10 +384,16 @@ circular_manhattan(
 ## PheWAS plot
 
 Phenome-wide association studies test one variant against hundreds or
-thousands of phenotypes. The PheWAS plot arranges phenotypes by category
-along the x-axis, with -log10(p) on the y-axis. Triangle direction
-indicates whether the effect is positive or negative — immediately showing
-which phenotype domains are enriched for associations:
+thousands of phenotypes — common in biobank-era research (UK Biobank,
+FinnGen, All of Us).
+
+**How to interpret:** Each point is a phenotype. Phenotypes are grouped by
+domain (metabolic, immune, cardiovascular, etc.) along the x-axis. Triangles
+pointing up indicate risk-increasing effects; pointing down, protective.
+A cluster of significant associations within one domain suggests the variant
+influences a biological pathway rather than a single trait. Isolated
+significant hits across multiple domains may indicate pleiotropy or a
+shared confounder (e.g., BMI-mediated effects):
 
 ```{r phewas, fig.height=5}
 phewas_data <- data.frame(
@@ -366,10 +409,16 @@ phewas_plot(phewas_data, label_top_n = 5)
 
 ## Colocalization locus plot
 
-When a GWAS signal and an eQTL signal overlap at the same locus, a
-colocalization plot helps judge visually whether they share the same
-causal variant. The two panels share a genomic coordinate axis — if the
-peaks line up, colocalization is likely:
+Colocalization analysis asks: do a GWAS signal and an eQTL (or two GWAS
+traits) share the same causal variant, or are they driven by different
+variants that happen to be nearby?
+
+**How to interpret:** The two panels share a genomic coordinate axis. If the
+peak in the top panel (GWAS) aligns with the peak in the bottom panel
+(eQTL), the signals likely share a causal variant — the gene regulated by
+that eQTL is a strong candidate for the GWAS hit. Offset peaks suggest
+distinct causal variants in LD. This visual check complements formal
+colocalization methods (coloc, eCAVIAR):
 
 ```{r coloc}
 set.seed(42)
@@ -385,10 +434,17 @@ coloc_plot(
 
 ## Fine-mapping credible set
 
-After statistical fine-mapping (SuSiE, FINEMAP), each variant has a
-posterior inclusion probability (PIP) indicating how likely it is to be
-causal. `finemapping_plot()` encodes PIP as point size and credible set
-membership as color — the emerging standard for fine-mapping figures:
+After identifying a GWAS locus, fine-mapping narrows down which variant
+is most likely causal. Tools like SuSiE and FINEMAP assign each variant a
+posterior inclusion probability (PIP, 0–1) and group high-PIP variants into
+credible sets.
+
+**How to interpret:** Large points have high PIP — they are strong causal
+candidates. Color indicates credible set membership: variants in the same
+set are in LD and cannot be statistically distinguished. A locus with one
+large red point (PIP > 0.8) is well-resolved; a locus with many
+medium-sized points in one set has residual uncertainty. Multiple credible
+sets at one locus suggest independent signals:
 
 ```{r finemapping}
 fm_data <- example_gwas
@@ -407,10 +463,16 @@ finemapping_plot(
 
 ## Genetic correlation matrix
 
-LD Score Regression (LDSC) estimates genetic correlations between traits.
-`genetic_correlation()` displays them as a clustered heatmap with
-significance markers — one of the most common figures in cross-trait
-genomics papers:
+Genetic correlation (rg) measures how much the genetic basis of two traits
+overlaps. It ranges from -1 (perfectly opposing genetic effects) through 0
+(independent) to +1 (shared genetic architecture). LDSC or GREML estimate
+rg from GWAS summary statistics alone, without individual-level data.
+
+**How to interpret:** Red cells indicate traits that share risk variants
+(e.g., BMI and T2D). Blue cells indicate opposing genetics (e.g., height
+and T2D). Clustering reveals groups of genetically related traits. Stars
+mark statistically significant correlations. This figure is essential for
+understanding trait relationships in cross-trait genomics:
 
 ```{r rg-matrix, fig.height=6}
 traits <- c("BMI", "Height", "WHR", "T2D", "CAD", "SBP", "HDL")
@@ -426,9 +488,14 @@ genetic_correlation(rg, show_values = TRUE, palette = "RdBu")
 ## Genetic architecture
 
 The relationship between minor allele frequency and effect size reveals
-a trait's genetic architecture. Polygenic traits (height, BMI) show many
-small effects spread across the MAF spectrum. Oligogenic traits have a
-few large-effect variants, often at low frequency:
+a trait's genetic architecture.
+
+**How to interpret:** Most complex traits show a cloud of small effects at
+common frequencies (lower left) — this is polygenicity. Rare variants with
+large effects (upper left) are characteristic of more Mendelian-like
+architecture. An empty upper-right corner (large effects at common MAF) is
+expected because natural selection removes such variants. If you see points
+there, check for coding errors or population-stratification artifacts:
 
 ```{r architecture}
 architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
