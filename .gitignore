@@ -6,3 +6,5 @@ inst/doc
 gwasplot.Rcheck
 *.tar.gz
 Rplots.pdf
+vignettes/*.html
+inst/doc
