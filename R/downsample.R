@@ -43,12 +43,15 @@ smart_downsample <- function(data,
 
   bin_key <- paste(rest$CHR, bp_bin, logp_bin, sep = "_")
 
-  set.seed(seed)
   unique_bins <- !duplicated(bin_key)
   deduped_idx <- rest_idx[unique_bins]
 
   if (length(deduped_idx) > n_rest_target) {
-    sampled <- sample(deduped_idx, n_rest_target)
+    sampled <- if (!is.null(seed)) {
+      withr::with_seed(seed, sample(deduped_idx, n_rest_target))
+    } else {
+      sample(deduped_idx, n_rest_target)
+    }
     final_idx <- sort(c(keep_idx, sampled))
   } else {
     final_idx <- sort(c(keep_idx, deduped_idx))
