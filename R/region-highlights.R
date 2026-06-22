@@ -126,7 +126,9 @@ highlight_regions <- function(plt,
 
   data_layer <- build$data[[1]]
   chr_points_x <- data_layer$x[abs(data_layer$x - chr_center) <
-                                  (diff(range(data_layer$x)) / length(x_breaks))]
+                                  (diff(range(data_layer$x, na.rm = TRUE)) /
+                                   length(x_breaks))]
+  chr_points_x <- chr_points_x[!is.na(chr_points_x)]
 
   if (length(chr_points_x) == 0) return(chr_center)
 
@@ -134,7 +136,7 @@ highlight_regions <- function(plt,
   chr_max_x <- max(chr_points_x)
   chr_width <- chr_max_x - chr_min_x
 
-  if (chr_width == 0) return(chr_center)
+  if (is.na(chr_width) || chr_width == 0) return(chr_center)
 
   frac <- bp / (diff(range(data_layer$x)) / length(x_breaks) * 2)
   chr_min_x + frac * chr_width
