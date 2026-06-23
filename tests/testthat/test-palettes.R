@@ -15,3 +15,17 @@ test_that("scale_color_gwas works as expected", {
   s <- scale_color_gwas("nature")
   expect_s3_class(s, "Scale")
 })
+
+test_that("scale_fill_gwas works as expected", {
+  s <- scale_fill_gwas("colorblind")
+  expect_s3_class(s, "Scale")
+})
+
+test_that("gwas_palette interpolates colors", {
+  cols <- gwas_palette("nature", n = 20)
+  expect_length(cols, 20)
+})
+
+test_that("gwas_palette errors on unknown name", {
+  expect_error(gwas_palette("nonexistent"))
+})
