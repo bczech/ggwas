@@ -1,7 +1,7 @@
 # Create a gwas_data object
 
 Convert a data.frame to the standardized gwas_data format used by all
-gwasplot plotting functions.
+ggwas plotting functions.
 
 ## Usage
 

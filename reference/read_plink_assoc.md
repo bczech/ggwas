@@ -26,7 +26,7 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
+f <- system.file("extdata", "example_plink.assoc", package = "ggwas")
 gwas <- read_plink_assoc(f)
 #> Read 10 variants from example_plink.assoc
 gwas

@@ -29,7 +29,7 @@ manhattan_genes(
 - genes:
 
   Gene annotation data.frame (see
-  [`annotate_genes()`](https://bczech.github.io/gwasplot/reference/annotate_genes.md)).
+  [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)).
 
 - gene_p_threshold:
 
@@ -62,7 +62,7 @@ manhattan_genes(
 - ...:
 
   Additional arguments passed to
-  [`manhattan_plot()`](https://bczech.github.io/gwasplot/reference/manhattan_plot.md).
+  [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md).
 
 ## Value
 

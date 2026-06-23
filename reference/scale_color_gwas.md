@@ -15,7 +15,7 @@ scale_fill_gwas(palette = "colorblind", ...)
 - palette:
 
   Palette name from
-  [`gwas_palette()`](https://bczech.github.io/gwasplot/reference/gwas_palette.md).
+  [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md).
 
 - ...:
 

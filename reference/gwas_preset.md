@@ -1,6 +1,6 @@
 # GWAS plot presets
 
-Apply a preset configuration to any gwasplot function. Presets combine a
+Apply a preset configuration to any ggwas function. Presets combine a
 theme, color palette, and sizing appropriate for the context.
 
 ## Usage

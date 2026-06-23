@@ -70,6 +70,6 @@ A ggplot object.
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 pvalue_heatmap(example_gwas, bin_size = 10000)
 ```

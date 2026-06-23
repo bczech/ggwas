@@ -99,7 +99,7 @@ A ggplot object (or patchwork composition if gene_data is provided).
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 locus_plot(example_gwas, region_chr = 1,
            region_start = 1e6, region_end = 20e6)
 ```

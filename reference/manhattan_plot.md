@@ -123,7 +123,7 @@ A ggplot object.
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 manhattan_plot(example_gwas)
 
 manhattan_plot(example_gwas, label_top_n = 5, colors = gwas_palette("vibrant"))

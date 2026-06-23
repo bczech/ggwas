@@ -1,4 +1,4 @@
-# gwasplot
+# ggwas
 
 Modern, fast, and fully customizable GWAS visualizations built on
 **ggplot2**. Designed for publication-ready figures with sensible
@@ -17,7 +17,7 @@ defaults and journal-specific themes.
 
 ## Comparison
 
-| Feature | qqman | CMplot | **gwasplot** |
+| Feature | qqman | CMplot | **ggwas** |
 |----|----|----|----|
 | ggplot2-native | No | No | **Yes** |
 | Manhattan + QQ | Yes | Yes | **Yes + CI + lambda + stratified** |
@@ -41,14 +41,14 @@ defaults and journal-specific themes.
 
 ``` r
 
-pak::pak("bczech/gwasplot")
+pak::pak("bczech/ggwas")
 ```
 
 ## Quick start
 
 ``` r
 
-library(gwasplot)
+library(ggwas)
 
 # Read any GWAS results file — columns auto-detected
 gwas <- read_gwas_table("my_results.txt")
@@ -75,11 +75,11 @@ manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 
 | Format | Function |
 |----|----|
-| Generic (auto-detect) | [`read_gwas_table()`](https://bczech.github.io/gwasplot/reference/read_gwas_table.md) |
-| PLINK .assoc/.linear/.logistic | [`read_plink_assoc()`](https://bczech.github.io/gwasplot/reference/read_plink_assoc.md) / `_linear()` / `_logistic()` |
-| REGENIE | [`read_regenie()`](https://bczech.github.io/gwasplot/reference/read_regenie.md) |
-| GCTA MLMA | [`read_gcta_mlma()`](https://bczech.github.io/gwasplot/reference/read_gcta_mlma.md) |
-| GEMMA | [`read_gemma()`](https://bczech.github.io/gwasplot/reference/read_gemma.md) |
+| Generic (auto-detect) | [`read_gwas_table()`](https://bczech.github.io/ggwas/reference/read_gwas_table.md) |
+| PLINK .assoc/.linear/.logistic | [`read_plink_assoc()`](https://bczech.github.io/ggwas/reference/read_plink_assoc.md) / `_linear()` / `_logistic()` |
+| REGENIE | [`read_regenie()`](https://bczech.github.io/ggwas/reference/read_regenie.md) |
+| GCTA MLMA | [`read_gcta_mlma()`](https://bczech.github.io/ggwas/reference/read_gcta_mlma.md) |
+| GEMMA | [`read_gemma()`](https://bczech.github.io/ggwas/reference/read_gemma.md) |
 | Any data.frame | Pass directly with column mapping |
 
 ## Plot gallery
@@ -148,15 +148,15 @@ preserves all significant variants and bins the non-significant
 background — the plot looks identical but renders in seconds instead of
 minutes:
 
-| Variants | qqman | gwasplot | Speedup  |
-|----------|-------|----------|----------|
-| 50k      | 0.19s | 0.20s    | ~1x      |
-| 200k     | 0.78s | 0.42s    | **1.9x** |
-| 500k     | 1.81s | 1.03s    | **1.8x** |
-| 1M       | 4.24s | 1.73s    | **2.5x** |
-| 2M       | 9.00s | 2.28s    | **3.9x** |
+| Variants | qqman | ggwas | Speedup  |
+|----------|-------|-------|----------|
+| 50k      | 0.19s | 0.20s | ~1x      |
+| 200k     | 0.78s | 0.42s | **1.9x** |
+| 500k     | 1.81s | 1.03s | **1.8x** |
+| 1M       | 4.24s | 1.73s | **2.5x** |
+| 2M       | 9.00s | 2.28s | **3.9x** |
 
-![Benchmark: gwasplot vs qqman](benchmark/benchmark_plot.png)
+![Benchmark: ggwas vs qqman](benchmark/benchmark_plot.png)
 
 ``` r
 
@@ -169,14 +169,14 @@ See the package vignette for full documentation with worked examples:
 
 ``` r
 
-vignette("gwasplot")
+vignette("ggwas")
 ```
 
 ## Citation
 
-    Czech B (2026). gwasplot: Modern ggplot2 Visualizations for Genome-Wide
+    Czech B (2026). ggwas: Modern ggplot2 Visualizations for Genome-Wide
     Association Studies. R package version 0.1.0.
-    https://github.com/bczech/gwasplot
+    https://github.com/bczech/ggwas
 
 ## License
 

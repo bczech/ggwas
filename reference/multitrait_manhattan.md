@@ -46,7 +46,7 @@ multitrait_manhattan(
 - colors:
 
   Named vector of colors per trait, or a palette name from
-  [`gwas_palette()`](https://bczech.github.io/gwasplot/reference/gwas_palette.md).
+  [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md).
 
 - shapes:
 

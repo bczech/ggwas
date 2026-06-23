@@ -59,7 +59,7 @@ gwas_summary(
 - palette:
 
   Palette name from
-  [`gwas_palette()`](https://bczech.github.io/gwasplot/reference/gwas_palette.md).
+  [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md).
 
 - label_top_n:
 
@@ -72,7 +72,7 @@ gwas_summary(
 - theme_fn:
 
   Theme function to apply (default
-  [`theme_gwas()`](https://bczech.github.io/gwasplot/reference/theme_gwas.md)).
+  [`theme_gwas()`](https://bczech.github.io/ggwas/reference/theme_gwas.md)).
 
 - layout:
 

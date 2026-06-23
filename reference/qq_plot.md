@@ -94,7 +94,7 @@ A ggplot object.
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
 
 

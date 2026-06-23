@@ -23,7 +23,7 @@ highlight_regions(
 - plt:
 
   A ggplot object from
-  [`manhattan_plot()`](https://bczech.github.io/gwasplot/reference/manhattan_plot.md)
+  [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md)
   or similar.
 
 - regions:

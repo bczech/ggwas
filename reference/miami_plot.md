@@ -86,6 +86,6 @@ A ggplot object composed via patchwork.
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 miami_plot(example_gwas, example_gwas, top_title = "Study 1", bottom_title = "Study 2")
 ```

@@ -2,5 +2,5 @@
 
 ### All vignettes
 
-- [gwasplot: Modern GWAS
-  Visualizations](https://bczech.github.io/gwasplot/articles/gwasplot.md):
+- [ggwas: Modern GWAS
+  Visualizations](https://bczech.github.io/ggwas/articles/ggwas.md):

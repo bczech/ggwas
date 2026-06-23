@@ -47,7 +47,7 @@ circular_manhattan(
 - colors:
 
   Two-color vector for alternating chromosomes, or a palette name from
-  [`gwas_palette()`](https://bczech.github.io/gwasplot/reference/gwas_palette.md).
+  [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md).
 
 - point_size:
 

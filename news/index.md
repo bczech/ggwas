@@ -1,22 +1,22 @@
 # Changelog
 
-## gwasplot 0.99.1
+## ggwas 0.99.1
 
 - Added PheWAS, colocalization, fine-mapping, genetic correlation, and
   architecture plots
 - Added data utilities:
-  [`filter_region()`](https://bczech.github.io/gwasplot/reference/filter_region.md),
-  [`maf_filter()`](https://bczech.github.io/gwasplot/reference/maf_filter.md),
-  [`merge_gwas()`](https://bczech.github.io/gwasplot/reference/merge_gwas.md),
-  [`get_loci()`](https://bczech.github.io/gwasplot/reference/get_loci.md)
+  [`filter_region()`](https://bczech.github.io/ggwas/reference/filter_region.md),
+  [`maf_filter()`](https://bczech.github.io/ggwas/reference/maf_filter.md),
+  [`merge_gwas()`](https://bczech.github.io/ggwas/reference/merge_gwas.md),
+  [`get_loci()`](https://bczech.github.io/ggwas/reference/get_loci.md)
 - Added scattermore support for faster rendering of large datasets
 - Expanded vignette with interpretation guides for all plot types
 - Added Zenodo DOI
 - Fixed integer overflow in cumulative BP calculation
 - Fixed NA handling in
-  [`highlight_regions()`](https://bczech.github.io/gwasplot/reference/highlight_regions.md)
+  [`highlight_regions()`](https://bczech.github.io/ggwas/reference/highlight_regions.md)
 
-## gwasplot 0.99.0
+## ggwas 0.99.0
 
 Initial Bioconductor pre-release.
 
@@ -36,13 +36,13 @@ Initial Bioconductor pre-release.
 
 ### Gene annotation
 
-- [`manhattan_genes()`](https://bczech.github.io/gwasplot/reference/manhattan_genes.md)
+- [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   for labeling peaks with gene names
-- [`annotate_genes()`](https://bczech.github.io/gwasplot/reference/annotate_genes.md)
+- [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)
   for nearest-gene mapping
-- [`top_hits()`](https://bczech.github.io/gwasplot/reference/top_hits.md)
+- [`top_hits()`](https://bczech.github.io/ggwas/reference/top_hits.md)
   with clumping and cytoband estimation
-- [`highlight_regions()`](https://bczech.github.io/gwasplot/reference/highlight_regions.md)
+- [`highlight_regions()`](https://bczech.github.io/ggwas/reference/highlight_regions.md)
   for marking genomic regions
 - Arrow-style annotations
 
@@ -51,11 +51,11 @@ Initial Bioconductor pre-release.
 - Journal themes: Nature, Science, Cell, PLOS, presentation, poster
 - 14 colorblind-safe palettes
 - Publication presets via
-  [`gwas_preset()`](https://bczech.github.io/gwasplot/reference/gwas_preset.md)
+  [`gwas_preset()`](https://bczech.github.io/ggwas/reference/gwas_preset.md)
 
 ### Data I/O
 
 - Readers for PLINK, REGENIE, GCTA, GEMMA, and generic formats
 - Automatic column name detection
-- [`as_gwas_data()`](https://bczech.github.io/gwasplot/reference/as_gwas_data.md)
+- [`as_gwas_data()`](https://bczech.github.io/ggwas/reference/as_gwas_data.md)
   constructor with validation

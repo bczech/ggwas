@@ -84,6 +84,6 @@ A ggplot object.
 ## Examples
 
 ``` r
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 volcano_plot(example_gwas)
 ```

@@ -115,7 +115,7 @@ enrichment_manhattan(
 - palette:
 
   Color palette for annotations (from
-  [`gwas_palette()`](https://bczech.github.io/gwasplot/reference/gwas_palette.md)).
+  [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md)).
 
 ## Value
 
