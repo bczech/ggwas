@@ -175,8 +175,9 @@ vignette("ggwas")
 ## Citation
 
     Czech B (2026). ggwas: Modern ggplot2 Visualizations for Genome-Wide
-    Association Studies. R package version 0.1.0.
+    Association Studies. R package version 0.99.2.
     https://github.com/bczech/ggwas
+    doi: 10.5281/zenodo.20815110
 
 ## License
 
