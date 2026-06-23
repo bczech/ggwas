@@ -4,7 +4,7 @@
 [![R-CMD-check](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20795549-blue)](https://doi.org/10.5281/zenodo.20795549)
+[![DOI](https://zenodo.org/badge/1278117414.svg)](https://doi.org/10.5281/zenodo.20815110)
 <!-- badges: end -->
 
 Modern, fast, and fully customizable GWAS visualizations built on
