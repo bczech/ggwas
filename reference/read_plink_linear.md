@@ -30,7 +30,8 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 gwas <- read_plink_linear("my_results.assoc.linear")
-} # }
+#> Error in data.table::fread(file, header = TRUE, data.table = FALSE, ...): File 'my_results.assoc.linear' does not exist or is non-readable. getwd()=='/home/runner/work/ggwas/ggwas/docs/reference'
+# }
 ```

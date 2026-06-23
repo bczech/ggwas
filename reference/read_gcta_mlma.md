@@ -26,7 +26,8 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 gwas <- read_gcta_mlma("my_results.mlma")
-} # }
+#> Error in data.table::fread(file, header = TRUE, data.table = FALSE, ...): File 'my_results.mlma' does not exist or is non-readable. getwd()=='/home/runner/work/ggwas/ggwas/docs/reference'
+# }
 ```

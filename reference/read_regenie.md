@@ -26,7 +26,8 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 gwas <- read_regenie("my_results.regenie")
-} # }
+#> Error in data.table::fread(file, header = TRUE, data.table = FALSE, ...): File 'my_results.regenie' does not exist or is non-readable. getwd()=='/home/runner/work/ggwas/ggwas/docs/reference'
+# }
 ```
