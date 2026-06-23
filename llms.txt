@@ -156,7 +156,7 @@ minutes:
 | 1M       | 4.24s | 1.73s | **2.5x** |
 | 2M       | 9.00s | 2.28s | **3.9x** |
 
-![Benchmark: ggwas vs qqman](benchmark/benchmark_plot.png)
+![Benchmark: ggwas vs qqman](reference/figures/benchmark.png)
 
 ``` r
 
