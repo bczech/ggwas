@@ -5,6 +5,7 @@
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20815110-blue)](https://doi.org/10.5281/zenodo.20815110)
+[![Codecov](https://codecov.io/gh/bczech/ggwas/graph/badge.svg)](https://codecov.io/gh/bczech/ggwas)
 <!-- badges: end -->
 
 Modern, fast, and fully customizable GWAS visualizations built on

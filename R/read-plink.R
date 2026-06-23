@@ -22,7 +22,7 @@ read_plink_assoc <- function(file, ...) {
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gwas <- read_plink_linear("my_results.assoc.linear")
 #' }
 read_plink_linear <- function(file, test = "ADD", ...) {
@@ -42,7 +42,7 @@ read_plink_linear <- function(file, test = "ADD", ...) {
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gwas <- read_plink_logistic("my_results.assoc.logistic")
 #' }
 read_plink_logistic <- function(file, test = "ADD", ...) {

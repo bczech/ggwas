@@ -20,7 +20,7 @@ A \code{gwas_data} object.
 Read GEMMA association results
 }
 \examples{
-\dontrun{
+\donttest{
 gwas <- read_gemma("my_results.assoc.txt")
 }
 }

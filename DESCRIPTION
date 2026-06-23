@@ -14,7 +14,7 @@ BugReports: https://github.com/bczech/ggwas/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-Depends: R (>= 4.1.0)
+Depends: R (>= 4.4.0)
 Imports:
     cli,
     data.table (>= 1.14.0),

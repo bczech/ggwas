@@ -18,7 +18,7 @@ A \code{gwas_data} object.
 Read REGENIE results
 }
 \examples{
-\dontrun{
+\donttest{
 gwas <- read_regenie("my_results.regenie")
 }
 }

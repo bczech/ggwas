@@ -5,7 +5,7 @@
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gwas <- read_regenie("my_results.regenie")
 #' }
 read_regenie <- function(file, ...) {

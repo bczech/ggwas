@@ -18,7 +18,7 @@ A \code{gwas_data} object.
 Read GCTA MLMA results
 }
 \examples{
-\dontrun{
+\donttest{
 gwas <- read_gcta_mlma("my_results.mlma")
 }
 }

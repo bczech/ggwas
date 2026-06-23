@@ -5,7 +5,7 @@
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' gwas <- read_gcta_mlma("my_results.mlma")
 #' }
 read_gcta_mlma <- function(file, ...) {
