@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/bczech/ggwas/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/bczech/ggwas/blob/v0.99.2/DESCRIPTION)
 
 Czech B (2026). *ggwas: Modern 'ggplot2' Visualizations for Genome-Wide
 Association Studies*. R package version 0.99.0,
