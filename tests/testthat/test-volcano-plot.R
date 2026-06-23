@@ -9,3 +9,21 @@ test_that("volcano_plot works as expected", {
   plt <- volcano_plot(df)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("volcano_plot handles color_by chromosome", {
+  df <- data.frame(
+    CHR = rep(1:3, each = 30), BP = 1:90,
+    P = runif(90), BETA = rnorm(90), SNP = paste0("rs", 1:90)
+  )
+  plt <- volcano_plot(df, color_by = "chromosome", label_top_n = 3)
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("volcano_plot handles beta_threshold", {
+  df <- data.frame(
+    CHR = 1, BP = 1:50, P = runif(50),
+    BETA = rnorm(50, 0, 0.5), SNP = paste0("rs", 1:50)
+  )
+  plt <- volcano_plot(df, beta_threshold = 0.3)
+  expect_s3_class(plt, "ggplot")
+})
