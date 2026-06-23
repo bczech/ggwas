@@ -2,7 +2,7 @@
 
 ## Authors
 
-- **Bartosz Czech**. Author, maintainer.
+- **[Bartosz Czech](https://github.com/bczech)**. Author, maintainer.
   [](https://orcid.org/0000-0002-9908-3007)
 
 ## Citation
