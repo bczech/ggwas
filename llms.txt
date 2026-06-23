@@ -6,8 +6,8 @@ defaults and journal-specific themes.
 
 ## Key features
 
-- **10 plot types** including novel visualizations not available
-  elsewhere
+- **Comprehensive plot library** including novel visualizations not
+  available elsewhere
 - **Smart downsampling** for 10M+ variant datasets
 - **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
 - **Gene annotation** with automatic nearest-gene mapping
