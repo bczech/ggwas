@@ -1,0 +1,9 @@
+bibentry(
+  bibtype  = "Manual",
+  title    = "ggwas: Modern ggplot2 Visualizations for GWAS Summary Statistics",
+  author   = person("Bartosz", "Czech"),
+  year     = "2026",
+  note     = "R package version 0.99.2",
+  url      = "https://github.com/bczech/ggwas",
+  doi      = "10.5281/zenodo.20815110"
+)
