@@ -162,7 +162,9 @@ manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
 
 ## Documentation
 
-See the package vignette for full documentation with worked examples:
+Full documentation with worked examples: **https://bczech.github.io/ggwas/**
+
+Or from R:
 
 ```r
 vignette("ggwas")
