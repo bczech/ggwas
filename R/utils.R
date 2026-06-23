@@ -99,11 +99,11 @@ calc_lambda <- function(p) {
 #' @noRd
 add_cumulative_bp <- function(data) {
   chr_f <- data$CHR
-  max_bp <- tapply(data$BP, chr_f, max)
-  chrs <- as.integer(names(max_bp))
+  max_bp_raw <- tapply(data$BP, chr_f, max)
+  chrs <- as.integer(names(max_bp_raw))
   ord <- order(chrs)
   chrs <- chrs[ord]
-  max_bp <- max_bp[ord]
+  max_bp <- as.numeric(max_bp_raw[ord])
 
   cumstart <- c(0, cumsum(max_bp[-length(max_bp)]))
   gap <- max_bp[1] * 0.05
