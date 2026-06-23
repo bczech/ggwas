@@ -2,8 +2,8 @@
 title: "ggwas: Modern GWAS Visualizations"
 author:
   - name: Bartosz Czech
-    affiliation: GeneStat
-    email: bartosz.w.czech@gmail.com
+    affiliation: Department of Genetics, Wroclaw University of Environmental and Life Sciences
+    email: bartosz.czech@upwr.edu.pl
 date: "`r Sys.Date()`"
 package: ggwas
 abstract: >
