@@ -49,6 +49,6 @@ Each cell represents a genomic bin colored by the summary statistic
 Handles 10M+ SNPs efficiently through pre-aggregation.
 }
 \examples{
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 pvalue_heatmap(example_gwas, bin_size = 10000)
 }

@@ -7,4 +7,4 @@
 ^pkgdown$
 ^cran-comments\.md$
 ^_pkgdown\.yml$
-gwasplot.Rcheck/
+ggwas.Rcheck/

@@ -57,6 +57,6 @@ Unlike RNA-seq volcano plots, this variant can color by chromosome
 and scale point size by allele frequency.
 }
 \examples{
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 volcano_plot(example_gwas)
 }

@@ -1,7 +1,7 @@
 #' Create a gwas_data object
 #'
 #' Convert a data.frame to the standardized gwas_data format used by all
-#' gwasplot plotting functions.
+#' ggwas plotting functions.
 #'
 #' @param x A data.frame, tibble, or data.table.
 #' @param chr,bp,snp,p,beta,se,a1,a2,af,n,info Column names to use.

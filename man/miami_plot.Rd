@@ -59,6 +59,6 @@ The top panel shows one study with -log10(p) going up, and the bottom
 panel shows another study with -log10(p) going down.
 }
 \examples{
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 miami_plot(example_gwas, example_gwas, top_title = "Study 1", bottom_title = "Study 2")
 }

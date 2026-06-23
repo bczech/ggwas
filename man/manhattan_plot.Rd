@@ -80,7 +80,7 @@ Create a genome-wide Manhattan plot from GWAS summary statistics.
 Returns a ggplot2 object for further customization.
 }
 \examples{
-data(example_gwas, package = "gwasplot")
+data(example_gwas, package = "ggwas")
 manhattan_plot(example_gwas)
 manhattan_plot(example_gwas, label_top_n = 5, colors = gwas_palette("vibrant"))
 manhattan_plot(example_gwas, chromosomes = 1:10) + theme_nature()

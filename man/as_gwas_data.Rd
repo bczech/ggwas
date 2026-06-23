@@ -34,7 +34,7 @@ A tibble with class \code{gwas_data}.
 }
 \description{
 Convert a data.frame to the standardized gwas_data format used by all
-gwasplot plotting functions.
+ggwas plotting functions.
 }
 \examples{
 df <- data.frame(CHR = c(1, 1, 2), BP = c(1e6, 2e6, 5e6),

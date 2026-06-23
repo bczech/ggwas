@@ -19,7 +19,7 @@
 #' @return A ggplot object composed via patchwork.
 #' @export
 #' @examples
-#' data(example_gwas, package = "gwasplot")
+#' data(example_gwas, package = "ggwas")
 #' miami_plot(example_gwas, example_gwas, top_title = "Study 1", bottom_title = "Study 2")
 miami_plot <- function(top, bottom,
                        chr = NULL,

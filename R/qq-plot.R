@@ -21,7 +21,7 @@
 #' @return A ggplot object.
 #' @export
 #' @examples
-#' data(example_gwas, package = "gwasplot")
+#' data(example_gwas, package = "ggwas")
 #' qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
 #'
 #' # Stratify by allele frequency

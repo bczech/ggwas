@@ -1,4 +1,4 @@
-# gwasplot 0.99.1
+# ggwas 0.99.1
 
 * Added PheWAS, colocalization, fine-mapping, genetic correlation, and
   architecture plots
@@ -10,7 +10,7 @@
 * Fixed integer overflow in cumulative BP calculation
 * Fixed NA handling in `highlight_regions()`
 
-# gwasplot 0.99.0
+# ggwas 0.99.0
 
 Initial Bioconductor pre-release.
 

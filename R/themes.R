@@ -114,7 +114,7 @@ theme_poster <- function(base_size = 20, base_family = "") {
 
 #' GWAS plot presets
 #'
-#' Apply a preset configuration to any gwasplot function. Presets combine
+#' Apply a preset configuration to any ggwas function. Presets combine
 #' a theme, color palette, and sizing appropriate for the context.
 #'
 #' @param preset One of: "publication", "presentation", "poster", "exploratory".

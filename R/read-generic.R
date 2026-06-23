@@ -12,7 +12,7 @@
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
+#' f <- system.file("extdata", "example_plink.assoc", package = "ggwas")
 #' gwas <- read_gwas_table(f)
 #' gwas
 read_gwas_table <- function(file,

@@ -1,4 +1,4 @@
-url: https://bczech.github.io/gwasplot/
+url: https://bczech.github.io/ggwas/
 
 template:
   bootstrap: 5
@@ -8,7 +8,7 @@ template:
     border-radius: 0.5rem
 
 home:
-  title: "gwasplot — Modern GWAS Visualizations"
+  title: "ggwas — Modern GWAS Visualizations"
   description: >
     Comprehensive ggplot2-based toolkit for visualizing GWAS results.
     Manhattan, QQ, Miami, PheWAS, fine-mapping, genetic correlations, and more.
@@ -20,7 +20,7 @@ navbar:
   components:
     github:
       icon: fa-github
-      href: https://github.com/bczech/gwasplot
+      href: https://github.com/bczech/ggwas
 
 reference:
   - title: "Core plots"

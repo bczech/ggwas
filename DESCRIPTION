@@ -1,4 +1,4 @@
-Package: gwasplot
+Package: ggwas
 Title: Modern 'ggplot2' Visualizations for Genome-Wide Association Studies
 Version: 0.99.0
 Authors@R: person("Bartosz", "Czech", email = "bartosz.w.czech@gmail.com",
@@ -9,8 +9,8 @@ Description: Create publication-ready Manhattan plots, QQ plots, Miami plots,
     All plot functions return 'ggplot2' objects for full customization.
     Smart downsampling handles datasets with 10 million+ variants efficiently.
 License: MIT + file LICENSE
-URL: https://github.com/bczech/gwasplot
-BugReports: https://github.com/bczech/gwasplot/issues
+URL: https://github.com/bczech/ggwas
+BugReports: https://github.com/bczech/ggwas/issues
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

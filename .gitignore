@@ -3,7 +3,7 @@
 .RData
 .Ruserdata
 inst/doc
-gwasplot.Rcheck
+*.Rcheck
 *.tar.gz
 Rplots.pdf
 vignettes/*.html

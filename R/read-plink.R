@@ -5,7 +5,7 @@
 #' @return A `gwas_data` object.
 #' @export
 #' @examples
-#' f <- system.file("extdata", "example_plink.assoc", package = "gwasplot")
+#' f <- system.file("extdata", "example_plink.assoc", package = "ggwas")
 #' gwas <- read_plink_assoc(f)
 #' gwas
 read_plink_assoc <- function(file, ...) {

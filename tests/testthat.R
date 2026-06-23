@@ -1,4 +1,4 @@
 library(testthat)
-library(gwasplot)
+library(ggwas)
 
-test_check("gwasplot")
+test_check("ggwas")

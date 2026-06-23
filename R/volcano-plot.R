@@ -21,7 +21,7 @@
 #' @return A ggplot object.
 #' @export
 #' @examples
-#' data(example_gwas, package = "gwasplot")
+#' data(example_gwas, package = "ggwas")
 #' volcano_plot(example_gwas)
 volcano_plot <- function(data,
                          beta = NULL, p = NULL, snp = NULL,

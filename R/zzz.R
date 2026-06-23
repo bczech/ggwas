@@ -1,3 +1,3 @@
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage("gwasplot v", utils::packageVersion("gwasplot"))
+  packageStartupMessage("ggwas v", utils::packageVersion("ggwas"))
 }

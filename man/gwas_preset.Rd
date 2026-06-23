@@ -14,7 +14,7 @@ A list with components: \code{theme}, \code{colors}, \code{point_size}, \code{al
 \code{label_size}.
 }
 \description{
-Apply a preset configuration to any gwasplot function. Presets combine
+Apply a preset configuration to any ggwas function. Presets combine
 a theme, color palette, and sizing appropriate for the context.
 }
 \examples{

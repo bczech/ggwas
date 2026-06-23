@@ -19,7 +19,7 @@
 #' @return A ggplot object.
 #' @export
 #' @examples
-#' data(example_gwas, package = "gwasplot")
+#' data(example_gwas, package = "ggwas")
 #' pvalue_heatmap(example_gwas, bin_size = 10000)
 pvalue_heatmap <- function(data,
                            chr = NULL,

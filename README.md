@@ -1,7 +1,7 @@
-# gwasplot <img src="man/figures/logo.png" align="right" height="180" alt="gwasplot logo" />
+# ggwas <img src="man/figures/logo.png" align="right" height="180" alt="ggwas logo" />
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/gwasplot/actions/workflows/R-CMD-check.yaml)
+[![R-CMD-check](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20795549-blue)](https://doi.org/10.5281/zenodo.20795549)
@@ -22,7 +22,7 @@ and journal-specific themes.
 
 ## Comparison
 
-| Feature | qqman | CMplot | **gwasplot** |
+| Feature | qqman | CMplot | **ggwas** |
 |---|---|---|---|
 | ggplot2-native | No | No | **Yes** |
 | Manhattan + QQ | Yes | Yes | **Yes + CI + lambda + stratified** |
@@ -45,13 +45,13 @@ and journal-specific themes.
 ## Installation
 
 ```r
-pak::pak("bczech/gwasplot")
+pak::pak("bczech/ggwas")
 ```
 
 ## Quick start
 
 ```r
-library(gwasplot)
+library(ggwas)
 
 # Read any GWAS results file — columns auto-detected
 gwas <- read_gwas_table("my_results.txt")
@@ -146,7 +146,7 @@ Smart downsampling kicks in automatically for large datasets. It preserves
 all significant variants and bins the non-significant background — the plot
 looks identical but renders in seconds instead of minutes:
 
-| Variants | qqman | gwasplot | Speedup |
+| Variants | qqman | ggwas | Speedup |
 |---|---|---|---|
 | 50k | 0.19s | 0.20s | ~1x |
 | 200k | 0.78s | 0.42s | **1.9x** |
@@ -154,7 +154,7 @@ looks identical but renders in seconds instead of minutes:
 | 1M | 4.24s | 1.73s | **2.5x** |
 | 2M | 9.00s | 2.28s | **3.9x** |
 
-<img src="benchmark/benchmark_plot.png" width="600" alt="Benchmark: gwasplot vs qqman" />
+<img src="benchmark/benchmark_plot.png" width="600" alt="Benchmark: ggwas vs qqman" />
 
 ```r
 manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
@@ -165,15 +165,15 @@ manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
 See the package vignette for full documentation with worked examples:
 
 ```r
-vignette("gwasplot")
+vignette("ggwas")
 ```
 
 ## Citation
 
 ```
-Czech B (2026). gwasplot: Modern ggplot2 Visualizations for Genome-Wide
+Czech B (2026). ggwas: Modern ggplot2 Visualizations for Genome-Wide
 Association Studies. R package version 0.1.0.
-https://github.com/bczech/gwasplot
+https://github.com/bczech/ggwas
 ```
 
 ## License

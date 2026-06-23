@@ -1,13 +1,13 @@
 ---
-title: "gwasplot: Modern GWAS Visualizations"
+title: "ggwas: Modern GWAS Visualizations"
 author:
   - name: Bartosz Czech
     affiliation: GeneStat
     email: bartosz.w.czech@gmail.com
 date: "`r Sys.Date()`"
-package: gwasplot
+package: ggwas
 abstract: >
-  The gwasplot package provides a comprehensive, ggplot2-based toolkit for
+  The ggwas package provides a comprehensive, ggplot2-based toolkit for
   visualizing genome-wide association study results. It covers the full
   spectrum of GWAS plots — from standard Manhattan and QQ plots to novel
   visualizations like genome-wide heatmaps, enrichment overlays, and
@@ -21,7 +21,7 @@ output:
     number_sections: true
     toc_float: true
 vignette: >
-  %\VignetteIndexEntry{gwasplot: Modern GWAS Visualizations}
+  %\VignetteIndexEntry{ggwas: Modern GWAS Visualizations}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -47,7 +47,7 @@ from a plotting system that integrates with ggplot2 — enabling layered
 customization, journal-specific theming, and seamless composition of
 multi-panel figures.
 
-`gwasplot` was designed with three goals:
+`ggwas` was designed with three goals:
 
 1. **Comprehensive coverage** — all common GWAS plot types in one package,
    plus novel visualizations not available elsewhere.
@@ -67,10 +67,10 @@ exactly as you would with any other ggplot.
 
 ```{r eval=FALSE}
 # From GitHub
-pak::pak("bczech/gwasplot")
+pak::pak("bczech/ggwas")
 
 # Once available on Bioconductor:
-# BiocManager::install("gwasplot")
+# BiocManager::install("ggwas")
 ```
 
 ## Reading data
@@ -80,7 +80,7 @@ auto-detects common column naming conventions (CHR/CHROM/#CHROM,
 BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 
 ```{r}
-library(gwasplot)
+library(ggwas)
 library(ggplot2)
 
 data(example_gwas)
@@ -505,7 +505,7 @@ architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
 
 ## Color palettes
 
-gwasplot ships with 14 palettes covering different use cases — colorblind-safe
+ggwas ships with 14 palettes covering different use cases — colorblind-safe
 defaults, journal-inspired schemes, and RColorBrewer integrations:
 
 ```{r}
@@ -547,7 +547,7 @@ Available presets: `"publication"`, `"presentation"`, `"poster"`,
 # Performance
 
 For large datasets (common in imputed GWAS with 10-40M variants),
-gwasplot applies smart downsampling by default. The algorithm preserves all
+ggwas applies smart downsampling by default. The algorithm preserves all
 significant and near-significant variants while spatially binning the dense
 cloud of non-significant points. The resulting plot is visually
 indistinguishable from plotting all points, but renders in seconds rather
@@ -561,7 +561,7 @@ manhattan_plot(large_gwas, downsample_n = 500000) # custom target
 
 # Multi-panel figures
 
-Since every gwasplot function returns a standard ggplot object, you can
+Since every ggwas function returns a standard ggplot object, you can
 compose multi-panel figures using `patchwork` the same way you would with
 any other ggplot:
 
