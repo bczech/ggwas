@@ -4,7 +4,7 @@
 [![R-CMD-check](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/bczech/ggwas/actions/workflows/R-CMD-check.yaml)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![DOI](https://zenodo.org/badge/1278117414.svg)](https://doi.org/10.5281/zenodo.20815110)
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.20815110-blue)](https://doi.org/10.5281/zenodo.20815110)
 <!-- badges: end -->
 
 Modern, fast, and fully customizable GWAS visualizations built on
@@ -154,7 +154,7 @@ looks identical but renders in seconds instead of minutes:
 | 1M | 4.24s | 1.73s | **2.5x** |
 | 2M | 9.00s | 2.28s | **3.9x** |
 
-<img src="benchmark/benchmark_plot.png" width="600" alt="Benchmark: ggwas vs qqman" />
+<img src="man/figures/benchmark.png" width="600" alt="Benchmark: ggwas vs qqman" />
 
 ```r
 manhattan_plot(large_gwas)  # 10M SNPs, auto-downsampled to ~200k points
