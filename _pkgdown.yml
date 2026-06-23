@@ -12,15 +12,29 @@ home:
   description: >
     Comprehensive ggplot2-based toolkit for visualizing GWAS results.
     Manhattan, QQ, Miami, PheWAS, fine-mapping, genetic correlations, and more.
+  links:
+    - text: Report a bug
+      href: https://github.com/bczech/ggwas/issues
+    - text: Zenodo DOI
+      href: https://doi.org/10.5281/zenodo.20815110
 
 navbar:
   structure:
-    left: [intro, reference, articles]
+    left: [intro, reference, articles, news]
     right: [search, github]
   components:
     github:
       icon: fa-github
       href: https://github.com/bczech/ggwas
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+
+authors:
+  Bartosz Czech:
+    href: https://github.com/bczech
 
 reference:
   - title: "Core plots"
