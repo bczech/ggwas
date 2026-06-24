@@ -4,10 +4,10 @@
 .Ruserdata
 inst/doc
 *.Rcheck
+*.BiocCheck
 *.tar.gz
 Rplots.pdf
 vignettes/*.html
-inst/doc
 paper/
 Meta/
 doc/

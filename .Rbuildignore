@@ -7,4 +7,9 @@
 ^pkgdown$
 ^cran-comments\.md$
 ^_pkgdown\.yml$
-ggwas.Rcheck/
+^ggwas\.Rcheck$
+^ggwas\.BiocCheck$
+^paper$
+^Meta$
+^doc$
+^Rplots\.pdf$
