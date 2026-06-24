@@ -39,6 +39,12 @@ Multi-trait, enrichment, and post-GWAS visualizations
   : Genetic correlation matrix
 - [`architecture_plot()`](https://bczech.github.io/ggwas/reference/architecture_plot.md)
   : Genetic architecture plot
+- [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md)
+  : SNP density karyogram
+- [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
+  : Density–signal dual-track plot
+- [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info_human.md)
+  : Human chromosome information (hg38)
 
 ## Annotation and analysis
 

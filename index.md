@@ -6,9 +6,9 @@ defaults and journal-specific themes.
 
 ## Key features
 
-- **15 plot types** — from classic Manhattan and QQ to post-GWAS
+- **17 plot types** — from classic Manhattan and QQ to post-GWAS
   visualizations (PheWAS, colocalization, fine-mapping, genetic
-  correlations)
+  correlations, SNP density karyogram)
 - **Smart downsampling** for 10M+ variant datasets
 - **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
 - **Gene annotation** with automatic nearest-gene mapping
@@ -35,6 +35,8 @@ defaults and journal-specific themes.
 | Fine-mapping (PIP) | No | No | **Yes (novel)** |
 | Genetic correlation | No | No | **Yes (novel)** |
 | Architecture plot | No | No | **Yes (novel)** |
+| SNP density karyogram | No | No | **Yes (novel)** |
+| Density vs signal | No | No | **Yes (novel)** |
 | Gene labels on peaks | No | No | **Yes** |
 | Region highlights | No | No | **Yes** |
 | Top hits table | No | No | **Yes (with clumping)** |
@@ -122,6 +124,8 @@ coloc_plot(gwas, eqtl, region_chr = 1, region_start = 1e6, region_end = 2e6)
 finemapping_plot(susie_results, region_chr = 1, region_start = 1e6, region_end = 2e6)
 genetic_correlation(ldsc_matrix, cluster = TRUE)
 architecture_plot(gwas)
+snp_density(gwas, chr_info = chr_info_human())
+density_signal_plot(gwas)
 ```
 
 ### Gene annotation

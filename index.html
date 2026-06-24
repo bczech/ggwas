@@ -63,7 +63,7 @@
 </h2>
 <ul>
 <li>
-<strong>15 plot types</strong> — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations)</li>
+<strong>17 plot types</strong> — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations, SNP density karyogram)</li>
 <li>
 <strong>Smart downsampling</strong> for 10M+ variant datasets</li>
 <li>
@@ -179,6 +179,18 @@
 </tr>
 <tr>
 <td>Architecture plot</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>SNP density karyogram</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>Density vs signal</td>
 <td>No</td>
 <td>No</td>
 <td><strong>Yes (novel)</strong></td>
@@ -334,7 +346,9 @@
 <span><span class="fu"><a href="reference/coloc_plot.html">coloc_plot</a></span><span class="op">(</span><span class="va">gwas</span>, <span class="va">eqtl</span>, region_chr <span class="op">=</span> <span class="fl">1</span>, region_start <span class="op">=</span> <span class="fl">1e6</span>, region_end <span class="op">=</span> <span class="fl">2e6</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/finemapping_plot.html">finemapping_plot</a></span><span class="op">(</span><span class="va">susie_results</span>, region_chr <span class="op">=</span> <span class="fl">1</span>, region_start <span class="op">=</span> <span class="fl">1e6</span>, region_end <span class="op">=</span> <span class="fl">2e6</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/genetic_correlation.html">genetic_correlation</a></span><span class="op">(</span><span class="va">ldsc_matrix</span>, cluster <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/architecture_plot.html">architecture_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/architecture_plot.html">architecture_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/snp_density.html">snp_density</a></span><span class="op">(</span><span class="va">gwas</span>, chr_info <span class="op">=</span> <span class="fu"><a href="reference/chr_info_human.html">chr_info_human</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/density_signal_plot.html">density_signal_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="gene-annotation">Gene annotation<a class="anchor" aria-label="anchor" href="#gene-annotation"></a>

@@ -2,8 +2,24 @@
 
 ## ggwas 0.99.2
 
-- Synchronized documentation across README, vignette, and DESCRIPTION to
-  reflect all 15 plot types
+- Added
+  [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md)
+  karyogram-style SNP density visualization with optional centromere
+  markers
+- Added
+  [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
+  dual-track comparison of genotyping density vs association signal to
+  distinguish real hits from artifacts
+- Added
+  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info_human.md)
+  helper for hg38 chromosome lengths and centromere positions
+- Filled empty bins in
+  [`pvalue_heatmap()`](https://bczech.github.io/ggwas/reference/pvalue_heatmap.md)
+  to eliminate gaps
+- Replaced scattermore with geom_point for correct circle shapes
+- Showed legends by default in journal themes
+- Reduced overlapping text in genetic correlation and PheWAS plots
+- Fixed reader examples using non-existent files
 
 ## ggwas 0.99.1
 

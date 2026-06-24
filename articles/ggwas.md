@@ -22,7 +22,7 @@ composition of multi-panel figures.
 
 `ggwas` was designed with three goals:
 
-1.  **Comprehensive coverage** — 15 plot types in one package, including
+1.  **Comprehensive coverage** — 17 plot types in one package, including
     novel visualizations not available elsewhere.
 2.  **Publication-ready defaults** — sensible colors, proper axis
     formatting, and built-in journal themes so plots look good without
