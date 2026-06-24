@@ -13,3 +13,15 @@ test_that("chr_info_human returns correct structure", {
   expect_equal(nrow(ci), 22)
   expect_true(all(c("chr", "length", "centromere_start", "centromere_end") %in% names(ci)))
 })
+
+test_that("chr_info_mouse returns correct structure", {
+  ci <- chr_info_mouse()
+  expect_equal(nrow(ci), 19)
+  expect_true(all(c("chr", "length", "centromere_start", "centromere_end") %in% names(ci)))
+})
+
+test_that("chr_info_cattle returns correct structure", {
+  ci <- chr_info_cattle()
+  expect_equal(nrow(ci), 29)
+  expect_true(all(c("chr", "length", "centromere_start", "centromere_end") %in% names(ci)))
+})

@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Create publication-ready visualizations for genome-wide association studies. Provides 15 plot types including Manhattan, QQ, Miami, locus zoom, PheWAS, colocalization, fine-mapping, and genetic correlation plots. Reads PLINK, REGENIE, GCTA, and GEMMA formats natively. All plot functions return 'ggplot2' objects for full customization. Smart downsampling handles datasets with 10 million+ variants efficiently.
+Create publication-ready visualizations for genome-wide association studies. Provides 17 plot types including Manhattan, QQ, Miami, locus zoom, PheWAS, colocalization, fine-mapping, genetic correlation, SNP density, and density-signal comparison plots. Reads PLINK, REGENIE, GCTA, and GEMMA formats natively. All plot functions return 'ggplot2' objects for full customization. Smart downsampling handles datasets with 10 million+ variants efficiently.
 }
 \seealso{
 Useful links:
