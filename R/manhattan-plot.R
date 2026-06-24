@@ -231,21 +231,36 @@ manhattan_plot <- function(data,
       )
     }
 
-    x_range <- range(data$BP_CUM, na.rm = TRUE)
-    x_ax <- x_range[1] - diff(x_range) * 0.025
-    dx <- diff(x_range) * 0.01
-    dy <- break_at * 0.04
+    y_frac_break <- break_at / y_top
+
+    break_grob <- grid::grobTree(
+      grid::rectGrob(
+        x = grid::unit(0, "npc"),
+        y = grid::unit(y_frac_break, "npc"),
+        width = grid::unit(12, "mm"),
+        height = grid::unit(10, "mm"),
+        just = "centre",
+        gp = grid::gpar(fill = "white", col = NA)
+      ),
+      grid::segmentsGrob(
+        x0 = grid::unit(0, "npc") - grid::unit(4, "mm"),
+        x1 = grid::unit(0, "npc") + grid::unit(4, "mm"),
+        y0 = grid::unit(y_frac_break, "npc") + grid::unit(0.5, "mm"),
+        y1 = grid::unit(y_frac_break, "npc") + grid::unit(3.5, "mm"),
+        gp = grid::gpar(col = "black", lwd = 2.5)
+      ),
+      grid::segmentsGrob(
+        x0 = grid::unit(0, "npc") - grid::unit(4, "mm"),
+        x1 = grid::unit(0, "npc") + grid::unit(4, "mm"),
+        y0 = grid::unit(y_frac_break, "npc") - grid::unit(3.5, "mm"),
+        y1 = grid::unit(y_frac_break, "npc") - grid::unit(0.5, "mm"),
+        gp = grid::gpar(col = "black", lwd = 2.5)
+      )
+    )
 
     plt <- plt +
       coord_cartesian(ylim = c(0, y_top), clip = "off") +
-      ggplot2::annotate("segment",
-        x = x_ax - dx, xend = x_ax + dx,
-        y = break_at + dy * 0.5, yend = break_at + dy * 2.5,
-        color = "black", linewidth = 0.7) +
-      ggplot2::annotate("segment",
-        x = x_ax - dx, xend = x_ax + dx,
-        y = break_at - dy * 0.5, yend = break_at + dy * 1.5,
-        color = "black", linewidth = 0.7)
+      annotation_custom(break_grob)
   } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
   }
