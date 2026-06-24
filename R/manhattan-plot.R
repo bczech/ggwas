@@ -181,29 +181,20 @@ manhattan_plot <- function(data,
     }
 
     x_range <- range(data$BP_CUM, na.rm = TRUE)
-    x_break <- x_range[1] - diff(x_range) * 0.015
-    gap <- trunc_val * 0.03
-    break_df <- data.frame(
-      x = rep(x_break, 4),
-      xend = rep(x_break, 4),
-      y = c(trunc_val - gap * 2, trunc_val - gap,
-            trunc_val + gap, trunc_val + gap * 2),
-      yend = c(trunc_val - gap, trunc_val + gap,
-               trunc_val + gap * 2, trunc_val + gap * 3)
-    )
+    x_left <- x_range[1] - diff(x_range) * 0.01
+    dx <- diff(x_range) * 0.012
+    dy <- trunc_val * 0.04
 
     plt <- plt +
       coord_cartesian(ylim = c(0, trunc_val * 1.05), clip = "off") +
       ggplot2::annotate("segment",
-        x = x_break - diff(x_range) * 0.008,
-        xend = x_break + diff(x_range) * 0.008,
-        y = trunc_val - gap, yend = trunc_val + gap,
-        color = "grey30", linewidth = 0.5) +
+        x = x_left - dx, xend = x_left + dx,
+        y = trunc_val * 0.97 - dy, yend = trunc_val * 0.97 + dy,
+        color = "grey20", linewidth = 0.6) +
       ggplot2::annotate("segment",
-        x = x_break - diff(x_range) * 0.008,
-        xend = x_break + diff(x_range) * 0.008,
-        y = trunc_val - gap * 2, yend = trunc_val,
-        color = "grey30", linewidth = 0.5)
+        x = x_left - dx, xend = x_left + dx,
+        y = trunc_val * 0.93 - dy, yend = trunc_val * 0.93 + dy,
+        color = "grey20", linewidth = 0.6)
   } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
   }
