@@ -8,30 +8,52 @@ snp_density(
   data,
   chr = NULL,
   bp = NULL,
+  p = NULL,
+  style = c("heatmap", "points"),
   bin_size = 1e+06,
+  color_by = c("density", "significance", "uniform"),
   chr_info = NULL,
   palette = "viridis",
+  point_size = 0.3,
+  point_alpha = 0.5,
   show_centromeres = TRUE,
+  downsample_n = 2e+05,
   title = NULL
 )
 }
 \arguments{
 \item{data}{A \code{gwas_data} object or data.frame with GWAS results.}
 
-\item{chr, bp}{Column name overrides.}
+\item{chr, bp, p}{Column name overrides.}
 
-\item{bin_size}{Bin size in base pairs (default 1 Mb).}
+\item{style}{Rendering style: \code{"heatmap"} for binned density tiles,
+or \code{"points"} for individual variant positions on chromosome
+outlines.}
+
+\item{bin_size}{Bin size in base pairs (default 1 Mb). Only used
+when \code{style = "heatmap"}.}
+
+\item{color_by}{For \code{style = "points"}: how to color dots.
+\code{"density"} (default) colors by local density, \code{"significance"}
+colors by -log10(p), or \code{"uniform"} for a single color.}
 
 \item{chr_info}{Optional data.frame with columns \code{chr}, \code{length}, and
 optionally \code{centromere_start}, \code{centromere_end}. Use
 \code{\link[=chr_info_human]{chr_info_human()}} for hg38. If NULL, chromosome lengths are
 inferred from the data.}
 
-\item{palette}{Color palette for density: "viridis", "magma",
-"inferno", or "plasma".}
+\item{palette}{Color palette: "viridis", "magma", "inferno", or
+"plasma".}
+
+\item{point_size}{Point size for \code{style = "points"}.}
+
+\item{point_alpha}{Point transparency for \code{style = "points"}.}
 
 \item{show_centromeres}{If TRUE and centromere positions are available
 in \code{chr_info}, draw centromere markers.}
+
+\item{downsample_n}{Maximum number of points to plot in \code{"points"}
+style. Set to NULL to plot all variants (can be slow for >500k).}
 
 \item{title}{Plot title.}
 }
@@ -40,14 +62,21 @@ A ggplot object.
 }
 \description{
 Visualize the distribution of genotyped or imputed variants across
-chromosomes. Each chromosome is drawn proportionally to its length
-and colored by SNP density per genomic bin. Optionally marks
-centromere positions when \code{chr_info} is provided.
+chromosomes. Two rendering styles are available: \code{"heatmap"} (default)
+bins variants and colors tiles by count, while \code{"points"} draws
+individual variant positions on chromosome outlines — density is
+visible through natural clustering. Optionally marks centromere
+positions when \code{chr_info} is provided.
 }
 \examples{
 data(example_gwas, package = "ggwas")
-snp_density(example_gwas, bin_size = 5e6)
 
-# With human centromere markers
+# Heatmap style (default)
 snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+
+# Points style — individual variants on chromosome outlines
+snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+
+# Points colored by significance
+snp_density(example_gwas, style = "points", color_by = "significance")
 }
