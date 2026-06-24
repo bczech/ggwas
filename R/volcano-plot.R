@@ -90,7 +90,7 @@ volcano_plot <- function(data,
                linetype = "dashed", color = "grey40", linewidth = 0.4) +
     ggplot2::geom_vline(xintercept = 0, linetype = "solid",
                         color = "grey60", linewidth = 0.3) +
-    labs(x = "Effect Size (BETA)",
+    labs(x = expression("Effect size" ~ (hat(beta))),
          y = expression(-log[10](italic(p))),
          title = title) +
     theme_gwas()

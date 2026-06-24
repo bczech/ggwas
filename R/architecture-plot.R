@@ -73,7 +73,7 @@ architecture_plot <- function(data,
   }
 
   plt <- plt +
-    labs(y = "|Effect Size| (|BETA|)", title = title) +
+    labs(y = expression("|" * hat(beta) * "|"), title = title) +
     theme_gwas() +
     ggplot2::theme(legend.position = "right")
 
