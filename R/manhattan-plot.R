@@ -232,7 +232,7 @@ manhattan_plot <- function(data,
     }
 
     x_range <- range(data$BP_CUM, na.rm = TRUE)
-    x_pad <- diff(x_range) * 0.015
+    x_pad <- diff(x_range) * 0.04
     bh <- break_at * 0.025
 
     n_zig <- 80
@@ -244,7 +244,7 @@ manhattan_plot <- function(data,
     zig_lower <- data.frame(x = x_seq, y = y_zig - bh * 0.5)
 
     plt <- plt +
-      coord_cartesian(ylim = c(0, y_top)) +
+      coord_cartesian(ylim = c(0, y_top), clip = "off") +
       ggplot2::annotate("rect",
         xmin = x_range[1] - x_pad, xmax = x_range[2] + x_pad,
         ymin = break_at - bh * 1.5, ymax = break_at + bh * 1.5,
