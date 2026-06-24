@@ -57,6 +57,9 @@ reference:
       - finemapping_plot
       - genetic_correlation
       - architecture_plot
+      - snp_density
+      - density_signal_plot
+      - chr_info_human
 
   - title: "Annotation and analysis"
     desc: "Gene annotation, region highlights, top hits"
