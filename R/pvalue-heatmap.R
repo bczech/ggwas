@@ -65,13 +65,31 @@ pvalue_heatmap <- function(data,
     fill_label <- paste0("Count (p < ", format(threshold, scientific = TRUE), ")")
   }
 
+  chr_lengths <- c(
+    248956422, 242193529, 198295559, 190214555, 181538259,
+    170805979, 159345973, 145138636, 138394717, 133797422,
+    135086622, 133275309, 114364328, 107043718, 101991189,
+    90338345, 83257441, 80373285, 58617616, 64444167,
+    46709983, 50818468
+  )
+
+  present_chrs <- sort(unique(bins$CHR))
+  all_bins <- do.call(rbind, lapply(present_chrs, function(ch) {
+    max_bp <- if (ch <= length(chr_lengths)) chr_lengths[ch] else max(bins$bin[bins$CHR == ch])
+    bin_seq <- seq(0, max_bp, by = bin_size)
+    data.frame(CHR = ch, bin = bin_seq)
+  }))
+
+  bins <- merge(all_bins, bins, by = c("CHR", "bin"), all.x = TRUE)
+  bins$fill_val[is.na(bins$fill_val)] <- 0
+
   bins$bin_mb <- bins$bin / 1e6
   bins$CHR_label <- factor(int_to_chr(bins$CHR),
-                           levels = rev(int_to_chr(sort(unique(bins$CHR)))))
+                           levels = rev(int_to_chr(present_chrs)))
 
   plt <- ggplot(bins, aes(x = .data$bin_mb, y = .data$CHR_label,
                            fill = .data$fill_val)) +
-    geom_tile(width = bin_size / 1e6 * 0.95, height = 0.85) +
+    geom_tile(width = bin_size / 1e6, height = 0.9) +
     scale_fill_viridis_c(
       option = switch(palette,
                        "viridis" = "D", "magma" = "A",
@@ -83,7 +101,7 @@ pvalue_heatmap <- function(data,
     ggplot2::theme_minimal() +
     ggplot2::theme(
       panel.grid = element_blank(),
-      axis.text.y = element_text(size = 9),
+      axis.text.y = element_text(size = 7),
       legend.position = "right"
     )
 
