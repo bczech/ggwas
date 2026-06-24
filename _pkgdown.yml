@@ -59,7 +59,8 @@ reference:
       - architecture_plot
       - snp_density
       - density_signal_plot
-      - chr_info_human
+      - chr_info
+      - chr_info_ucsc
 
   - title: "Annotation and analysis"
     desc: "Gene annotation, region highlights, top hits"
