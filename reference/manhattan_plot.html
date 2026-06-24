@@ -66,6 +66,7 @@ Returns a ggplot2 object for further customization.</p>
 <span>  chr_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  y_limit <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  y_truncate <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  y_compress <span class="op">=</span> <span class="fl">0.1</span>,</span>
 <span>  title <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -152,11 +153,16 @@ as displayed chromosomes). If NULL, auto-generated from chromosome numbers.</p><
 
 
 <dt id="arg-y-truncate">y_truncate<a class="anchor" aria-label="anchor" href="#arg-y-truncate"></a></dt>
-<dd><p>If set, truncate the y-axis at this value and draw
-a break symbol. Variants above the truncation are shown as triangles
-at the truncation line, indicating their values exceed the visible
-range. Useful for GWAS with extremely significant loci that compress
-the rest of the plot.</p></dd>
+<dd><p>If set, break the y-axis at this -log10(p) value.
+The region below is shown at full scale; the region above is
+compressed so extreme values remain visible with their true
+-log10(p) labels. A break symbol (//) marks the transition.</p></dd>
+
+
+<dt id="arg-y-compress">y_compress<a class="anchor" aria-label="anchor" href="#arg-y-compress"></a></dt>
+<dd><p>Compression factor for the zone above <code>y_truncate</code>
+(default 0.1). Values closer to 0 compress more (less space for
+extreme points); values closer to 1 compress less.</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
@@ -196,9 +202,13 @@ the rest of the plot.</p></dd>
 <span class="r-in"><span><span class="fu">manhattan_plot</span><span class="op">(</span><span class="va">example_gwas</span>, colors <span class="op">=</span> <span class="fu"><a href="gwas_palette.html">gwas_palette</a></span><span class="op">(</span><span class="st">"nejm"</span><span class="op">)</span>, label_top_n <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="manhattan_plot-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Truncated y-axis for extreme p-values</span></span></span>
+<span class="r-in"><span><span class="co"># Broken y-axis for extreme p-values</span></span></span>
 <span class="r-in"><span><span class="fu">manhattan_plot</span><span class="op">(</span><span class="va">example_gwas</span>, y_truncate <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="manhattan_plot-7.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Less compression (more space for extreme values)</span></span></span>
+<span class="r-in"><span><span class="fu">manhattan_plot</span><span class="op">(</span><span class="va">example_gwas</span>, y_truncate <span class="op">=</span> <span class="fl">10</span>, y_compress <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="manhattan_plot-8.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
