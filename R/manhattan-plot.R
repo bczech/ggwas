@@ -167,33 +167,78 @@ manhattan_plot <- function(data,
   }
 
   if (!is.null(y_truncate)) {
-    trunc_val <- y_truncate
-    above <- data[data$LOG10P > trunc_val, , drop = FALSE]
-    if (nrow(above) > 0) {
-      above$LOG10P_orig <- above$LOG10P
-      above$LOG10P <- trunc_val
-      plt <- plt + geom_point(
-        data = above,
-        aes(x = .data$BP_CUM, y = .data$LOG10P),
-        shape = 17, size = point_size * 2, color = "#E74C3C",
-        inherit.aes = FALSE
+    break_at <- y_truncate
+    max_val <- max(data$LOG10P, na.rm = TRUE)
+    compress <- 0.1
+    top_zone <- (max_val - break_at) * compress
+
+    data$LOG10P_plot <- ifelse(
+      data$LOG10P <= break_at,
+      data$LOG10P,
+      break_at + (data$LOG10P - break_at) * compress
+    )
+
+    y_top <- break_at + top_zone * 1.15
+
+    max_real <- ceiling(max_val / 10) * 10
+    breaks_below <- scales::breaks_pretty(n = 4)(c(0, break_at))
+    breaks_below <- breaks_below[breaks_below < break_at]
+    breaks_above <- max_real
+    all_breaks_real <- c(breaks_below, breaks_above)
+    all_breaks_plot <- c(breaks_below, break_at + (breaks_above - break_at) * compress)
+
+    plt <- ggplot(data, aes(x = .data$BP_CUM, y = .data$LOG10P_plot,
+                             color = .data$CHR_F)) +
+      geom_point(size = point_size, alpha = alpha, shape = 16) +
+      scale_color_chromosome(colors = colors, guide = "none") +
+      scale_x_continuous(
+        breaks = chr_info$center, labels = chr_labels, expand = c(0.01, 0)
+      ) +
+      scale_y_continuous(
+        breaks = all_breaks_plot, labels = all_breaks_real,
+        expand = c(0.02, 0)
+      ) +
+      labs(x = "Chromosome", y = expression(-log[10](italic(p))), title = title) +
+      theme_gwas()
+
+    if (!is.null(genome_wide)) {
+      plt <- plt + geom_hline(yintercept = -log10(genome_wide),
+        linetype = "dashed", color = threshold_colors[1], linewidth = 0.4)
+    }
+    if (!is.null(suggestive)) {
+      plt <- plt + geom_hline(yintercept = -log10(suggestive),
+        linetype = "dotted", color = threshold_colors[2], linewidth = 0.4)
+    }
+
+    if (!is.null(label_data) && nrow(label_data) > 0 && label_column %in% names(label_data)) {
+      label_data$LOG10P_plot <- ifelse(
+        label_data$LOG10P <= break_at,
+        label_data$LOG10P,
+        break_at + (label_data$LOG10P - break_at) * compress
+      )
+      label_data <- label_data[!duplicated(label_data[[label_column]]), , drop = FALSE]
+      plt <- plt + ggrepel::geom_text_repel(
+        data = label_data,
+        aes(x = .data$BP_CUM, y = .data$LOG10P_plot, label = .data[[label_column]]),
+        inherit.aes = FALSE,
+        size = 3, max.overlaps = 20, segment.color = "grey50"
       )
     }
 
     x_range <- range(data$BP_CUM, na.rm = TRUE)
     x_left <- x_range[1] - diff(x_range) * 0.01
     dx <- diff(x_range) * 0.012
-    dy <- trunc_val * 0.04
+    dy <- break_at * 0.025
 
     plt <- plt +
-      coord_cartesian(ylim = c(0, trunc_val * 1.05), clip = "off") +
+      coord_cartesian(ylim = c(0, y_top), clip = "off") +
       ggplot2::annotate("segment",
         x = x_left - dx, xend = x_left + dx,
-        y = trunc_val * 0.97 - dy, yend = trunc_val * 0.97 + dy,
+        y = break_at - dy * 0.5, yend = break_at + dy * 1.5,
         color = "grey20", linewidth = 0.6) +
       ggplot2::annotate("segment",
         x = x_left - dx, xend = x_left + dx,
-        y = trunc_val * 0.93 - dy, yend = trunc_val * 0.93 + dy,
+        y = break_at - dy * 1.5, yend = break_at + dy * 0.5,
         color = "grey20", linewidth = 0.6)
   } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
