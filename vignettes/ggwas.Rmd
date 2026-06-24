@@ -137,6 +137,19 @@ manhattan_plot(
 )
 ```
 
+### Palette and theme variations
+
+The same Manhattan plot can look very different with alternative palettes
+and themes — useful when matching journal style guides:
+
+```{r manhattan-themes, fig.height=4}
+manhattan_plot(example_gwas, colors = gwas_palette("lancet")) + theme_science()
+```
+
+```{r manhattan-cell, fig.height=4}
+manhattan_plot(example_gwas, colors = gwas_palette("nejm")) + theme_cell()
+```
+
 ## QQ plot
 
 The quantile-quantile plot compares observed p-value distribution against the
@@ -221,6 +234,16 @@ handles 10M+ variant datasets without downsampling because it pre-aggregates.
 pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
 ```
 
+Different palettes emphasize different signal ranges:
+
+```{r heatmap-viridis}
+pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "viridis")
+```
+
+```{r heatmap-inferno}
+pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "inferno")
+```
+
 ## Effect-size volcano
 
 Unlike the RNA-seq volcano plot (which uses fold change), this plots GWAS
@@ -231,6 +254,12 @@ or by chromosome:
 
 ```{r volcano}
 volcano_plot(example_gwas, label_top_n = 5)
+```
+
+Color by chromosome instead of significance:
+
+```{r volcano-chr}
+volcano_plot(example_gwas, label_top_n = 5, color_by = "chromosome")
 ```
 
 ## Circular Manhattan
@@ -484,6 +513,12 @@ diag(rg) <- 1
 genetic_correlation(rg, show_values = TRUE, palette = "RdBu")
 ```
 
+Alternative palette and without clustering:
+
+```{r rg-prgn, fig.height=6}
+genetic_correlation(rg, show_values = TRUE, palette = "PRGn", cluster = FALSE)
+```
+
 ## Genetic architecture
 
 The relationship between minor allele frequency and effect size reveals
@@ -499,6 +534,76 @@ there, check for coding errors or population-stratification artifacts:
 ```{r architecture}
 architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
 ```
+
+# Genome-wide density
+
+## SNP density karyogram
+
+Visualize how genotyped or imputed variants are distributed across the
+genome. Regions with low coverage (centromeres, heterochromatin) appear
+as gaps, while high-density regions stand out. Two rendering styles
+are available.
+
+**Heatmap style** bins variants and colors tiles by count — best for
+large datasets:
+
+```{r density-heatmap}
+snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+```
+
+**Points style** draws individual variants on chromosome outlines —
+density is visible through natural clustering:
+
+```{r density-points}
+snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+```
+
+Points can be colored by local density, association significance, or
+uniformly:
+
+```{r density-significance}
+snp_density(example_gwas, style = "points",
+  color_by = "significance", chr_info = chr_info_human())
+```
+
+The `palette` argument works with both styles:
+
+```{r density-palette}
+snp_density(example_gwas, bin_size = 5e6,
+  palette = "magma", chr_info = chr_info_human())
+```
+
+### Species support
+
+Built-in chromosome data is available for human, mouse, and cattle.
+For other species, use `chr_info_ucsc()` to fetch data from UCSC:
+
+```{r eval=FALSE}
+# Built-in (instant, offline)
+snp_density(gwas, chr_info = chr_info_human())   # hg38
+snp_density(gwas, chr_info = chr_info_mouse())   # mm39
+snp_density(gwas, chr_info = chr_info_cattle())  # ARS-UCD1.2
+
+# Any species from UCSC (requires internet)
+snp_density(gwas, chr_info = chr_info_ucsc("canFam6"))   # dog
+snp_density(gwas, chr_info = chr_info_ucsc("susScr11"))  # pig
+```
+
+## Density vs signal comparison
+
+A critical quality-control visualization: compare genotyping density
+(top track) against association signal strength (bottom track) for each
+chromosome. This helps distinguish genuine signals from density
+artifacts — if a region shows strong association AND high variant
+density, the signal could be driven by uneven coverage rather than
+biology.
+
+```{r density-signal, fig.height=6}
+density_signal_plot(example_gwas, bin_size = 5e6)
+```
+
+Regions where the bottom track lights up but the top track is uniform
+are the most convincing signals.
 
 # Themes, palettes, and presets
 
