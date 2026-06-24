@@ -31,3 +31,10 @@ test_that("manhattan_genes works as expected", {
   plt <- manhattan_genes(df, genes = genes, gene_p_threshold = 0.01)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("manhattan_genes works with arrow style", {
+  genes <- data.frame(chr = 1, start = 1e6, end = 2e6, gene = "TEST")
+  plt <- manhattan_genes(example_gwas, genes = genes,
+    gene_p_threshold = 0.01, arrow = TRUE, label_face = "italic")
+  expect_s3_class(plt, "ggplot")
+})

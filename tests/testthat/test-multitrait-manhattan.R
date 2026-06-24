@@ -28,3 +28,13 @@ test_that("multitrait_manhattan works with custom shapes", {
     shapes = c(X = 16L, Y = 17L))
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("multitrait_manhattan highlight_shared works", {
+  df1 <- data.frame(CHR = rep(1:2, each = 50),
+    BP = rep(seq(1e6, 50e6, length.out = 50), 2),
+    P = runif(100), SNP = paste0("rs", 1:100))
+  df2 <- df1
+  df2$P <- runif(100)^3
+  plt <- multitrait_manhattan(A = df1, B = df2, highlight_shared = TRUE)
+  expect_s3_class(plt, "ggplot")
+})

@@ -28,3 +28,13 @@ test_that("gwas_summary works with tall layout", {
   plt <- gwas_summary(df, layout = "tall")
   expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
 })
+
+test_that("gwas_summary works with wide layout", {
+  plt <- gwas_summary(example_gwas, layout = "wide")
+  expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
+})
+
+test_that("gwas_summary works with custom palette", {
+  plt <- gwas_summary(example_gwas, palette = "nature")
+  expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
+})
