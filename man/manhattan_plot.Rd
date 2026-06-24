@@ -28,6 +28,7 @@ manhattan_plot(
   chr_labels = NULL,
   y_limit = NULL,
   y_truncate = NULL,
+  y_compress = 0.1,
   title = NULL
 )
 }
@@ -71,11 +72,14 @@ as displayed chromosomes). If NULL, auto-generated from chromosome numbers.}
 
 \item{y_limit}{Upper y-axis limit for -log10(p).}
 
-\item{y_truncate}{If set, truncate the y-axis at this value and draw
-a break symbol. Variants above the truncation are shown as triangles
-at the truncation line, indicating their values exceed the visible
-range. Useful for GWAS with extremely significant loci that compress
-the rest of the plot.}
+\item{y_truncate}{If set, break the y-axis at this -log10(p) value.
+The region below is shown at full scale; the region above is
+compressed so extreme values remain visible with their true
+-log10(p) labels. A break symbol (//) marks the transition.}
+
+\item{y_compress}{Compression factor for the zone above \code{y_truncate}
+(default 0.1). Values closer to 0 compress more (less space for
+extreme points); values closer to 1 compress less.}
 
 \item{title}{Plot title.}
 }
@@ -107,6 +111,9 @@ manhattan_plot(example_gwas, chromosomes = 1:10)
 # NEJM palette
 manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
 
-# Truncated y-axis for extreme p-values
+# Broken y-axis for extreme p-values
 manhattan_plot(example_gwas, y_truncate = 10)
+
+# Less compression (more space for extreme values)
+manhattan_plot(example_gwas, y_truncate = 10, y_compress = 0.3)
 }
