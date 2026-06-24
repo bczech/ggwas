@@ -232,29 +232,20 @@ manhattan_plot <- function(data,
     }
 
     x_range <- range(data$BP_CUM, na.rm = TRUE)
-    x_pad <- diff(x_range) * 0.04
-    bh <- break_at * 0.025
-
-    n_zig <- 80
-    x_seq <- seq(x_range[1] - x_pad, x_range[2] + x_pad, length.out = n_zig)
-    zig_dy <- bh * 0.6
-    y_zig <- break_at + ifelse(seq_len(n_zig) %% 2 == 0, zig_dy, -zig_dy)
-
-    zig_upper <- data.frame(x = x_seq, y = y_zig + bh * 0.5)
-    zig_lower <- data.frame(x = x_seq, y = y_zig - bh * 0.5)
+    x_ax <- x_range[1] - diff(x_range) * 0.025
+    dx <- diff(x_range) * 0.01
+    dy <- break_at * 0.04
 
     plt <- plt +
       coord_cartesian(ylim = c(0, y_top), clip = "off") +
-      ggplot2::annotate("rect",
-        xmin = x_range[1] - x_pad, xmax = x_range[2] + x_pad,
-        ymin = break_at - bh * 1.5, ymax = break_at + bh * 1.5,
-        fill = "white") +
-      ggplot2::geom_line(data = zig_upper,
-        aes(x = .data$x, y = .data$y),
-        color = "grey30", linewidth = 0.4, inherit.aes = FALSE) +
-      ggplot2::geom_line(data = zig_lower,
-        aes(x = .data$x, y = .data$y),
-        color = "grey30", linewidth = 0.4, inherit.aes = FALSE)
+      ggplot2::annotate("segment",
+        x = x_ax - dx, xend = x_ax + dx,
+        y = break_at + dy * 0.5, yend = break_at + dy * 2.5,
+        color = "black", linewidth = 0.7) +
+      ggplot2::annotate("segment",
+        x = x_ax - dx, xend = x_ax + dx,
+        y = break_at - dy * 0.5, yend = break_at + dy * 1.5,
+        color = "black", linewidth = 0.7)
   } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
   }
