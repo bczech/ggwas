@@ -48,8 +48,8 @@ multi-panel figures.
 
 `ggwas` was designed with three goals:
 
-1. **Comprehensive coverage** — all common GWAS plot types in one package,
-   plus novel visualizations not available elsewhere.
+1. **Comprehensive coverage** — 15 plot types in one package,
+   including novel visualizations not available elsewhere.
 2. **Publication-ready defaults** — sensible colors, proper axis formatting,
    and built-in journal themes so plots look good without tweaking.
 3. **Performance at scale** — smart downsampling handles 10M+ variant datasets
