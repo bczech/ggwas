@@ -38,11 +38,20 @@
 #' # Heatmap style (default)
 #' snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
 #'
+#' # Different palette
+#' snp_density(example_gwas, bin_size = 5e6, palette = "magma",
+#'   chr_info = chr_info_human())
+#'
 #' # Points style — individual variants on chromosome outlines
 #' snp_density(example_gwas, style = "points", chr_info = chr_info_human())
 #'
 #' # Points colored by significance
-#' snp_density(example_gwas, style = "points", color_by = "significance")
+#' snp_density(example_gwas, style = "points", color_by = "significance",
+#'   chr_info = chr_info_human())
+#'
+#' # Uniform color, no centromeres
+#' snp_density(example_gwas, style = "points", color_by = "uniform",
+#'   show_centromeres = FALSE)
 snp_density <- function(data,
                         chr = NULL,
                         bp = NULL,
@@ -98,15 +107,26 @@ snp_density <- function(data,
     }
     cen <- chr_info[, c("chr", "centromere_start", "centromere_end")]
     cen$CHR_label <- factor(int_to_chr(cen$chr), levels = chr_levels)
-    cen$cen_start_mb <- cen$centromere_start / 1e6
-    cen$cen_end_mb <- cen$centromere_end / 1e6
+    cen$cen_mid_mb <- (cen$centromere_start + cen$centromere_end) / 2 / 1e6
+    cen$cen_width_mb <- (cen$centromere_end - cen$centromere_start) / 1e6
 
-    plt <- plt + ggplot2::geom_rect(
-      data = cen,
-      aes(xmin = .data$cen_start_mb, xmax = .data$cen_end_mb,
-          ymin = as.numeric(.data$CHR_label) - 0.42,
-          ymax = as.numeric(.data$CHR_label) + 0.42),
-      fill = "white", color = "grey40", linewidth = 0.2,
+    cen_poly <- do.call(rbind, lapply(seq_len(nrow(cen)), function(i) {
+      y_center <- as.numeric(cen$CHR_label[i])
+      x_left <- cen$cen_mid_mb[i] - cen$cen_width_mb[i] / 2
+      x_mid <- cen$cen_mid_mb[i]
+      x_right <- cen$cen_mid_mb[i] + cen$cen_width_mb[i] / 2
+      data.frame(
+        x = c(x_left, x_mid, x_right, x_right, x_mid, x_left),
+        y = c(y_center + 0.42, y_center + 0.08, y_center + 0.42,
+              y_center - 0.42, y_center - 0.08, y_center - 0.42),
+        group = paste0("cen_", cen$chr[i])
+      )
+    }))
+
+    plt <- plt + ggplot2::geom_polygon(
+      data = cen_poly,
+      aes(x = .data$x, y = .data$y, group = .data$group),
+      fill = "white", color = "grey50", linewidth = 0.15,
       inherit.aes = FALSE
     )
   }

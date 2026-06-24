@@ -74,9 +74,18 @@ data(example_gwas, package = "ggwas")
 # Heatmap style (default)
 snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
 
+# Different palette
+snp_density(example_gwas, bin_size = 5e6, palette = "magma",
+  chr_info = chr_info_human())
+
 # Points style — individual variants on chromosome outlines
 snp_density(example_gwas, style = "points", chr_info = chr_info_human())
 
 # Points colored by significance
-snp_density(example_gwas, style = "points", color_by = "significance")
+snp_density(example_gwas, style = "points", color_by = "significance",
+  chr_info = chr_info_human())
+
+# Uniform color, no centromeres
+snp_density(example_gwas, style = "points", color_by = "uniform",
+  show_centromeres = FALSE)
 }
