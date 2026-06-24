@@ -51,5 +51,13 @@ colored by significance.
 }
 \examples{
 data(example_gwas)
+
+# Basic architecture plot
 architecture_plot(example_gwas)
+
+# Label top hits, lower threshold for demo
+architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
+
+# Log-scale MAF axis
+architecture_plot(example_gwas, p_threshold = 0.001, log_maf = TRUE)
 }

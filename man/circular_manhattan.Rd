@@ -80,5 +80,15 @@ Supports multiple rings for multi-trait comparison.
 }
 \examples{
 data(example_gwas)
+
+# Single trait
 circular_manhattan(example_gwas)
+
+# Nature palette
+circular_manhattan(example_gwas, colors = gwas_palette("nature"))
+
+# Multi-ring: two traits
+trait2 <- example_gwas
+trait2$P <- runif(nrow(trait2))^3
+circular_manhattan(list(Trait1 = example_gwas, Trait2 = trait2))
 }

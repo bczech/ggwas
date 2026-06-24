@@ -62,10 +62,18 @@ genomic inflation factor.
 }
 \examples{
 data(example_gwas, package = "ggwas")
+
+# Basic QQ with lambda and confidence band
 qq_plot(example_gwas, show_lambda = TRUE, ci = 0.95)
+
+# Without confidence band
+qq_plot(example_gwas, show_lambda = TRUE, ci = NULL)
 
 # Stratify by allele frequency
 example_gwas$maf_bin <- cut(example_gwas$AF, c(0, 0.05, 0.2, 0.5),
                             labels = c("Rare", "Low", "Common"))
 qq_plot(example_gwas, group = "maf_bin")
+
+# Nature theme
+qq_plot(example_gwas, show_lambda = TRUE) + theme_nature()
 }

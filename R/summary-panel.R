@@ -20,7 +20,12 @@
 #' @export
 #' @examples
 #' data(example_gwas)
+#'
+#' # Full summary dashboard
 #' gwas_summary(example_gwas)
+#'
+#' # Manhattan and QQ only
+#' gwas_summary(example_gwas, panels = c("manhattan", "qq"))
 gwas_summary <- function(data,
                          chr = NULL,
                          bp = NULL,

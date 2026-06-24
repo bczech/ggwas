@@ -20,7 +20,15 @@
 #' @export
 #' @examples
 #' data(example_gwas, package = "ggwas")
-#' miami_plot(example_gwas, example_gwas, top_title = "Study 1", bottom_title = "Study 2")
+#'
+#' # Discovery vs replication
+#' miami_plot(example_gwas, example_gwas,
+#'   top_title = "Discovery", bottom_title = "Replication")
+#'
+#' # Different colors
+#' miami_plot(example_gwas, example_gwas,
+#'   colors = gwas_palette("nature"),
+#'   top_title = "Study 1", bottom_title = "Study 2")
 miami_plot <- function(top, bottom,
                        chr = NULL,
                        bp = NULL,

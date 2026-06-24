@@ -64,4 +64,13 @@ rg <- matrix(c(
   0.2,   0.0,  0.15, 0.5,  1.0
 ), nrow = 5, dimnames = list(traits, traits))
 genetic_correlation(rg)
+
+# With clustering
+genetic_correlation(rg, cluster = TRUE)
+
+# PRGn palette, no clustering
+genetic_correlation(rg, palette = "PRGn", cluster = FALSE)
+
+# PiYG palette
+genetic_correlation(rg, palette = "PiYG")
 }

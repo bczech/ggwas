@@ -50,5 +50,16 @@ Handles 10M+ SNPs efficiently through pre-aggregation.
 }
 \examples{
 data(example_gwas, package = "ggwas")
+
+# Default (viridis)
 pvalue_heatmap(example_gwas, bin_size = 10000)
+
+# Magma palette
+pvalue_heatmap(example_gwas, bin_size = 10000, palette = "magma")
+
+# Inferno palette
+pvalue_heatmap(example_gwas, bin_size = 10000, palette = "inferno")
+
+# Count significant variants per bin
+pvalue_heatmap(example_gwas, bin_size = 10000, summary_fun = "count_sig")
 }

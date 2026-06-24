@@ -22,7 +22,18 @@
 #' @export
 #' @examples
 #' data(example_gwas, package = "ggwas")
+#'
+#' # Basic volcano
 #' volcano_plot(example_gwas)
+#'
+#' # Label top hits
+#' volcano_plot(example_gwas, label_top_n = 5)
+#'
+#' # Color by chromosome
+#' volcano_plot(example_gwas, color_by = "chromosome", label_top_n = 5)
+#'
+#' # Scale point size by allele frequency
+#' volcano_plot(example_gwas, size_by = "AF", label_top_n = 3)
 volcano_plot <- function(data,
                          beta = NULL, p = NULL, snp = NULL,
                          p_threshold = 5e-8,
