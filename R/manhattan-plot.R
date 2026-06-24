@@ -232,20 +232,23 @@ manhattan_plot <- function(data,
     }
 
     x_range <- range(data$BP_CUM, na.rm = TRUE)
-    x_left <- x_range[1] - diff(x_range) * 0.01
-    dx <- diff(x_range) * 0.012
-    dy <- break_at * 0.025
+    bw <- diff(x_range) * 0.012
+    bh <- break_at * 0.02
 
     plt <- plt +
-      coord_cartesian(ylim = c(0, y_top), clip = "off") +
+      coord_cartesian(ylim = c(0, y_top)) +
+      ggplot2::annotate("rect",
+        xmin = x_range[1] - bw, xmax = x_range[2] + bw,
+        ymin = break_at - bh, ymax = break_at + bh,
+        fill = "white") +
       ggplot2::annotate("segment",
-        x = x_left - dx, xend = x_left + dx,
-        y = break_at - dy * 0.5, yend = break_at + dy * 1.5,
-        color = "grey20", linewidth = 0.6) +
+        x = x_range[1], xend = x_range[2],
+        y = break_at - bh, yend = break_at - bh,
+        linetype = "11", color = "grey50", linewidth = 0.3) +
       ggplot2::annotate("segment",
-        x = x_left - dx, xend = x_left + dx,
-        y = break_at - dy * 1.5, yend = break_at + dy * 0.5,
-        color = "grey20", linewidth = 0.6)
+        x = x_range[1], xend = x_range[2],
+        y = break_at + bh, yend = break_at + bh,
+        linetype = "11", color = "grey50", linewidth = 0.3)
   } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
   }
