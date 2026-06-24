@@ -105,6 +105,7 @@ pvalue_heatmap <- function(data,
       option = switch(palette,
                        "viridis" = "D", "magma" = "A",
                        "inferno" = "B", "plasma" = "C", "D"),
+      direction = -1,
       na.value = na_color,
       name = fill_label
     ) +

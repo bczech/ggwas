@@ -129,8 +129,8 @@ density_signal_plot <- function(data,
   pal_signal <- switch(signal_palette,
     "viridis" = "D", "magma" = "A", "inferno" = "B", "plasma" = "C", "D")
 
-  density_colors <- scales::viridis_pal(option = pal_density)(256)
-  signal_colors <- scales::viridis_pal(option = pal_signal)(256)
+  density_colors <- rev(scales::viridis_pal(option = pal_density)(256))
+  signal_colors <- rev(scales::viridis_pal(option = pal_signal)(256))
 
   combined$color <- ifelse(
     combined$track == "SNP density",

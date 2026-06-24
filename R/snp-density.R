@@ -106,29 +106,21 @@ snp_density <- function(data,
       chr_levels <- rev(int_to_chr(present_chrs))
     }
     cen <- chr_info[, c("chr", "centromere_start", "centromere_end")]
-    cen$CHR_label <- factor(int_to_chr(cen$chr), levels = chr_levels)
-    cen$cen_mid_mb <- (cen$centromere_start + cen$centromere_end) / 2 / 1e6
-    cen$cen_width_mb <- (cen$centromere_end - cen$centromere_start) / 1e6
+    cen <- cen[!is.na(cen$centromere_start) & !is.na(cen$centromere_end), ,
+               drop = FALSE]
+    if (nrow(cen) > 0) {
+      cen$CHR_label <- factor(int_to_chr(cen$chr), levels = chr_levels)
+      cen$cen_mid_mb <- (cen$centromere_start + cen$centromere_end) / 2 / 1e6
 
-    cen_poly <- do.call(rbind, lapply(seq_len(nrow(cen)), function(i) {
-      y_center <- as.numeric(cen$CHR_label[i])
-      x_left <- cen$cen_mid_mb[i] - cen$cen_width_mb[i] / 2
-      x_mid <- cen$cen_mid_mb[i]
-      x_right <- cen$cen_mid_mb[i] + cen$cen_width_mb[i] / 2
-      data.frame(
-        x = c(x_left, x_mid, x_right, x_right, x_mid, x_left),
-        y = c(y_center + 0.42, y_center + 0.08, y_center + 0.42,
-              y_center - 0.42, y_center - 0.08, y_center - 0.42),
-        group = paste0("cen_", cen$chr[i])
+      plt <- plt + geom_segment(
+        data = cen,
+        aes(x = .data$cen_mid_mb, xend = .data$cen_mid_mb,
+            y = as.numeric(.data$CHR_label) - 0.42,
+            yend = as.numeric(.data$CHR_label) + 0.42),
+        color = "#E74C3C", linewidth = 0.6,
+        inherit.aes = FALSE
       )
-    }))
-
-    plt <- plt + ggplot2::geom_polygon(
-      data = cen_poly,
-      aes(x = .data$x, y = .data$y, group = .data$group),
-      fill = "white", color = "grey50", linewidth = 0.15,
-      inherit.aes = FALSE
-    )
+    }
   }
 
   plt
@@ -155,7 +147,7 @@ snp_density <- function(data,
   ggplot(bins, aes(x = .data$bin_mb, y = .data$CHR_label,
                     fill = .data$count)) +
     geom_tile(width = bin_size / 1e6, height = 0.85) +
-    scale_fill_viridis_c(option = pal_option, name = "SNP count") +
+    scale_fill_viridis_c(option = pal_option, direction = -1, name = "SNP count") +
     labs(x = "Position (Mb)", y = "Chromosome", title = title) +
     ggplot2::theme_minimal() +
     ggplot2::theme(
@@ -208,7 +200,7 @@ snp_density <- function(data,
       aes(x = .data$bp_mb, y = .data$y_jitter, color = .data$neglog10p),
       size = point_size, alpha = point_alpha, shape = 16
     ) +
-      scale_color_viridis_c(option = pal_option,
+      scale_color_viridis_c(option = pal_option, direction = -1,
         name = expression(-log[10](italic(p))))
   } else {
     bin_size_local <- 1e6
@@ -225,7 +217,7 @@ snp_density <- function(data,
       aes(x = .data$bp_mb, y = .data$y_jitter, color = .data$local_density),
       size = point_size, alpha = point_alpha, shape = 16
     ) +
-      scale_color_viridis_c(option = pal_option, name = "Local density")
+      scale_color_viridis_c(option = pal_option, direction = -1, name = "Local density")
   }
 
   plt +

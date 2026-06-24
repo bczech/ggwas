@@ -54,7 +54,8 @@ chr_info_mouse <- function(build = "mm39") {
     cli_abort("Only {.val mm39} build is currently supported.")
   }
 
-  # GRCm39 / mm39 — all chromosomes are acrocentric (centromere at ~3 Mb)
+  # GRCm39 / mm39 — all chromosomes are acrocentric
+  # Centromere positions from UCSC gap table (uniform 110kb-3Mb)
   data.frame(
     chr = 1:19,
     length = c(
@@ -63,18 +64,8 @@ chr_info_mouse <- function(build = "mm39") {
       121973369, 120092757, 120883175, 125139656, 104073951,
       98008968, 95294699, 90720763, 61420004
     ),
-    centromere_start = c(
-      3000000, 3000000, 3000000, 3000000, 3000000,
-      3000000, 3000000, 3000000, 3000000, 3000000,
-      3000000, 3000000, 3000000, 3000000, 3000000,
-      3000000, 3000000, 3000000, 3000000
-    ),
-    centromere_end = c(
-      4500000, 4500000, 4500000, 4500000, 4500000,
-      4500000, 4500000, 4500000, 4500000, 4500000,
-      4500000, 4500000, 4500000, 4500000, 4500000,
-      4500000, 4500000, 4500000, 4500000
-    )
+    centromere_start = rep(110000, 19),
+    centromere_end = rep(3000000, 19)
   )
 }
 
@@ -86,6 +77,7 @@ chr_info_cattle <- function(build = "ARS-UCD1.2") {
   }
 
   # ARS-UCD1.2 / bosTau9 — all autosomes are acrocentric
+  # No centromere annotation in UCSC for this assembly
   data.frame(
     chr = 1:29,
     length = c(
@@ -96,8 +88,8 @@ chr_info_cattle <- function(build = "ARS-UCD1.2") {
       69862954, 60773035, 52498615, 62317253, 42350435,
       51992305, 45407902, 45636533, 51505224
     ),
-    centromere_start = rep(1000000, 29),
-    centromere_end = rep(3000000, 29)
+    centromere_start = rep(NA_real_, 29),
+    centromere_end = rep(NA_real_, 29)
   )
 }
 
