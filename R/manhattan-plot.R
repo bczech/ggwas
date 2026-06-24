@@ -23,13 +23,11 @@
 #' @param chr_labels Custom chromosome labels (character vector, same length
 #'   as displayed chromosomes). If NULL, auto-generated from chromosome numbers.
 #' @param y_limit Upper y-axis limit for -log10(p).
-#' @param y_truncate If set, break the y-axis at this -log10(p) value.
-#'   The region below is shown at full scale; the region above is
-#'   compressed so extreme values remain visible with their true
-#'   -log10(p) labels. A break symbol (//) marks the transition.
-#' @param y_compress Compression factor for the zone above `y_truncate`
-#'   (default 0.1). Values closer to 0 compress more (less space for
-#'   extreme points); values closer to 1 compress less.
+#' @param y_truncate Break the y-axis to cut out a middle region. Either
+#'   a single value (break point, resumes at max value) or a vector of
+#'   two values `c(break_from, resume_at)` defining the cut range in
+#'   -log10(p) units. For example, `y_truncate = c(15, 50)` shows 0-15
+#'   at full scale, cuts 15-50, then shows 50+ above the break.
 #' @param title Plot title.
 #' @return A ggplot object.
 #' @export
@@ -54,11 +52,17 @@
 #' # NEJM palette
 #' manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
 #'
-#' # Broken y-axis for extreme p-values
+#' # Broken y-axis: cut 10-50, show 0-10 and 50+
+#' manhattan_plot(example_gwas, y_truncate = c(10, 50))
+#'
+#' # Single value: auto-detect resume point
 #' manhattan_plot(example_gwas, y_truncate = 10)
 #'
-#' # Less compression (more space for extreme values)
-#' manhattan_plot(example_gwas, y_truncate = 10, y_compress = 0.3)
+#' # Custom significance threshold (Bonferroni for 500k SNPs)
+#' manhattan_plot(example_gwas, genome_wide = 0.05 / 500000)
+#'
+#' # No threshold lines
+#' manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
 manhattan_plot <- function(data,
                            chr = NULL,
                            bp = NULL,
@@ -82,7 +86,6 @@ manhattan_plot <- function(data,
                            chr_labels = NULL,
                            y_limit = NULL,
                            y_truncate = NULL,
-                           y_compress = 0.1,
                            title = NULL) {
 
   if (!inherits(data, "gwas_data")) {
@@ -173,25 +176,40 @@ manhattan_plot <- function(data,
   }
 
   if (!is.null(y_truncate)) {
-    break_at <- y_truncate
+    if (length(y_truncate) == 1) {
+      break_from <- y_truncate
+      max_val <- max(data$LOG10P, na.rm = TRUE)
+      resume_at <- ceiling(max_val / 10) * 10
+    } else {
+      break_from <- y_truncate[1]
+      resume_at <- y_truncate[2]
+    }
+
     max_val <- max(data$LOG10P, na.rm = TRUE)
-    compress <- y_compress
-    top_zone <- (max_val - break_at) * compress
+    max_label <- ceiling(max_val / 10) * 10
+    top_height <- break_from * 0.25
+    gap <- top_height * 0.15
 
-    data$LOG10P_plot <- ifelse(
-      data$LOG10P <= break_at,
-      data$LOG10P,
-      break_at + (data$LOG10P - break_at) * compress
-    )
+    data_below <- data[data$LOG10P <= break_from, , drop = FALSE]
+    data_above <- data[data$LOG10P >= resume_at, , drop = FALSE]
+    data_below$LOG10P_plot <- data_below$LOG10P
+    if (nrow(data_above) > 0) {
+      above_range <- max(max_val - resume_at, 1)
+      data_above$LOG10P_plot <- break_from + gap +
+        (data_above$LOG10P - resume_at) / above_range * (top_height - gap)
+    }
+    data <- rbind(data_below, data_above)
 
-    y_top <- break_at + top_zone * 1.15
+    y_top <- break_from + top_height * 1.15
 
-    max_real <- ceiling(max_val / 10) * 10
-    breaks_below <- scales::breaks_pretty(n = 4)(c(0, break_at))
-    breaks_below <- breaks_below[breaks_below < break_at]
-    breaks_above <- max_real
-    all_breaks_real <- c(breaks_below, breaks_above)
-    all_breaks_plot <- c(breaks_below, break_at + (breaks_above - break_at) * compress)
+    breaks_below <- scales::breaks_pretty(n = 4)(c(0, break_from))
+    breaks_below <- breaks_below[breaks_below < break_from]
+    breaks_above_real <- max_label
+    above_range <- max(max_val - resume_at, 1)
+    breaks_above_plot <- break_from + gap +
+      (breaks_above_real - resume_at) / above_range * (top_height - gap)
+    all_breaks_real <- c(breaks_below, breaks_above_real)
+    all_breaks_plot <- c(breaks_below, breaks_above_plot)
 
     plt <- ggplot(data, aes(x = .data$BP_CUM, y = .data$LOG10P_plot,
                              color = .data$CHR_F)) +
@@ -208,19 +226,28 @@ manhattan_plot <- function(data,
       theme_gwas()
 
     if (!is.null(genome_wide)) {
-      plt <- plt + geom_hline(yintercept = -log10(genome_wide),
-        linetype = "dashed", color = threshold_colors[1], linewidth = 0.4)
+      gw_val <- -log10(genome_wide)
+      if (gw_val <= break_from) {
+        plt <- plt + geom_hline(yintercept = gw_val,
+          linetype = "dashed", color = threshold_colors[1], linewidth = 0.4)
+      }
     }
     if (!is.null(suggestive)) {
-      plt <- plt + geom_hline(yintercept = -log10(suggestive),
-        linetype = "dotted", color = threshold_colors[2], linewidth = 0.4)
+      sug_val <- -log10(suggestive)
+      if (sug_val <= break_from) {
+        plt <- plt + geom_hline(yintercept = sug_val,
+          linetype = "dotted", color = threshold_colors[2], linewidth = 0.4)
+      }
     }
 
     if (!is.null(label_data) && nrow(label_data) > 0 && label_column %in% names(label_data)) {
+      label_data <- label_data[label_data$LOG10P <= break_from |
+                               label_data$LOG10P >= resume_at, , drop = FALSE]
       label_data$LOG10P_plot <- ifelse(
-        label_data$LOG10P <= break_at,
+        label_data$LOG10P <= break_from,
         label_data$LOG10P,
-        break_at + (label_data$LOG10P - break_at) * compress
+        break_from + gap + (label_data$LOG10P - resume_at) /
+          above_range * (top_height - gap)
       )
       label_data <- label_data[!duplicated(label_data[[label_column]]), , drop = FALSE]
       plt <- plt + ggrepel::geom_text_repel(
@@ -231,7 +258,7 @@ manhattan_plot <- function(data,
       )
     }
 
-    y_frac_break <- break_at / y_top
+    y_frac_break <- break_from / y_top
 
     break_grob <- grid::grobTree(
       grid::rectGrob(

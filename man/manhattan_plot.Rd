@@ -28,7 +28,6 @@ manhattan_plot(
   chr_labels = NULL,
   y_limit = NULL,
   y_truncate = NULL,
-  y_compress = 0.1,
   title = NULL
 )
 }
@@ -72,14 +71,11 @@ as displayed chromosomes). If NULL, auto-generated from chromosome numbers.}
 
 \item{y_limit}{Upper y-axis limit for -log10(p).}
 
-\item{y_truncate}{If set, break the y-axis at this -log10(p) value.
-The region below is shown at full scale; the region above is
-compressed so extreme values remain visible with their true
--log10(p) labels. A break symbol (//) marks the transition.}
-
-\item{y_compress}{Compression factor for the zone above \code{y_truncate}
-(default 0.1). Values closer to 0 compress more (less space for
-extreme points); values closer to 1 compress less.}
+\item{y_truncate}{Break the y-axis to cut out a middle region. Either
+a single value (break point, resumes at max value) or a vector of
+two values \code{c(break_from, resume_at)} defining the cut range in
+-log10(p) units. For example, \code{y_truncate = c(15, 50)} shows 0-15
+at full scale, cuts 15-50, then shows 50+ above the break.}
 
 \item{title}{Plot title.}
 }
@@ -111,9 +107,15 @@ manhattan_plot(example_gwas, chromosomes = 1:10)
 # NEJM palette
 manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
 
-# Broken y-axis for extreme p-values
+# Broken y-axis: cut 10-50, show 0-10 and 50+
+manhattan_plot(example_gwas, y_truncate = c(10, 50))
+
+# Single value: auto-detect resume point
 manhattan_plot(example_gwas, y_truncate = 10)
 
-# Less compression (more space for extreme values)
-manhattan_plot(example_gwas, y_truncate = 10, y_compress = 0.3)
+# Custom significance threshold (Bonferroni for 500k SNPs)
+manhattan_plot(example_gwas, genome_wide = 0.05 / 500000)
+
+# No threshold lines
+manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
 }
