@@ -23,6 +23,11 @@
 #' @param chr_labels Custom chromosome labels (character vector, same length
 #'   as displayed chromosomes). If NULL, auto-generated from chromosome numbers.
 #' @param y_limit Upper y-axis limit for -log10(p).
+#' @param y_truncate If set, truncate the y-axis at this value and draw
+#'   a break symbol. Variants above the truncation are shown as triangles
+#'   at the truncation line, indicating their values exceed the visible
+#'   range. Useful for GWAS with extremely significant loci that compress
+#'   the rest of the plot.
 #' @param title Plot title.
 #' @return A ggplot object.
 #' @export
@@ -46,6 +51,9 @@
 #'
 #' # NEJM palette
 #' manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
+#'
+#' # Truncated y-axis for extreme p-values
+#' manhattan_plot(example_gwas, y_truncate = 10)
 manhattan_plot <- function(data,
                            chr = NULL,
                            bp = NULL,
@@ -68,6 +76,7 @@ manhattan_plot <- function(data,
                            chromosomes = NULL,
                            chr_labels = NULL,
                            y_limit = NULL,
+                           y_truncate = NULL,
                            title = NULL) {
 
   if (!inherits(data, "gwas_data")) {
@@ -157,7 +166,45 @@ manhattan_plot <- function(data,
     )
   }
 
-  if (!is.null(y_limit)) {
+  if (!is.null(y_truncate)) {
+    trunc_val <- y_truncate
+    above <- data[data$LOG10P > trunc_val, , drop = FALSE]
+    if (nrow(above) > 0) {
+      above$LOG10P_orig <- above$LOG10P
+      above$LOG10P <- trunc_val
+      plt <- plt + geom_point(
+        data = above,
+        aes(x = .data$BP_CUM, y = .data$LOG10P),
+        shape = 17, size = point_size * 2, color = "#E74C3C",
+        inherit.aes = FALSE
+      )
+    }
+
+    x_range <- range(data$BP_CUM, na.rm = TRUE)
+    x_break <- x_range[1] - diff(x_range) * 0.015
+    gap <- trunc_val * 0.03
+    break_df <- data.frame(
+      x = rep(x_break, 4),
+      xend = rep(x_break, 4),
+      y = c(trunc_val - gap * 2, trunc_val - gap,
+            trunc_val + gap, trunc_val + gap * 2),
+      yend = c(trunc_val - gap, trunc_val + gap,
+               trunc_val + gap * 2, trunc_val + gap * 3)
+    )
+
+    plt <- plt +
+      coord_cartesian(ylim = c(0, trunc_val * 1.05), clip = "off") +
+      ggplot2::annotate("segment",
+        x = x_break - diff(x_range) * 0.008,
+        xend = x_break + diff(x_range) * 0.008,
+        y = trunc_val - gap, yend = trunc_val + gap,
+        color = "grey30", linewidth = 0.5) +
+      ggplot2::annotate("segment",
+        x = x_break - diff(x_range) * 0.008,
+        xend = x_break + diff(x_range) * 0.008,
+        y = trunc_val - gap * 2, yend = trunc_val,
+        color = "grey30", linewidth = 0.5)
+  } else if (!is.null(y_limit)) {
     plt <- plt + coord_cartesian(ylim = c(0, y_limit))
   }
 

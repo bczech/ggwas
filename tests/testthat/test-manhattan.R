@@ -51,3 +51,10 @@ test_that("manhattan_plot handles highlighting", {
   plt <- manhattan_plot(df, highlight_snps = c("rs1", "rs50"))
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("manhattan_plot y_truncate works as expected", {
+  df <- example_gwas
+  df$P[1] <- 1e-50
+  plt <- manhattan_plot(df, y_truncate = 15)
+  expect_s3_class(plt, "ggplot")
+})
