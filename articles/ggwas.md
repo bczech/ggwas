@@ -129,6 +129,32 @@ manhattan_plot(
 
 ![](ggwas_files/figure-html/manhattan-custom-1.png)
 
+#### Broken y-axis for extreme p-values
+
+When a few loci have extremely low p-values (e.g., 1e-50), they compress
+the rest of the plot. `y_truncate` breaks the y-axis at a given value —
+the lower portion is shown at full scale, the upper portion is
+compressed, and a break symbol marks the transition:
+
+``` r
+
+# Add extreme p-values for demonstration
+gwas_extreme <- example_gwas
+gwas_extreme$P[1:2] <- c(1e-50, 1e-30)
+manhattan_plot(gwas_extreme, y_truncate = 15, label_top_n = 3)
+```
+
+![](ggwas_files/figure-html/manhattan-truncate-1.png)
+
+Control the compression factor with `y_compress` (default 0.1):
+
+``` r
+
+manhattan_plot(gwas_extreme, y_truncate = 12, y_compress = 0.25)
+```
+
+![](ggwas_files/figure-html/manhattan-truncate-less-1.png)
+
 #### Palette and theme variations
 
 The same Manhattan plot can look very different with alternative
@@ -271,10 +297,10 @@ pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "inferno")
 ### Effect-size volcano
 
 Unlike the RNA-seq volcano plot (which uses fold change), this plots
-GWAS effect size (BETA) against significance. You see at once which
-signals are protective vs risk-increasing, and how large the effects are
-relative to their statistical evidence. Points can be colored by
-significance status or by chromosome:
+GWAS effect size ($`\hat{\beta}`$) against significance. You see at once
+which signals are protective vs risk-increasing, and how large the
+effects are relative to their statistical evidence. Points can be
+colored by significance status or by chromosome:
 
 ``` r
 

@@ -2,24 +2,30 @@
 
 ## ggwas 0.99.2
 
+- Added `y_truncate` parameter for Manhattan plots with broken y-axis,
+  showing extreme p-values in a compressed zone above the break
 - Added
   [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md)
-  karyogram-style SNP density visualization with optional centromere
-  markers
+  with heatmap and points styles for SNP density karyograms with
+  centromere markers
 - Added
   [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
-  dual-track comparison of genotyping density vs association signal to
-  distinguish real hits from artifacts
+  dual-track comparison of genotyping density vs association signal
 - Added
-  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  helper for hg38 chromosome lengths and centromere positions
+  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md),
+  [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md),
+  [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
+  for built-in chromosome data, and
+  [`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
+  for any UCSC assembly
+- Used Greek letter on axis labels in volcano and architecture plots
+- Reversed color scale in heatmaps (dark = high values)
 - Filled empty bins in
   [`pvalue_heatmap()`](https://bczech.github.io/ggwas/reference/pvalue_heatmap.md)
   to eliminate gaps
 - Replaced scattermore with geom_point for correct circle shapes
 - Showed legends by default in journal themes
 - Reduced overlapping text in genetic correlation and PheWAS plots
-- Fixed reader examples using non-existent files
 
 ## ggwas 0.99.1
 
