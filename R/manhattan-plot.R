@@ -81,21 +81,9 @@ manhattan_plot <- function(data,
   }
   n_chr_displayed <- nrow(chr_info)
 
-  use_scatter <- requireNamespace("scattermore", quietly = TRUE) &&
-    nrow(data) > 100000
-
   plt <- ggplot(data, aes(x = .data$BP_CUM, y = .data$LOG10P,
-                           color = .data$CHR_F))
-
-  if (use_scatter) {
-    plt <- plt + scattermore::geom_scattermore(
-      pointsize = max(point_size * 2, 2), alpha = alpha
-    )
-  } else {
-    plt <- plt + geom_point(
-      size = point_size, alpha = alpha, shape = 16
-    )
-  }
+                           color = .data$CHR_F)) +
+    geom_point(size = point_size, alpha = alpha, shape = 16)
 
   plt <- plt +
     scale_color_chromosome(colors = colors, guide = "none") +
