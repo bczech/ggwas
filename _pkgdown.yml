@@ -13,8 +13,6 @@ home:
     Comprehensive ggplot2-based toolkit for visualizing GWAS results.
     Manhattan, QQ, Miami, PheWAS, fine-mapping, genetic correlations, and more.
   links:
-    - text: Report a bug
-      href: https://github.com/bczech/ggwas/issues
     - text: Zenodo DOI
       href: https://doi.org/10.5281/zenodo.20815110
 

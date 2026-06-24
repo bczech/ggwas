@@ -10,7 +10,7 @@ and journal-specific themes.
 
 ## Key features
 
-- **Comprehensive plot library** including novel visualizations not available elsewhere
+- **15 plot types** — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations)
 - **Smart downsampling** for 10M+ variant datasets
 - **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
 - **Gene annotation** with automatic nearest-gene mapping
@@ -31,6 +31,11 @@ and journal-specific themes.
 | Genome-wide heatmap | No | No | **Yes (novel)** |
 | Effect-size volcano | No | No | **Yes (novel)** |
 | Summary dashboard | No | No | **Yes (novel)** |
+| PheWAS plot | No | No | **Yes** |
+| Colocalization plot | No | No | **Yes (novel)** |
+| Fine-mapping (PIP) | No | No | **Yes (novel)** |
+| Genetic correlation | No | No | **Yes (novel)** |
+| Architecture plot | No | No | **Yes (novel)** |
 | Gene labels on peaks | No | No | **Yes** |
 | Region highlights | No | No | **Yes** |
 | Top hits table | No | No | **Yes (with clumping)** |
@@ -105,6 +110,16 @@ multitrait_manhattan(BMI = gwas1, Height = gwas2, highlight_shared = TRUE)
 gwas_summary(gwas)  # multi-panel dashboard
 ```
 
+### Post-GWAS
+
+```r
+phewas_plot(phewas_results)
+coloc_plot(gwas, eqtl, region_chr = 1, region_start = 1e6, region_end = 2e6)
+finemapping_plot(susie_results, region_chr = 1, region_start = 1e6, region_end = 2e6)
+genetic_correlation(ldsc_matrix, cluster = TRUE)
+architecture_plot(gwas)
+```
+
 ### Gene annotation
 
 ```r
@@ -145,11 +160,11 @@ looks identical but renders in seconds instead of minutes:
 
 | Variants | qqman | ggwas | Speedup |
 |---|---|---|---|
-| 50k | 0.19s | 0.20s | ~1x |
-| 200k | 0.78s | 0.42s | **1.9x** |
-| 500k | 1.81s | 1.03s | **1.8x** |
-| 1M | 4.24s | 1.73s | **2.5x** |
-| 2M | 9.00s | 2.28s | **3.9x** |
+| 50k | 0.17s | 0.06s | **2.6x** |
+| 200k | 0.80s | 0.11s | **7.0x** |
+| 500k | 2.03s | 1.01s | **2.0x** |
+| 1M | 4.08s | 1.24s | **3.3x** |
+| 1.37M | 5.71s | 0.65s | **8.8x** |
 
 <img src="man/figures/benchmark.png" width="600" alt="Benchmark: ggwas vs qqman" />
 
