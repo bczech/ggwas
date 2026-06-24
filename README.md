@@ -11,6 +11,7 @@ and journal-specific themes.
 ## Key features
 
 - **17 plot types** — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations, SNP density karyogram)
+- **Broken y-axis** for Manhattan plots with extreme p-values (`y_truncate`)
 - **Smart downsampling** for 10M+ variant datasets
 - **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
 - **Gene annotation** with automatic nearest-gene mapping
@@ -95,6 +96,7 @@ manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 
 ```r
 manhattan_plot(gwas, label_top_n = 5)
+manhattan_plot(gwas, y_truncate = 15)  # broken y-axis for extreme p-values
 qq_plot(gwas, show_lambda = TRUE, ci = 0.95)
 miami_plot(gwas1, gwas2, top_title = "Study 1", bottom_title = "Study 2")
 locus_plot(gwas, lead_snp = "rs12345", flank = 500000)

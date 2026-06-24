@@ -1,16 +1,19 @@
 # ggwas 0.99.2
 
-* Added `snp_density()` karyogram-style SNP density visualization with
-  optional centromere markers
+* Added `y_truncate` parameter for Manhattan plots with broken y-axis,
+  showing extreme p-values in a compressed zone above the break
+* Added `snp_density()` with heatmap and points styles for SNP density
+  karyograms with centromere markers
 * Added `density_signal_plot()` dual-track comparison of genotyping
-  density vs association signal to distinguish real hits from artifacts
-* Added `chr_info_human()` helper for hg38 chromosome lengths and
-  centromere positions
+  density vs association signal
+* Added `chr_info_human()`, `chr_info_mouse()`, `chr_info_cattle()` for
+  built-in chromosome data, and `chr_info_ucsc()` for any UCSC assembly
+* Used Greek letter on axis labels in volcano and architecture plots
+* Reversed color scale in heatmaps (dark = high values)
 * Filled empty bins in `pvalue_heatmap()` to eliminate gaps
 * Replaced scattermore with geom_point for correct circle shapes
 * Showed legends by default in journal themes
 * Reduced overlapping text in genetic correlation and PheWAS plots
-* Fixed reader examples using non-existent files
 
 # ggwas 0.99.1
 
