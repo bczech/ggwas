@@ -132,28 +132,53 @@ manhattan_plot(
 #### Broken y-axis for extreme p-values
 
 When a few loci have extremely low p-values (e.g., 1e-50), they compress
-the rest of the plot. `y_truncate` breaks the y-axis at a given value —
-the lower portion is shown at full scale, the upper portion is
-compressed, and a break symbol marks the transition:
+the rest of the plot. `y_truncate` breaks the y-axis — the region
+between the two values is cut out, and a break symbol (//) marks the
+transition:
 
 ``` r
 
 # Add extreme p-values for demonstration
 gwas_extreme <- example_gwas
 gwas_extreme$P[1:2] <- c(1e-50, 1e-30)
-manhattan_plot(gwas_extreme, y_truncate = 15, label_top_n = 3)
+
+# Cut the region between 15 and 45 on the -log10(p) scale
+manhattan_plot(gwas_extreme, y_truncate = c(15, 45), label_top_n = 3)
 ```
 
 ![](ggwas_files/figure-html/manhattan-truncate-1.png)
 
-Control the compression factor with `y_compress` (default 0.1):
+A single value auto-detects the resume point from the data:
 
 ``` r
 
-manhattan_plot(gwas_extreme, y_truncate = 12, y_compress = 0.25)
+manhattan_plot(gwas_extreme, y_truncate = 15, label_top_n = 3)
 ```
 
-![](ggwas_files/figure-html/manhattan-truncate-less-1.png)
+![](ggwas_files/figure-html/manhattan-truncate-auto-1.png)
+
+#### Significance thresholds
+
+The genome-wide and suggestive significance lines are fully
+customizable. The default 5e-8 assumes a standard human GWAS with ~1M
+independent tests, but the correct threshold depends on the number of
+variants, correction method, and organism:
+
+``` r
+
+# Bonferroni for 500k SNPs
+manhattan_plot(example_gwas, genome_wide = 0.05 / 500000, suggestive = 1e-4)
+```
+
+![](ggwas_files/figure-html/manhattan-thresholds-1.png)
+
+``` r
+
+# No threshold lines
+manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
+```
+
+![](ggwas_files/figure-html/manhattan-no-lines-1.png)
 
 #### Palette and theme variations
 
