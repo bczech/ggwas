@@ -29,6 +29,7 @@ manhattan_plot(
   chromosomes = NULL,
   chr_labels = NULL,
   y_limit = NULL,
+  y_truncate = NULL,
   title = NULL
 )
 ```
@@ -112,6 +113,14 @@ manhattan_plot(
 
   Upper y-axis limit for -log10(p).
 
+- y_truncate:
+
+  If set, truncate the y-axis at this value and draw a break symbol.
+  Variants above the truncation are shown as triangles at the truncation
+  line, indicating their values exceed the visible range. Useful for
+  GWAS with extremely significant loci that compress the rest of the
+  plot.
+
 - title:
 
   Plot title.
@@ -147,4 +156,8 @@ manhattan_plot(example_gwas, chromosomes = 1:10)
 
 # NEJM palette
 manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
+
+
+# Truncated y-axis for extreme p-values
+manhattan_plot(example_gwas, y_truncate = 10)
 ```
