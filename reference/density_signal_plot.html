@@ -115,6 +115,20 @@ If NULL, chromosome lengths are inferred from the data.</p></dd>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_gwas</span>, package <span class="op">=</span> <span class="st">"ggwas"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">density_signal_plot</span><span class="op">(</span><span class="va">example_gwas</span>, bin_size <span class="op">=</span> <span class="fl">5e6</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="density_signal_plot-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># With chromosome info for accurate lengths</span></span></span>
+<span class="r-in"><span><span class="fu">density_signal_plot</span><span class="op">(</span><span class="va">example_gwas</span>, bin_size <span class="op">=</span> <span class="fl">5e6</span>,</span></span>
+<span class="r-in"><span>  chr_info <span class="op">=</span> <span class="fu"><a href="chr_info.html">chr_info_human</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="density_signal_plot-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Subset to specific chromosomes</span></span></span>
+<span class="r-in"><span><span class="fu">density_signal_plot</span><span class="op">(</span><span class="va">example_gwas</span>, bin_size <span class="op">=</span> <span class="fl">5e6</span>, chromosomes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="density_signal_plot-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Different palettes</span></span></span>
+<span class="r-in"><span><span class="fu">density_signal_plot</span><span class="op">(</span><span class="va">example_gwas</span>, bin_size <span class="op">=</span> <span class="fl">5e6</span>,</span></span>
+<span class="r-in"><span>  density_palette <span class="op">=</span> <span class="st">"plasma"</span>, signal_palette <span class="op">=</span> <span class="st">"inferno"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="density_signal_plot-4.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

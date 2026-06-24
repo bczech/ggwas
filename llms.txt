@@ -252,8 +252,12 @@ Multi-trait, enrichment, and post-GWAS visualizations
   : SNP density karyogram
 - [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
   : Density–signal dual-track plot
-- [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info_human.md)
-  : Human chromosome information (hg38)
+- [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
+  [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md)
+  [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
+  : Chromosome information for common species
+- [`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
+  : Fetch chromosome information from UCSC
 
 ## Annotation and analysis
 

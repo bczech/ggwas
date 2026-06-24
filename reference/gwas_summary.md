@@ -86,5 +86,11 @@ A patchwork composition.
 
 ``` r
 data(example_gwas)
+
+# Full summary dashboard
 gwas_summary(example_gwas)
+
+
+# Manhattan and QQ only
+gwas_summary(example_gwas, panels = c("manhattan", "qq"))
 ```

@@ -124,9 +124,27 @@ A ggplot object.
 
 ``` r
 data(example_gwas, package = "ggwas")
+
+# Basic Manhattan plot
 manhattan_plot(example_gwas)
 
+
+# Label top hits with a different palette
 manhattan_plot(example_gwas, label_top_n = 5, colors = gwas_palette("vibrant"))
 
-manhattan_plot(example_gwas, chromosomes = 1:10) + theme_nature()
+
+# Nature journal style
+manhattan_plot(example_gwas, label_top_n = 3) + theme_nature()
+
+
+# Lancet palette with Science theme
+manhattan_plot(example_gwas, colors = gwas_palette("lancet")) + theme_science()
+
+
+# Subset chromosomes
+manhattan_plot(example_gwas, chromosomes = 1:10)
+
+
+# NEJM palette
+manhattan_plot(example_gwas, colors = gwas_palette("nejm"), label_top_n = 3)
 ```

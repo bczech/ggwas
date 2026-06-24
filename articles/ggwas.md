@@ -129,6 +129,25 @@ manhattan_plot(
 
 ![](ggwas_files/figure-html/manhattan-custom-1.png)
 
+#### Palette and theme variations
+
+The same Manhattan plot can look very different with alternative
+palettes and themes — useful when matching journal style guides:
+
+``` r
+
+manhattan_plot(example_gwas, colors = gwas_palette("lancet")) + theme_science()
+```
+
+![](ggwas_files/figure-html/manhattan-themes-1.png)
+
+``` r
+
+manhattan_plot(example_gwas, colors = gwas_palette("nejm")) + theme_cell()
+```
+
+![](ggwas_files/figure-html/manhattan-cell-1.png)
+
 ### QQ plot
 
 The quantile-quantile plot compares observed p-value distribution
@@ -233,6 +252,22 @@ pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "magma")
 
 ![](ggwas_files/figure-html/heatmap-1.png)
 
+Different palettes emphasize different signal ranges:
+
+``` r
+
+pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "viridis")
+```
+
+![](ggwas_files/figure-html/heatmap-viridis-1.png)
+
+``` r
+
+pvalue_heatmap(example_gwas, bin_size = 10e6, palette = "inferno")
+```
+
+![](ggwas_files/figure-html/heatmap-inferno-1.png)
+
 ### Effect-size volcano
 
 Unlike the RNA-seq volcano plot (which uses fold change), this plots
@@ -247,6 +282,15 @@ volcano_plot(example_gwas, label_top_n = 5)
 ```
 
 ![](ggwas_files/figure-html/volcano-1.png)
+
+Color by chromosome instead of significance:
+
+``` r
+
+volcano_plot(example_gwas, label_top_n = 5, color_by = "chromosome")
+```
+
+![](ggwas_files/figure-html/volcano-chr-1.png)
 
 ### Circular Manhattan
 
@@ -556,6 +600,15 @@ genetic_correlation(rg, show_values = TRUE, palette = "RdBu")
 
 ![](ggwas_files/figure-html/rg-matrix-1.png)
 
+Alternative palette and without clustering:
+
+``` r
+
+genetic_correlation(rg, show_values = TRUE, palette = "PRGn", cluster = FALSE)
+```
+
+![](ggwas_files/figure-html/rg-prgn-1.png)
+
 ### Genetic architecture
 
 The relationship between minor allele frequency and effect size reveals
@@ -575,6 +628,94 @@ architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
 ```
 
 ![](ggwas_files/figure-html/architecture-1.png)
+
+## Genome-wide density
+
+### SNP density karyogram
+
+Visualize how genotyped or imputed variants are distributed across the
+genome. Regions with low coverage (centromeres, heterochromatin) appear
+as gaps, while high-density regions stand out. Two rendering styles are
+available.
+
+**Heatmap style** bins variants and colors tiles by count — best for
+large datasets:
+
+``` r
+
+snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+```
+
+![](ggwas_files/figure-html/density-heatmap-1.png)
+
+**Points style** draws individual variants on chromosome outlines —
+density is visible through natural clustering:
+
+``` r
+
+snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+```
+
+![](ggwas_files/figure-html/density-points-1.png)
+
+Points can be colored by local density, association significance, or
+uniformly:
+
+``` r
+
+snp_density(example_gwas, style = "points",
+  color_by = "significance", chr_info = chr_info_human())
+```
+
+![](ggwas_files/figure-html/density-significance-1.png)
+
+The `palette` argument works with both styles:
+
+``` r
+
+snp_density(example_gwas, bin_size = 5e6,
+  palette = "magma", chr_info = chr_info_human())
+```
+
+![](ggwas_files/figure-html/density-palette-1.png)
+
+#### Species support
+
+Built-in chromosome data is available for human, mouse, and cattle. For
+other species, use
+[`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
+to fetch data from UCSC:
+
+``` r
+
+# Built-in (instant, offline)
+snp_density(gwas, chr_info = chr_info_human())   # hg38
+snp_density(gwas, chr_info = chr_info_mouse())   # mm39
+snp_density(gwas, chr_info = chr_info_cattle())  # ARS-UCD1.2
+
+# Any species from UCSC (requires internet)
+snp_density(gwas, chr_info = chr_info_ucsc("canFam6"))   # dog
+snp_density(gwas, chr_info = chr_info_ucsc("susScr11"))  # pig
+```
+
+### Density vs signal comparison
+
+A critical quality-control visualization: compare genotyping density
+(top track) against association signal strength (bottom track) for each
+chromosome. This helps distinguish genuine signals from density
+artifacts — if a region shows strong association AND high variant
+density, the signal could be driven by uneven coverage rather than
+biology.
+
+``` r
+
+density_signal_plot(example_gwas, bin_size = 5e6)
+```
+
+![](ggwas_files/figure-html/density-signal-1.png)
+
+Regions where the bottom track lights up but the top track is uniform
+are the most convincing signals.
 
 ## Themes, palettes, and presets
 

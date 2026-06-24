@@ -11,7 +11,7 @@
   dual-track comparison of genotyping density vs association signal to
   distinguish real hits from artifacts
 - Added
-  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info_human.md)
+  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
   helper for hg38 chromosome lengths and centromere positions
 - Filled empty bins in
   [`pvalue_heatmap()`](https://bczech.github.io/ggwas/reference/pvalue_heatmap.md)
