@@ -25,7 +25,7 @@ theme_nature <- function(base_size = 7, base_family = "") {
       axis.text = element_text(size = base_size, color = "black"),
       axis.title = element_text(size = base_size + 1, face = "bold"),
       plot.title = element_text(size = base_size + 2, face = "bold"),
-      legend.position = "none",
+      legend.position = "right",
       plot.margin = ggplot2::margin(5, 5, 5, 5)
     )
 }
@@ -40,7 +40,7 @@ theme_science <- function(base_size = 8, base_family = "") {
       axis.text = element_text(size = base_size, color = "black"),
       axis.title = element_text(size = base_size + 1),
       plot.title = element_text(size = base_size + 2, face = "bold"),
-      legend.position = "none",
+      legend.position = "right",
       panel.grid = element_blank()
     )
 }
@@ -72,7 +72,7 @@ theme_cell <- function(base_size = 7, base_family = "") {
       axis.text = element_text(size = base_size, color = "black"),
       axis.title = element_text(size = base_size + 0.5),
       plot.title = element_text(size = base_size + 1.5, face = "bold"),
-      legend.position = "none",
+      legend.position = "right",
       plot.margin = ggplot2::margin(3, 3, 3, 3)
     )
 }

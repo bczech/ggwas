@@ -111,7 +111,7 @@ phewas_plot <- function(data,
     ) +
       ggplot2::theme(
         axis.text.x = element_text(angle = category_label_angle,
-                                   hjust = 1, size = 8)
+                                   hjust = 1, vjust = 1, size = 6)
       )
   } else {
     plt <- plt + scale_x_continuous(breaks = NULL, expand = c(0.02, 0))

@@ -39,7 +39,7 @@ genetic_correlation <- function(rg_matrix,
                                 palette = "RdBu",
                                 cluster = TRUE,
                                 rg_range = c(-1, 1),
-                                cell_size = 3.5,
+                                cell_size = 2.8,
                                 show_values = TRUE,
                                 show_diagonal = FALSE,
                                 title = NULL) {
@@ -130,8 +130,8 @@ genetic_correlation <- function(rg_matrix,
     labs(x = NULL, y = NULL, title = title) +
     ggplot2::theme_minimal() +
     ggplot2::theme(
-      axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
-      axis.text.y = element_text(size = 10),
+      axis.text.x = element_text(angle = 55, hjust = 1, size = 7),
+      axis.text.y = element_text(size = 7),
       panel.grid = element_blank(),
       legend.position = "right"
     ) +
