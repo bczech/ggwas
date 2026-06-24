@@ -20,7 +20,7 @@ A \code{gwas_data} object.
 Read PLINK logistic regression results
 }
 \examples{
-\donttest{
+\dontrun{
 gwas <- read_plink_logistic("my_results.assoc.logistic")
 }
 }
