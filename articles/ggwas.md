@@ -22,8 +22,8 @@ composition of multi-panel figures.
 
 `ggwas` was designed with three goals:
 
-1.  **Comprehensive coverage** — all common GWAS plot types in one
-    package, plus novel visualizations not available elsewhere.
+1.  **Comprehensive coverage** — 15 plot types in one package, including
+    novel visualizations not available elsewhere.
 2.  **Publication-ready defaults** — sensible colors, proper axis
     formatting, and built-in journal themes so plots look good without
     tweaking.
@@ -58,7 +58,7 @@ BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 ``` r
 
 library(ggwas)
-#> ggwas v0.99.0
+#> ggwas v0.99.2
 library(ggplot2)
 
 data(example_gwas)
@@ -719,7 +719,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.0     BiocStyle_2.40.0
+#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.2     BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.0     
@@ -734,7 +734,7 @@ sessionInfo()
 #> [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.0      
 #> [31] withr_3.0.3         digest_0.6.39       grid_4.6.0         
 #> [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     
-#> [37] glue_1.8.1          data.table_1.18.4   scattermore_1.2    
-#> [40] farver_2.1.2        ragg_1.5.2          rmarkdown_2.31     
-#> [43] tools_4.6.0         htmltools_0.5.9
+#> [37] glue_1.8.1          data.table_1.18.4   farver_2.1.2       
+#> [40] ragg_1.5.2          rmarkdown_2.31      tools_4.6.0        
+#> [43] htmltools_0.5.9
 ```

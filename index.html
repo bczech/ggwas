@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
 </h2>
 <ul>
 <li>
-<strong>Comprehensive plot library</strong> including novel visualizations not available elsewhere</li>
+<strong>15 plot types</strong> — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations)</li>
 <li>
 <strong>Smart downsampling</strong> for 10M+ variant datasets</li>
 <li>
@@ -149,6 +149,36 @@
 </tr>
 <tr>
 <td>Summary dashboard</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>PheWAS plot</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Colocalization plot</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>Fine-mapping (PIP)</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>Genetic correlation</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (novel)</strong></td>
+</tr>
+<tr>
+<td>Architecture plot</td>
 <td>No</td>
 <td>No</td>
 <td><strong>Yes (novel)</strong></td>
@@ -297,9 +327,19 @@
 <span><span class="fu"><a href="reference/gwas_summary.html">gwas_summary</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span>  <span class="co"># multi-panel dashboard</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="gene-annotation">Gene annotation<a class="anchor" aria-label="anchor" href="#gene-annotation"></a>
+<h3 id="post-gwas">Post-GWAS<a class="anchor" aria-label="anchor" href="#post-gwas"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="reference/phewas_plot.html">phewas_plot</a></span><span class="op">(</span><span class="va">phewas_results</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/coloc_plot.html">coloc_plot</a></span><span class="op">(</span><span class="va">gwas</span>, <span class="va">eqtl</span>, region_chr <span class="op">=</span> <span class="fl">1</span>, region_start <span class="op">=</span> <span class="fl">1e6</span>, region_end <span class="op">=</span> <span class="fl">2e6</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/finemapping_plot.html">finemapping_plot</a></span><span class="op">(</span><span class="va">susie_results</span>, region_chr <span class="op">=</span> <span class="fl">1</span>, region_start <span class="op">=</span> <span class="fl">1e6</span>, region_end <span class="op">=</span> <span class="fl">2e6</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/genetic_correlation.html">genetic_correlation</a></span><span class="op">(</span><span class="va">ldsc_matrix</span>, cluster <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="reference/architecture_plot.html">architecture_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="gene-annotation">Gene annotation<a class="anchor" aria-label="anchor" href="#gene-annotation"></a>
+</h3>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Label peaks with nearest gene names (instead of rs IDs)</span></span>
 <span><span class="fu"><a href="reference/manhattan_genes.html">manhattan_genes</a></span><span class="op">(</span><span class="va">gwas</span>, genes <span class="op">=</span> <span class="va">gene_table</span>, arrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
@@ -313,7 +353,7 @@
 <div class="section level3">
 <h3 id="themes-and-palettes">Themes and palettes<a class="anchor" aria-label="anchor" href="#themes-and-palettes"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Journal themes</span></span>
 <span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/journal_themes.html">theme_nature</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="reference/journal_themes.html">theme_science</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -343,38 +383,38 @@
 <tbody>
 <tr>
 <td>50k</td>
-<td>0.19s</td>
-<td>0.20s</td>
-<td>~1x</td>
+<td>0.17s</td>
+<td>0.06s</td>
+<td><strong>2.6x</strong></td>
 </tr>
 <tr>
 <td>200k</td>
-<td>0.78s</td>
-<td>0.42s</td>
-<td><strong>1.9x</strong></td>
+<td>0.80s</td>
+<td>0.11s</td>
+<td><strong>7.0x</strong></td>
 </tr>
 <tr>
 <td>500k</td>
-<td>1.81s</td>
-<td>1.03s</td>
-<td><strong>1.8x</strong></td>
+<td>2.03s</td>
+<td>1.01s</td>
+<td><strong>2.0x</strong></td>
 </tr>
 <tr>
 <td>1M</td>
-<td>4.24s</td>
-<td>1.73s</td>
-<td><strong>2.5x</strong></td>
+<td>4.08s</td>
+<td>1.24s</td>
+<td><strong>3.3x</strong></td>
 </tr>
 <tr>
-<td>2M</td>
-<td>9.00s</td>
-<td>2.28s</td>
-<td><strong>3.9x</strong></td>
+<td>1.37M</td>
+<td>5.71s</td>
+<td>0.65s</td>
+<td><strong>8.8x</strong></td>
 </tr>
 </tbody>
 </table>
 <p><img src="reference/figures/benchmark.png" width="600" alt="Benchmark: ggwas vs qqman"></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">large_gwas</span><span class="op">)</span>  <span class="co"># 10M SNPs, auto-downsampled to ~200k points</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -382,7 +422,7 @@
 </h2>
 <p>Full documentation with worked examples: <strong><a href="https://bczech.github.io/ggwas/" class="uri">https://bczech.github.io/ggwas/</a></strong></p>
 <p>Or from R:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span><span class="st">"ggwas"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -403,7 +443,6 @@ doi: 10.5281/zenodo.20815110</code></pre>
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/bczech/ggwas/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/bczech/ggwas/issues" class="external-link">Report a bug</a></li>
 <li><a href="https://github.com/bczech/ggwas/issues" class="external-link">Report a bug</a></li>
 <li><a href="https://doi.org/10.5281/zenodo.20815110" class="external-link">Zenodo DOI</a></li>
 </ul>

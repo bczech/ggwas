@@ -30,8 +30,7 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-# \donttest{
+if (FALSE) { # \dontrun{
 gwas <- read_plink_logistic("my_results.assoc.logistic")
-#> Error in data.table::fread(file, header = TRUE, data.table = FALSE, ...): File 'my_results.assoc.logistic' does not exist or is non-readable. getwd()=='/home/runner/work/ggwas/ggwas/docs/reference'
-# }
+} # }
 ```

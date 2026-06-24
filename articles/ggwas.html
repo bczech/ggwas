@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,7 +56,7 @@ Czech</h4>
                   <a class="author_email" href="mailto:#"></a><a href="mailto:bartosz.w.czech@gmail.com" class="email">bartosz.w.czech@gmail.com</a>
       
                   
-            <h4 data-toc-skip class="date">2026-06-23</h4>
+            <h4 data-toc-skip class="date">2026-06-24</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bczech/ggwas/blob/main/vignettes/ggwas.Rmd" class="external-link"><code>vignettes/ggwas.Rmd</code></a></small>
       <div class="d-none name"><code>ggwas.Rmd</code></div>
@@ -89,8 +89,8 @@ multi-panel figures.</p>
 <p><code>ggwas</code> was designed with three goals:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Comprehensive coverage</strong> — all common GWAS plot types
-in one package, plus novel visualizations not available elsewhere.</li>
+<strong>Comprehensive coverage</strong> — 15 plot types in one
+package, including novel visualizations not available elsewhere.</li>
 <li>
 <strong>Publication-ready defaults</strong> — sensible colors,
 proper axis formatting, and built-in journal themes so plots look good
@@ -126,7 +126,7 @@ conventions (CHR/CHROM/#CHROM, BP/POS/GENPOS, P/PVALUE/LOG10P,
 etc.):</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bczech/ggwas" class="external-link">ggwas</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; ggwas v0.99.0</span></span>
+<span><span class="co">#&gt; ggwas v0.99.2</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">example_gwas</span><span class="op">)</span></span>
@@ -694,7 +694,7 @@ requirements:</p>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.0     BiocStyle_2.40.0</span></span>
+<span><span class="co">#&gt; [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.2     BiocStyle_2.40.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.0     </span></span>
@@ -709,9 +709,9 @@ requirements:</p>
 <span><span class="co">#&gt; [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.0      </span></span>
 <span><span class="co">#&gt; [31] withr_3.0.3         digest_0.6.39       grid_4.6.0         </span></span>
 <span><span class="co">#&gt; [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     </span></span>
-<span><span class="co">#&gt; [37] glue_1.8.1          data.table_1.18.4   scattermore_1.2    </span></span>
-<span><span class="co">#&gt; [40] farver_2.1.2        ragg_1.5.2          rmarkdown_2.31     </span></span>
-<span><span class="co">#&gt; [43] tools_4.6.0         htmltools_0.5.9</span></span></code></pre></div>
+<span><span class="co">#&gt; [37] glue_1.8.1          data.table_1.18.4   farver_2.1.2       </span></span>
+<span><span class="co">#&gt; [40] ragg_1.5.2          rmarkdown_2.31      tools_4.6.0        </span></span>
+<span><span class="co">#&gt; [43] htmltools_0.5.9</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

@@ -15,7 +15,7 @@ genetic_correlation(
   palette = "RdBu",
   cluster = TRUE,
   rg_range = c(-1, 1),
-  cell_size = 3.5,
+  cell_size = 2.8,
   show_values = TRUE,
   show_diagonal = FALSE,
   title = NULL

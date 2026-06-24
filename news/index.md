@@ -1,5 +1,10 @@
 # Changelog
 
+## ggwas 0.99.2
+
+- Synchronized documentation across README, vignette, and DESCRIPTION to
+  reflect all 15 plot types
+
 ## ggwas 0.99.1
 
 - Added PheWAS, colocalization, fine-mapping, genetic correlation, and
