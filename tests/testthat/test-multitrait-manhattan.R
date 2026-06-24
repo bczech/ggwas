@@ -38,3 +38,13 @@ test_that("multitrait_manhattan highlight_shared works", {
   plt <- multitrait_manhattan(A = df1, B = df2, highlight_shared = TRUE)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("multitrait_manhattan with three traits works as expected", {
+  df1 <- data.frame(CHR = rep(1:2, each = 30),
+    BP = rep(seq(1e6, 30e6, length.out = 30), 2),
+    P = runif(60), SNP = paste0("rs", 1:60))
+  df2 <- df1; df2$P <- runif(60)^2
+  df3 <- df1; df3$P <- runif(60)^3
+  plt <- multitrait_manhattan(A = df1, B = df2, C = df3)
+  expect_s3_class(plt, "ggplot")
+})

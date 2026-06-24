@@ -17,3 +17,13 @@ test_that("architecture_plot handles log MAF scale", {
   plt <- architecture_plot(df, log_maf = TRUE)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("architecture_plot label_top_n works as expected", {
+  plt <- architecture_plot(example_gwas, p_threshold = 0.01, label_top_n = 5)
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("architecture_plot show_density works as expected", {
+  plt <- architecture_plot(example_gwas, show_density = TRUE)
+  expect_s3_class(plt, "ggplot")
+})

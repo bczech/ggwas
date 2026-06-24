@@ -21,3 +21,15 @@ test_that("finemapping_plot works without credible sets", {
                           region_start = 1e6, region_end = 30e6)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("finemapping_plot label_pip_above works as expected", {
+  df <- data.frame(
+    CHR = rep(1, 50), BP = seq(1e6, 30e6, length.out = 50),
+    P = runif(50), SNP = paste0("rs", 1:50),
+    PIP = runif(50)^3, credible_set = c(rep(1L, 3), rep(2L, 2), rep(NA_integer_, 45))
+  )
+  df$PIP[1] <- 0.95
+  plt <- finemapping_plot(df, region_chr = 1,
+    region_start = 1e6, region_end = 30e6, label_pip_above = 0.5)
+  expect_s3_class(plt, "ggplot")
+})

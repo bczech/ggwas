@@ -28,3 +28,15 @@ test_that("enrichment_manhattan handles list of annotations", {
   plt <- enrichment_manhattan(df, annotations = annot_list)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("enrichment_manhattan label_top_n works as expected", {
+  annot <- data.frame(chr = 1, start = 1e6, end = 50e6, category = "Gene")
+  plt <- enrichment_manhattan(example_gwas, annotations = annot, label_top_n = 3)
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("enrichment_manhattan palette works as expected", {
+  annot <- data.frame(chr = 1, start = 1e6, end = 50e6, category = "Gene")
+  plt <- enrichment_manhattan(example_gwas, annotations = annot, palette = "nature")
+  expect_s3_class(plt, "ggplot")
+})

@@ -55,3 +55,20 @@ test_that("summary.gwas_data produces output", {
   gd <- as_gwas_data(df)
   expect_output(summary(gd), "GWAS Data Summary")
 })
+
+test_that("as_gwas_data auto-detects common column names", {
+  df <- data.frame(CHROM = 1, POS = 100, PVALUE = 0.05, ID = "rs1")
+  result <- as_gwas_data(df)
+  expect_s3_class(result, "gwas_data")
+})
+
+test_that("as_gwas_data preserves extra columns", {
+  df <- data.frame(CHR = 1, BP = 100, P = 0.05, BETA = 0.1, INFO = 0.99)
+  result <- as_gwas_data(df)
+  expect_true("INFO" %in% names(result))
+})
+
+test_that("validate_gwas_data warns on NA p-values", {
+  df <- data.frame(CHR = c(1, 1), BP = c(100, 200), P = c(0.05, NA))
+  expect_warning(as_gwas_data(df), "NA")
+})

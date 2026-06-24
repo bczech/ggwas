@@ -38,3 +38,19 @@ test_that("gwas_summary works with custom palette", {
   plt <- gwas_summary(example_gwas, palette = "nature")
   expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
 })
+
+test_that("gwas_summary includes density panel", {
+  plt <- gwas_summary(example_gwas, panels = c("manhattan", "density"))
+  expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
+})
+
+test_that("gwas_summary includes stats panel", {
+  plt <- gwas_summary(example_gwas, panels = c("manhattan", "qq", "stats"))
+  expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
+})
+
+test_that("gwas_summary all four panels", {
+  plt <- gwas_summary(example_gwas,
+    panels = c("manhattan", "qq", "top_hits", "density"))
+  expect_true(inherits(plt, "patchwork") || inherits(plt, "ggplot"))
+})

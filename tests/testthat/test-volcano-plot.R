@@ -27,3 +27,14 @@ test_that("volcano_plot handles beta_threshold", {
   plt <- volcano_plot(df, beta_threshold = 0.3)
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("volcano_plot size_by works as expected", {
+  plt <- volcano_plot(example_gwas, size_by = "AF")
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("volcano_plot custom column color_by works as expected", {
+  example_gwas$group <- ifelse(example_gwas$CHR < 10, "A", "B")
+  plt <- volcano_plot(example_gwas, color_by = "group")
+  expect_s3_class(plt, "ggplot")
+})

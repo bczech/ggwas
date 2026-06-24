@@ -19,3 +19,18 @@ test_that("qq_plot handles stratified groups", {
   plt <- qq_plot(gd, group = "group")
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("qq_plot without CI works as expected", {
+  plt <- qq_plot(example_gwas, ci = NULL, show_lambda = TRUE)
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("qq_plot custom colors works as expected", {
+  plt <- qq_plot(example_gwas, point_color = "red", line_color = "blue")
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("qq_plot downsampling works as expected", {
+  plt <- qq_plot(example_gwas, downsample = TRUE, downsample_n = 100)
+  expect_s3_class(plt, "ggplot")
+})

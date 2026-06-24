@@ -28,3 +28,17 @@ test_that("get_loci works as expected", {
   result <- get_loci(df, p_threshold = 0.01)
   expect_true(nrow(result) > 0)
 })
+
+test_that("merge_gwas with multiple studies works as expected", {
+  df1 <- data.frame(CHR = 1, BP = c(100, 200), P = c(0.01, 0.5))
+  df2 <- data.frame(CHR = 1, BP = c(100, 300), P = c(0.05, 0.1))
+  df3 <- data.frame(CHR = 2, BP = c(100), P = c(0.001))
+  result <- merge_gwas(A = df1, B = df2, C = df3)
+  expect_true(nrow(result) == 5)
+  expect_equal(length(unique(result$study)), 3)
+})
+
+test_that("filter_region with invalid chr returns empty", {
+  result <- filter_region(example_gwas, chr = 99, start = 0, end = 1e9)
+  expect_equal(nrow(result), 0)
+})

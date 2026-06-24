@@ -1,5 +1,6 @@
 test_that("theme_nature works as expected", {
   expect_s3_class(theme_nature(), "theme")
+  expect_s3_class(theme_nature(base_size = 6), "theme")
 })
 
 test_that("theme_science works as expected", {
@@ -23,7 +24,13 @@ test_that("theme_poster works as expected", {
 })
 
 test_that("gwas_preset works as expected", {
-  p <- gwas_preset("publication")
-  expect_true(is.list(p))
-  expect_true(all(c("theme", "colors", "point_size") %in% names(p)))
+  for (name in c("publication", "presentation", "poster", "exploratory")) {
+    p <- gwas_preset(name)
+    expect_true(is.list(p))
+    expect_true(all(c("theme", "colors", "point_size") %in% names(p)))
+  }
+})
+
+test_that("gwas_preset errors on unknown preset", {
+  expect_error(gwas_preset("nonexistent"))
 })

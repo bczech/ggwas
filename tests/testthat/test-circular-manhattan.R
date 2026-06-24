@@ -20,3 +20,15 @@ test_that("circular_manhattan handles multi-ring", {
   plt <- circular_manhattan(list(Trait1 = df1, Trait2 = df2))
   expect_s3_class(plt, "ggplot")
 })
+
+test_that("circular_manhattan with palette name works as expected", {
+  plt <- circular_manhattan(example_gwas, colors = "nature")
+  expect_s3_class(plt, "ggplot")
+})
+
+test_that("circular_manhattan highlight and label works as expected", {
+  snps <- head(example_gwas$SNP[order(example_gwas$P)], 3)
+  plt <- circular_manhattan(example_gwas, highlight_snps = snps,
+    label_top_n = 2)
+  expect_s3_class(plt, "ggplot")
+})

@@ -29,3 +29,10 @@ test_that("gwas_palette interpolates colors", {
 test_that("gwas_palette errors on unknown name", {
   expect_error(gwas_palette("nonexistent"))
 })
+
+test_that("gwas_palette returns journal palettes", {
+  for (j in c("lancet", "nejm", "aaas")) {
+    cols <- gwas_palette(j)
+    expect_true(length(cols) >= 5)
+  }
+})
