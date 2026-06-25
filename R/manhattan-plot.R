@@ -179,7 +179,8 @@ manhattan_plot <- function(data,
       aes(x = .data$BP_CUM, y = .data$LOG10P, label = .data[[label_column]]),
       inherit.aes = FALSE,
       size = 3, max.overlaps = 20, segment.color = "grey50",
-        min.segment.length = 0, nudge_y = 5, box.padding = 0.5
+        min.segment.length = 0, nudge_y = 10, box.padding = 0.8,
+        force = 10, force_pull = 0.5
     )
   }
 
@@ -263,7 +264,8 @@ manhattan_plot <- function(data,
         aes(x = .data$BP_CUM, y = .data$LOG10P_plot, label = .data[[label_column]]),
         inherit.aes = FALSE,
         size = 3, max.overlaps = 20, segment.color = "grey50",
-        min.segment.length = 0, nudge_y = 5, box.padding = 0.5
+        min.segment.length = 0, nudge_y = 10, box.padding = 0.8,
+        force = 10, force_pull = 0.5
       )
     }
 
