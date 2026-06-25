@@ -10,13 +10,13 @@
 \alias{theme_poster}
 \title{Journal-specific themes for GWAS plots}
 \usage{
-theme_nature(base_size = 7, base_family = "Helvetica")
+theme_nature(base_size = 7, base_family = NULL)
 
-theme_science(base_size = 8, base_family = "Helvetica")
+theme_science(base_size = 8, base_family = NULL)
 
-theme_plos(base_size = 10, base_family = "Arial")
+theme_plos(base_size = 10, base_family = NULL)
 
-theme_cell(base_size = 7, base_family = "Arial")
+theme_cell(base_size = 7, base_family = NULL)
 
 theme_presentation(base_size = 16, base_family = "")
 
