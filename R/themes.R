@@ -19,7 +19,7 @@ NULL
 #' @examples
 #' data(example_gwas)
 #' manhattan_plot(example_gwas) + theme_nature()
-theme_nature <- function(base_size = 7, base_family = "Helvetica") {
+theme_nature <- function(base_size = 7, base_family = "") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
@@ -45,7 +45,7 @@ theme_nature <- function(base_size = 7, base_family = "Helvetica") {
 #' thicker axis lines (0.5 pt), no grid. Science figures are narrow
 #' (55 mm single, 120 mm double, 174 mm full width).
 #' @export
-theme_science <- function(base_size = 8, base_family = "Helvetica") {
+theme_science <- function(base_size = 8, base_family = "") {
   ggplot2::theme_classic(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       axis.line = element_line(linewidth = 0.5, color = "black"),
@@ -65,7 +65,7 @@ theme_science <- function(base_size = 8, base_family = "Helvetica") {
 #' border, centered title. PLOS requires figures at 13.2 cm single
 #' column width, 300 dpi minimum.
 #' @export
-theme_plos <- function(base_size = 10, base_family = "Arial") {
+theme_plos <- function(base_size = 10, base_family = "") {
   ggplot2::theme_bw(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
@@ -86,7 +86,7 @@ theme_plos <- function(base_size = 10, base_family = "Arial") {
 #' (0.2 pt), no grid, tight margins. Cell Press figures use 85 mm
 #' single and 178 mm full width.
 #' @export
-theme_cell <- function(base_size = 7, base_family = "Arial") {
+theme_cell <- function(base_size = 7, base_family = "") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid = element_blank(),
