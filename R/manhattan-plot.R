@@ -20,8 +20,9 @@
 #' @param downsample Enable smart downsampling for large datasets.
 #' @param downsample_n Target number of points after downsampling.
 #' @param chromosomes Subset of chromosomes to plot (integer vector).
-#' @param chr_labels Custom chromosome labels (character vector, same length
-#'   as displayed chromosomes). If NULL, auto-generated from chromosome numbers.
+#' @param chr_labels Custom chromosome labels. Options: NULL (all labels),
+#'   `"odd"` (only odd-numbered chromosomes labeled), or a character
+#'   vector of labels (same length as displayed chromosomes).
 #' @param y_limit Upper y-axis limit for -log10(p).
 #' @param y_truncate Break the y-axis to cut out a middle region. Either
 #'   a single value (break point, resumes at max value) or a vector of
@@ -63,6 +64,9 @@
 #'
 #' # No threshold lines
 #' manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
+#'
+#' # Label only odd chromosomes (less crowded x-axis)
+#' manhattan_plot(example_gwas, chr_labels = "odd")
 manhattan_plot <- function(data,
                            chr = NULL,
                            bp = NULL,
@@ -111,6 +115,9 @@ manhattan_plot <- function(data,
 
   if (is.null(chr_labels)) {
     chr_labels <- int_to_chr(chr_info$CHR)
+  } else if (identical(chr_labels, "odd")) {
+    chr_labels <- int_to_chr(chr_info$CHR)
+    chr_labels[seq(2, length(chr_labels), by = 2)] <- ""
   }
   n_chr_displayed <- nrow(chr_info)
 
