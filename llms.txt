@@ -18,6 +18,22 @@ defaults and journal-specific themes.
   generic files
 - **Fully composable** — every function returns a ggplot object
 
+## Gallery
+
+![Manhattan plot](reference/figures/example_manhattan.png)
+
+![QQ plot](reference/figures/example_qq.png)![Circular
+Manhattan](reference/figures/example_circular.png)
+
+![Miami plot](reference/figures/example_miami.png)
+
+![SNP density karyogram](reference/figures/example_density.png)
+
+![Truncated Manhattan](reference/figures/example_truncate.png)
+
+See all 17 plot types with worked examples at
+**<https://bczech.github.io/ggwas/>**
+
 ## Comparison
 
 | Feature | qqman | CMplot | **ggwas** |
