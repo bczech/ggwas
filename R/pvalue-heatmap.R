@@ -100,12 +100,13 @@ pvalue_heatmap <- function(data,
 
   plt <- ggplot(bins, aes(x = .data$bin_mb, y = .data$CHR_label,
                            fill = .data$fill_val)) +
-    geom_tile(width = bin_size / 1e6, height = 0.9) +
+    geom_tile(width = bin_size / 1e6 * 1.05, height = 0.9) +
     scale_fill_viridis_c(
       option = switch(palette,
                        "viridis" = "D", "magma" = "A",
                        "inferno" = "B", "plasma" = "C", "D"),
       direction = -1,
+      begin = 0.05, end = 0.95,
       na.value = na_color,
       name = fill_label
     ) +
@@ -113,6 +114,7 @@ pvalue_heatmap <- function(data,
     ggplot2::theme_minimal() +
     ggplot2::theme(
       panel.grid = element_blank(),
+      panel.background = ggplot2::element_rect(fill = "grey92", color = NA),
       axis.text.y = element_text(size = 7),
       legend.position = "right"
     )
