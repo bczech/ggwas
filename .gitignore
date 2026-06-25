@@ -11,3 +11,5 @@ vignettes/*.html
 paper/
 Meta/
 doc/
+/doc/
+/Meta/

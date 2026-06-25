@@ -10,6 +10,20 @@
 #' @name journal_themes
 NULL
 
+.find_font <- function(preferred, fallbacks = c("Arial", "Helvetica", "sans")) {
+  for (f in c(preferred, fallbacks)) {
+    ok <- tryCatch({
+      tf <- tempfile(fileext = ".pdf")
+      grDevices::pdf(tf, family = f)
+      grDevices::dev.off()
+      unlink(tf)
+      TRUE
+    }, warning = function(w) FALSE, error = function(e) FALSE)
+    if (ok) return(f)
+  }
+  ""
+}
+
 #' @rdname journal_themes
 #' @details
 #' `theme_nature()`: Helvetica/Arial 5-7 pt, minimal gridlines, thin
@@ -19,12 +33,14 @@ NULL
 #' @examples
 #' data(example_gwas)
 #' manhattan_plot(example_gwas) + theme_nature()
-theme_nature <- function(base_size = 7, base_family = "") {
+theme_nature <- function(base_size = 7, base_family = NULL) {
+  if (is.null(base_family)) base_family <- .find_font("Helvetica")
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
       panel.grid.major.y = element_line(linewidth = 0.15, color = "grey90"),
+      panel.background = element_blank(),
       axis.line = element_line(linewidth = 0.25, color = "black"),
       axis.ticks = element_line(linewidth = 0.25, color = "black"),
       axis.ticks.length = ggplot2::unit(1, "mm"),
@@ -45,14 +61,16 @@ theme_nature <- function(base_size = 7, base_family = "") {
 #' thicker axis lines (0.5 pt), no grid. Science figures are narrow
 #' (55 mm single, 120 mm double, 174 mm full width).
 #' @export
-theme_science <- function(base_size = 8, base_family = "") {
+theme_science <- function(base_size = 8, base_family = NULL) {
+  if (is.null(base_family)) base_family <- .find_font("Helvetica")
   ggplot2::theme_classic(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       axis.line = element_line(linewidth = 0.5, color = "black"),
       axis.ticks = element_line(linewidth = 0.4, color = "black"),
       axis.ticks.length = ggplot2::unit(1.5, "mm"),
-      axis.text = element_text(size = base_size - 1, color = "black"),
-      axis.title = element_text(size = base_size, face = "plain"),
+      axis.text = element_text(size = base_size - 1, color = "black",
+                               face = "bold"),
+      axis.title = element_text(size = base_size, face = "bold"),
       plot.title = element_text(size = base_size + 1, face = "bold"),
       legend.position = "right",
       panel.grid = element_blank()
@@ -65,13 +83,16 @@ theme_science <- function(base_size = 8, base_family = "") {
 #' border, centered title. PLOS requires figures at 13.2 cm single
 #' column width, 300 dpi minimum.
 #' @export
-theme_plos <- function(base_size = 10, base_family = "") {
+theme_plos <- function(base_size = 10, base_family = NULL) {
+  if (is.null(base_family)) base_family <- .find_font("Arial")
   ggplot2::theme_bw(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      panel.border = ggplot2::element_rect(linewidth = 0.5, color = "black",
+      panel.grid.major.y = element_line(linewidth = 0.2, color = "grey85"),
+      panel.border = ggplot2::element_rect(linewidth = 0.8, color = "black",
                                            fill = NA),
+      axis.ticks = element_line(linewidth = 0.3, color = "black"),
       axis.text = element_text(size = base_size - 1, color = "black"),
       axis.title = element_text(size = base_size),
       plot.title = element_text(size = base_size + 1, face = "bold",
@@ -86,16 +107,18 @@ theme_plos <- function(base_size = 10, base_family = "") {
 #' (0.2 pt), no grid, tight margins. Cell Press figures use 85 mm
 #' single and 178 mm full width.
 #' @export
-theme_cell <- function(base_size = 7, base_family = "") {
+theme_cell <- function(base_size = 7, base_family = NULL) {
+  if (is.null(base_family)) base_family <- .find_font("Arial")
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid = element_blank(),
-      axis.line = element_line(linewidth = 0.2, color = "black"),
-      axis.ticks = element_line(linewidth = 0.15, color = "black"),
+      panel.background = ggplot2::element_rect(fill = "grey98", color = NA),
+      axis.line = element_line(linewidth = 0.2, color = "grey30"),
+      axis.ticks = element_line(linewidth = 0.15, color = "grey30"),
       axis.ticks.length = ggplot2::unit(0.8, "mm"),
-      axis.text = element_text(size = base_size - 1, color = "black"),
-      axis.title = element_text(size = base_size),
-      plot.title = element_text(size = base_size + 1, face = "bold"),
+      axis.text = element_text(size = base_size - 1, color = "grey20"),
+      axis.title = element_text(size = base_size, color = "grey20"),
+      plot.title = element_text(size = base_size + 1, face = "italic"),
       legend.position = "right",
       plot.margin = ggplot2::margin(1, 1, 1, 1)
     )
