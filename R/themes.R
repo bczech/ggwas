@@ -1,92 +1,119 @@
 #' Journal-specific themes for GWAS plots
 #'
-#' Publication-ready themes matching the style guides of major journals.
-#' Includes appropriate fonts, sizes, and spacing.
+#' Publication-ready themes matching the figure style guides of major
+#' journals. Each theme sets appropriate font family, sizes, line
+#' weights, and spacing.
 #'
-#' @param base_size Base font size.
-#' @param base_family Base font family. Defaults vary by journal.
+#' @param base_size Base font size in pt.
+#' @param base_family Base font family.
 #' @return A ggplot2 theme object.
 #' @name journal_themes
 NULL
 
 #' @rdname journal_themes
+#' @details
+#' `theme_nature()`: Helvetica/Arial 5-7 pt, minimal gridlines, thin
+#' axes (0.25 pt), compact margins. Matches Nature's requirement for
+#' figures at 89 mm (single column) or 183 mm (double column) width.
 #' @export
 #' @examples
 #' data(example_gwas)
 #' manhattan_plot(example_gwas) + theme_nature()
-theme_nature <- function(base_size = 7, base_family = "") {
+theme_nature <- function(base_size = 7, base_family = "Helvetica") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      panel.grid.major.y = element_line(linewidth = 0.2, color = "grey90"),
-      axis.line = element_line(linewidth = 0.4, color = "black"),
-      axis.ticks = element_line(linewidth = 0.3, color = "black"),
-      axis.text = element_text(size = base_size, color = "black"),
-      axis.title = element_text(size = base_size + 1, face = "bold"),
-      plot.title = element_text(size = base_size + 2, face = "bold"),
+      panel.grid.major.y = element_line(linewidth = 0.15, color = "grey90"),
+      axis.line = element_line(linewidth = 0.25, color = "black"),
+      axis.ticks = element_line(linewidth = 0.25, color = "black"),
+      axis.ticks.length = ggplot2::unit(1, "mm"),
+      axis.text = element_text(size = base_size - 1, color = "black"),
+      axis.title = element_text(size = base_size, face = "plain"),
+      plot.title = element_text(size = base_size + 1, face = "bold"),
       legend.position = "right",
-      plot.margin = ggplot2::margin(5, 5, 5, 5)
+      legend.key.size = ggplot2::unit(3, "mm"),
+      legend.text = element_text(size = base_size - 1),
+      legend.title = element_text(size = base_size, face = "plain"),
+      plot.margin = ggplot2::margin(2, 2, 2, 2)
     )
 }
 
 #' @rdname journal_themes
+#' @details
+#' `theme_science()`: Helvetica 6-8 pt, classic axes (no panel border),
+#' thicker axis lines (0.5 pt), no grid. Science figures are narrow
+#' (55 mm single, 120 mm double, 174 mm full width).
 #' @export
-theme_science <- function(base_size = 8, base_family = "") {
+theme_science <- function(base_size = 8, base_family = "Helvetica") {
   ggplot2::theme_classic(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       axis.line = element_line(linewidth = 0.5, color = "black"),
       axis.ticks = element_line(linewidth = 0.4, color = "black"),
-      axis.text = element_text(size = base_size, color = "black"),
-      axis.title = element_text(size = base_size + 1),
-      plot.title = element_text(size = base_size + 2, face = "bold"),
+      axis.ticks.length = ggplot2::unit(1.5, "mm"),
+      axis.text = element_text(size = base_size - 1, color = "black"),
+      axis.title = element_text(size = base_size, face = "plain"),
+      plot.title = element_text(size = base_size + 1, face = "bold"),
       legend.position = "right",
       panel.grid = element_blank()
     )
 }
 
 #' @rdname journal_themes
+#' @details
+#' `theme_plos()`: Arial 8-12 pt (larger than Nature/Science), panel
+#' border, centered title. PLOS requires figures at 13.2 cm single
+#' column width, 300 dpi minimum.
 #' @export
-theme_plos <- function(base_size = 10, base_family = "") {
+theme_plos <- function(base_size = 10, base_family = "Arial") {
   ggplot2::theme_bw(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      panel.border = ggplot2::element_rect(linewidth = 0.5, color = "black"),
-      axis.text = element_text(size = base_size, color = "black"),
-      axis.title = element_text(size = base_size + 1),
-      plot.title = element_text(size = base_size + 2, face = "bold",
+      panel.border = ggplot2::element_rect(linewidth = 0.5, color = "black",
+                                           fill = NA),
+      axis.text = element_text(size = base_size - 1, color = "black"),
+      axis.title = element_text(size = base_size),
+      plot.title = element_text(size = base_size + 1, face = "bold",
                                 hjust = 0.5),
-      legend.position = "none"
+      legend.position = "right"
     )
 }
 
 #' @rdname journal_themes
+#' @details
+#' `theme_cell()`: Arial 6-8 pt, minimalist with very thin axes
+#' (0.2 pt), no grid, tight margins. Cell Press figures use 85 mm
+#' single and 178 mm full width.
 #' @export
-theme_cell <- function(base_size = 7, base_family = "") {
+theme_cell <- function(base_size = 7, base_family = "Arial") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid = element_blank(),
-      axis.line = element_line(linewidth = 0.3, color = "black"),
-      axis.ticks = element_line(linewidth = 0.2, color = "black"),
-      axis.text = element_text(size = base_size, color = "black"),
-      axis.title = element_text(size = base_size + 0.5),
-      plot.title = element_text(size = base_size + 1.5, face = "bold"),
+      axis.line = element_line(linewidth = 0.2, color = "black"),
+      axis.ticks = element_line(linewidth = 0.15, color = "black"),
+      axis.ticks.length = ggplot2::unit(0.8, "mm"),
+      axis.text = element_text(size = base_size - 1, color = "black"),
+      axis.title = element_text(size = base_size),
+      plot.title = element_text(size = base_size + 1, face = "bold"),
       legend.position = "right",
-      plot.margin = ggplot2::margin(3, 3, 3, 3)
+      plot.margin = ggplot2::margin(1, 1, 1, 1)
     )
 }
 
 #' @rdname journal_themes
+#' @details
+#' `theme_presentation()`: Large fonts (16 pt base), thick axes,
+#' high contrast for slides projected at a distance.
 #' @export
 theme_presentation <- function(base_size = 16, base_family = "") {
  ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      axis.line = element_line(linewidth = 0.6, color = "black"),
-      axis.ticks = element_line(linewidth = 0.4, color = "black"),
-      axis.text = element_text(size = base_size * 0.9),
+      axis.line = element_line(linewidth = 0.8, color = "black"),
+      axis.ticks = element_line(linewidth = 0.5, color = "black"),
+      axis.text = element_text(size = base_size * 0.85),
       axis.title = element_text(size = base_size, face = "bold"),
       plot.title = element_text(size = base_size * 1.3, face = "bold"),
       legend.text = element_text(size = base_size * 0.8),
@@ -96,14 +123,17 @@ theme_presentation <- function(base_size = 16, base_family = "") {
 }
 
 #' @rdname journal_themes
+#' @details
+#' `theme_poster()`: Extra-large fonts (20 pt base), thick axes,
+#' readable from 1-2 meters at a conference poster.
 #' @export
 theme_poster <- function(base_size = 20, base_family = "") {
   ggplot2::theme_minimal(base_size = base_size, base_family = base_family) +
     ggplot2::theme(
       panel.grid.major.x = element_blank(),
       panel.grid.minor = element_blank(),
-      axis.line = element_line(linewidth = 0.8, color = "black"),
-      axis.ticks = element_line(linewidth = 0.6, color = "black"),
+      axis.line = element_line(linewidth = 1, color = "black"),
+      axis.ticks = element_line(linewidth = 0.7, color = "black"),
       axis.text = element_text(size = base_size * 0.85),
       axis.title = element_text(size = base_size, face = "bold"),
       plot.title = element_text(size = base_size * 1.4, face = "bold"),
