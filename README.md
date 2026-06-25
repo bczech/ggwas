@@ -20,17 +20,72 @@ and journal-specific themes.
 
 ## Gallery
 
+### Core GWAS plots
+
+**Manhattan plot** with labeled top hits and Nature palette:
+
 <img src="man/figures/example_manhattan.png" width="700" alt="Manhattan plot" />
 
-<img src="man/figures/example_qq.png" width="350" alt="QQ plot" /> <img src="man/figures/example_circular.png" width="350" alt="Circular Manhattan" />
-
-<img src="man/figures/example_miami.png" width="700" alt="Miami plot" />
-
-<img src="man/figures/example_density.png" width="700" alt="SNP density karyogram" />
+**Broken y-axis** — extreme p-values compressed above the break:
 
 <img src="man/figures/example_truncate.png" width="700" alt="Truncated Manhattan" />
 
-See all 17 plot types with worked examples at **https://bczech.github.io/ggwas/**
+<details>
+<summary><b>QQ plot</b> and <b>Circular Manhattan</b></summary>
+
+<img src="man/figures/example_qq.png" width="340" alt="QQ plot" /> <img src="man/figures/example_circular.png" width="340" alt="Circular Manhattan" />
+
+</details>
+
+**Miami plot** — discovery vs replication on a shared axis:
+
+<img src="man/figures/example_miami.png" width="700" alt="Miami plot" />
+
+### Multi-study and enrichment
+
+**Multi-trait Manhattan** with shared signal detection:
+
+<img src="man/figures/example_multitrait.png" width="700" alt="Multi-trait Manhattan" />
+
+**Enrichment Manhattan** with functional annotation overlays:
+
+<img src="man/figures/example_enrichment.png" width="700" alt="Enrichment Manhattan" />
+
+### Post-GWAS
+
+<details>
+<summary><b>PheWAS</b>, <b>Genetic correlation</b>, <b>Volcano</b>, <b>Architecture</b></summary>
+
+<img src="man/figures/example_phewas.png" width="700" alt="PheWAS plot" />
+
+<img src="man/figures/example_rg.png" width="400" alt="Genetic correlation" /> <img src="man/figures/example_volcano.png" width="400" alt="Volcano plot" />
+
+<img src="man/figures/example_architecture.png" width="400" alt="Architecture plot" />
+
+</details>
+
+### Genome-wide density and QC
+
+**SNP density karyogram** with centromere markers:
+
+<img src="man/figures/example_density.png" width="700" alt="SNP density karyogram" />
+
+<details>
+<summary><b>Points style</b>, <b>Density vs signal</b>, <b>P-value heatmap</b></summary>
+
+<img src="man/figures/example_density_points.png" width="700" alt="SNP density points" />
+
+<img src="man/figures/example_density_signal.png" width="700" alt="Density vs signal" />
+
+<img src="man/figures/example_heatmap.png" width="700" alt="P-value heatmap" />
+
+</details>
+
+### Journal themes
+
+<img src="man/figures/example_themes.png" width="700" alt="Journal themes comparison" />
+
+Full documentation with 17 plot types: **https://bczech.github.io/ggwas/**
 
 ## Comparison
 
