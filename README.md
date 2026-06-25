@@ -18,6 +18,20 @@ and journal-specific themes.
 - **Auto-detects** column names from PLINK, REGENIE, GCTA, GEMMA, and generic files
 - **Fully composable** — every function returns a ggplot object
 
+## Gallery
+
+<img src="man/figures/example_manhattan.png" width="700" alt="Manhattan plot" />
+
+<img src="man/figures/example_qq.png" width="350" alt="QQ plot" /> <img src="man/figures/example_circular.png" width="350" alt="Circular Manhattan" />
+
+<img src="man/figures/example_miami.png" width="700" alt="Miami plot" />
+
+<img src="man/figures/example_density.png" width="700" alt="SNP density karyogram" />
+
+<img src="man/figures/example_truncate.png" width="700" alt="Truncated Manhattan" />
+
+See all 17 plot types with worked examples at **https://bczech.github.io/ggwas/**
+
 ## Comparison
 
 | Feature | qqman | CMplot | **ggwas** |
