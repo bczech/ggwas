@@ -20,65 +20,26 @@ defaults and journal-specific themes.
 
 ## Gallery
 
-### Core GWAS plots
+|  |  |
+|:--:|:--:|
+| **Manhattan plot** | **Broken y-axis** |
+| ![](reference/figures/example_manhattan.png) | ![](reference/figures/example_truncate.png) |
+| **QQ plot** | **Circular Manhattan** |
+| ![](reference/figures/example_qq.png) | ![](reference/figures/example_circular.png) |
+| **Miami plot** | **Multi-trait Manhattan** |
+| ![](reference/figures/example_miami.png) | ![](reference/figures/example_multitrait.png) |
+| **Enrichment Manhattan** | **PheWAS plot** |
+| ![](reference/figures/example_enrichment.png) | ![](reference/figures/example_phewas.png) |
+| **Genetic correlation** | **Effect-size volcano** |
+| ![](reference/figures/example_rg.png) | ![](reference/figures/example_volcano.png) |
+| **SNP density karyogram** | **SNP density (points)** |
+| ![](reference/figures/example_density.png) | ![](reference/figures/example_density_points.png) |
+| **Density vs signal** | **P-value heatmap** |
+| ![](reference/figures/example_density_signal.png) | ![](reference/figures/example_heatmap.png) |
+| **Genetic architecture** | **Journal themes** |
+| ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 
-**Manhattan plot** with labeled top hits and Nature palette:
-
-![Manhattan plot](reference/figures/example_manhattan.png)
-
-**Broken y-axis** — extreme p-values compressed above the break:
-
-![Truncated Manhattan](reference/figures/example_truncate.png)
-
-**QQ plot** and **Circular Manhattan**
-
-![QQ plot](reference/figures/example_qq.png)![Circular
-Manhattan](reference/figures/example_circular.png)
-
-**Miami plot** — discovery vs replication on a shared axis:
-
-![Miami plot](reference/figures/example_miami.png)
-
-### Multi-study and enrichment
-
-**Multi-trait Manhattan** with shared signal detection:
-
-![Multi-trait Manhattan](reference/figures/example_multitrait.png)
-
-**Enrichment Manhattan** with functional annotation overlays:
-
-![Enrichment Manhattan](reference/figures/example_enrichment.png)
-
-### Post-GWAS
-
-**PheWAS**, **Genetic correlation**, **Volcano**, **Architecture**
-
-![PheWAS plot](reference/figures/example_phewas.png)
-
-![Genetic correlation](reference/figures/example_rg.png)![Volcano
-plot](reference/figures/example_volcano.png)
-
-![Architecture plot](reference/figures/example_architecture.png)
-
-### Genome-wide density and QC
-
-**SNP density karyogram** with centromere markers:
-
-![SNP density karyogram](reference/figures/example_density.png)
-
-**Points style**, **Density vs signal**, **P-value heatmap**
-
-![SNP density points](reference/figures/example_density_points.png)
-
-![Density vs signal](reference/figures/example_density_signal.png)
-
-![P-value heatmap](reference/figures/example_heatmap.png)
-
-### Journal themes
-
-![Journal themes comparison](reference/figures/example_themes.png)
-
-Full documentation with 17 plot types:
+Full documentation with worked examples:
 **<https://bczech.github.io/ggwas/>**
 
 ## Comparison
