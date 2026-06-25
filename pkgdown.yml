@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   ggwas: ggwas.html
-last_built: 2026-06-25T07:53Z
+last_built: 2026-06-25T08:05Z
 urls:
   reference: https://bczech.github.io/ggwas/reference
   article: https://bczech.github.io/ggwas/articles
