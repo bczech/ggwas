@@ -106,8 +106,9 @@ manhattan_plot(
 
 - chr_labels:
 
-  Custom chromosome labels (character vector, same length as displayed
-  chromosomes). If NULL, auto-generated from chromosome numbers.
+  Custom chromosome labels. Options: NULL (all labels), `"odd"` (only
+  odd-numbered chromosomes labeled), or a character vector of labels
+  (same length as displayed chromosomes).
 
 - y_limit:
 
@@ -172,4 +173,8 @@ manhattan_plot(example_gwas, genome_wide = 0.05 / 500000)
 
 # No threshold lines
 manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
+
+
+# Label only odd chromosomes (less crowded x-axis)
+manhattan_plot(example_gwas, chr_labels = "odd")
 ```
