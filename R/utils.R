@@ -72,12 +72,11 @@ chr_to_int <- function(x) {
 #' Convert integer chromosome back to label
 #' @noRd
 int_to_chr <- function(x) {
-
   labels <- as.character(x)
-  labels[x == 23] <- "X"
-  labels[x == 24] <- "Y"
-  labels[x == 25] <- "XY"
-  labels[x == 26] <- "MT"
+  labels[!is.na(x) & x == 23] <- "X"
+  labels[!is.na(x) & x == 24] <- "Y"
+  labels[!is.na(x) & x == 25] <- "XY"
+  labels[!is.na(x) & x == 26] <- "MT"
   labels
 }
 

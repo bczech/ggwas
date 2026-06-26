@@ -35,22 +35,26 @@ smart_downsample <- function(data,
 
   rest <- data[rest_idx, , drop = FALSE]
   logp <- -log10(rest$P)
-  logp_bin <- round(logp, 1)
 
+  n_chr <- length(unique(rest$CHR))
   genome_range <- max(data$BP, na.rm = TRUE)
-  bp_bin_size <- genome_range / (n_rest_target / length(unique(rest$CHR)))
+  bp_bin_size <- genome_range / (n_rest_target / n_chr)
+
+  logp_bin <- floor(logp * 2) / 2
   bp_bin <- floor(rest$BP / bp_bin_size)
 
   bin_key <- paste(rest$CHR, bp_bin, logp_bin, sep = "_")
-
   unique_bins <- !duplicated(bin_key)
   deduped_idx <- rest_idx[unique_bins]
 
   if (length(deduped_idx) > n_rest_target) {
+    deduped_logp <- -log10(data$P[deduped_idx])
+    weights <- 1 + deduped_logp
     sampled <- if (!is.null(seed)) {
-      withr::with_seed(seed, sample(deduped_idx, n_rest_target))
+      withr::with_seed(seed,
+        sample(deduped_idx, n_rest_target, prob = weights / sum(weights)))
     } else {
-      sample(deduped_idx, n_rest_target)
+      sample(deduped_idx, n_rest_target, prob = weights / sum(weights))
     }
     final_idx <- sort(c(keep_idx, sampled))
   } else {

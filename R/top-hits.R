@@ -29,12 +29,15 @@ top_hits <- function(data,
     data <- as_gwas_data(data)
   }
 
-  sig <- data[data$P < p_threshold & !is.na(data$P), , drop = FALSE]
+  sig <- data[!is.na(data$P) & data$P < p_threshold, , drop = FALSE]
 
   if (nrow(sig) == 0) {
     cli_inform("No variants below p < {p_threshold}.")
     return(data.frame())
   }
+
+  sig <- sig[!is.na(sig$CHR) & !is.na(sig$BP), , drop = FALSE]
+  if (nrow(sig) == 0) return(data.frame())
 
   sig <- sig[order(sig$P), , drop = FALSE]
   sig <- .clump_snps(sig, window = clump_window)
@@ -78,6 +81,7 @@ top_hits <- function(data,
 #' @noRd
 .estimate_cytoband <- function(chr, bp) {
   vapply(seq_along(chr), function(i) {
+    if (is.na(chr[i]) || is.na(bp[i])) return(NA_character_)
     arm <- if (bp[i] < 5e7) "p" else "q"
     band <- floor(bp[i] / 1e7) + 1
     paste0(int_to_chr(chr[i]), arm, band)
