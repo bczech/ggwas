@@ -1,0 +1,8 @@
+##provider: test
+##format: gtf
+chr1	test	gene	1000000	2000000	.	+	.	gene_id "ENSG00000001"; gene_name "GeneA";
+chr1	test	gene	5000000	6500000	.	-	.	gene_id "ENSG00000002"; gene_name "GeneB";
+chr1	test	gene	8000000	9000000	.	+	.	gene_id "ENSG00000003"; gene_name "GeneC";
+chr2	test	gene	3000000	4000000	.	+	.	gene_id "ENSG00000004"; gene_name "GeneD";
+chr1	test	exon	1000000	1200000	.	+	.	gene_id "ENSG00000001"; gene_name "GeneA";
+chr1	test	exon	1500000	2000000	.	+	.	gene_id "ENSG00000001"; gene_name "GeneA";

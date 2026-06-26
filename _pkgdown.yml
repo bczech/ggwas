@@ -63,8 +63,10 @@ reference:
       - chr_info_ucsc
 
   - title: "Annotation and analysis"
-    desc: "Gene annotation, region highlights, top hits"
+    desc: "Gene annotation, genomic tracks, region highlights, top hits"
     contents:
+      - gene_track
+      - read_gtf
       - manhattan_genes
       - annotate_genes
       - highlight_regions
