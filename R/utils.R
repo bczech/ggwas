@@ -62,10 +62,10 @@ chr_to_int <- function(x) {
   x <- as.character(x)
   x <- sub("^chr", "", x, ignore.case = TRUE)
   x <- sub("^0+(\\d)", "\\1", x)
-  x[x == "X"] <- "23"
-  x[x == "Y"] <- "24"
-  x[x == "XY"] <- "25"
-  x[x == "MT" | x == "M"] <- "26"
+  sex_map <- getOption("ggwas.sex_chr_map", default = .default_sex_chr_map)
+  for (label in names(sex_map)) {
+    x[x == label] <- as.character(sex_map[[label]])
+  }
   as.integer(x)
 }
 
@@ -73,12 +73,15 @@ chr_to_int <- function(x) {
 #' @noRd
 int_to_chr <- function(x) {
   labels <- as.character(x)
-  labels[!is.na(x) & x == 23] <- "X"
-  labels[!is.na(x) & x == 24] <- "Y"
-  labels[!is.na(x) & x == 25] <- "XY"
-  labels[!is.na(x) & x == 26] <- "MT"
+  sex_map <- getOption("ggwas.sex_chr_map", default = .default_sex_chr_map)
+  for (label in names(sex_map)) {
+    val <- sex_map[[label]]
+    labels[!is.na(x) & x == val] <- label
+  }
   labels
 }
+
+.default_sex_chr_map <- c(X = 23L, Y = 24L, XY = 25L, MT = 26L)
 
 #' Calculate genomic inflation factor (lambda GC)
 #'
