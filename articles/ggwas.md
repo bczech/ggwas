@@ -915,7 +915,7 @@ sessionInfo()
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
-#>  [4] BiocManager_1.30.27 Rcpp_1.1.1-1.1      gridExtra_2.3      
+#>  [4] BiocManager_1.30.27 Rcpp_1.1.1-1.1      gridExtra_2.3.1    
 #>  [7] jquerylib_0.1.4     systemfonts_1.3.2   scales_1.4.0       
 #> [10] textshaping_1.0.5   yaml_2.3.12         fastmap_1.2.0      
 #> [13] R6_2.6.1            labeling_0.4.3      knitr_1.51         
