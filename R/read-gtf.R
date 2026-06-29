@@ -10,6 +10,8 @@
 #' @param gene_name_attr Attribute key(s) to use as gene name, tried in
 #'   order. For GTF: `"gene_name"`, for GFF3: `"Name"`.
 #' @param gene_id_attr Attribute key for gene ID (e.g. ENSG...).
+#' @param biotype Character vector of gene biotypes to keep, e.g.
+#'   `"protein_coding"`. If NULL (default), all biotypes are returned.
 #' @return A data.frame with columns: chr (integer), start, end, gene,
 #'   strand, gene_id. Ready for [gene_track()] or
 #'   `locus_plot(gene_data = ...)`.
@@ -28,7 +30,8 @@
 read_gtf <- function(path,
                      feature_type = "gene",
                      gene_name_attr = c("gene_name", "Name", "gene"),
-                     gene_id_attr = "gene_id") {
+                     gene_id_attr = "gene_id",
+                     biotype = NULL) {
 
   if (!file.exists(path)) {
     cli_abort("File not found: {.file {path}}")
@@ -74,6 +77,12 @@ read_gtf <- function(path,
   }
 
   genes$gene_id <- parse_fn(gtf$attributes, gene_id_attr)
+
+  if (!is.null(biotype)) {
+    bt <- parse_fn(gtf$attributes, "gene_biotype")
+    if (all(is.na(bt))) bt <- parse_fn(gtf$attributes, "gene_type")
+    genes <- genes[!is.na(bt) & bt %in% biotype, , drop = FALSE]
+  }
 
   genes$gene[is.na(genes$gene)] <- genes$gene_id[is.na(genes$gene)]
   genes <- genes[!is.na(genes$chr), , drop = FALSE]

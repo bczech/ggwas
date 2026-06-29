@@ -64,6 +64,9 @@ gene_track <- function(gene_data,
                                label = "No genes in region", color = "grey50"))
   }
 
+  genes$start <- pmax(genes$start, region_start)
+  genes$end <- pmin(genes$end, region_end)
+
   if (nrow(genes) > max_genes) {
     genes$length <- genes$end - genes$start
     genes <- genes[order(-genes$length), , drop = FALSE]
@@ -78,53 +81,75 @@ gene_track <- function(gene_data,
   }
 
   has_strand <- "strand" %in% names(genes) && show_strand
+  bar_h <- 0.35
+  region_span <- (region_end - region_start) / 1e6
+  arrow_w <- region_span * 0.012
 
-  if (has_strand) {
-    genes$arrow_dir <- ifelse(genes$strand == "-", "last", "first")
-    plt <- ggplot(genes) +
-      geom_segment(
-        data = genes[genes$strand == "+", , drop = FALSE],
-        aes(x = .data$start / 1e6, xend = .data$end / 1e6,
-            y = .data$y, yend = .data$y),
-        linewidth = 3, color = genes$color[genes$strand == "+"],
-        arrow = grid::arrow(length = grid::unit(2, "mm"), type = "closed")
-      ) +
-      geom_segment(
-        data = genes[genes$strand == "-", , drop = FALSE],
-        aes(x = .data$end / 1e6, xend = .data$start / 1e6,
-            y = .data$y, yend = .data$y),
-        linewidth = 3, color = genes$color[genes$strand == "-"],
-        arrow = grid::arrow(length = grid::unit(2, "mm"), type = "closed")
+  arrow_polys <- do.call(rbind, lapply(seq_len(nrow(genes)), function(i) {
+    s <- genes$start[i] / 1e6
+    e <- genes$end[i] / 1e6
+    yi <- genes$y[i]
+    top <- yi + bar_h / 2
+    bot <- yi - bar_h / 2
+    mid <- yi
+    clr <- genes$color[i]
+    gname <- genes$gene[i]
+    strand_i <- if (has_strand) genes$strand[i] else "."
+
+    if (strand_i == "+") {
+      tip <- min(e + arrow_w, region_end / 1e6)
+      body_end <- e
+      data.frame(
+        x = c(s, body_end, tip, body_end, s),
+        y = c(top, top, mid, bot, bot),
+        id = i, fill = clr, gene = gname,
+        stringsAsFactors = FALSE
       )
-
-    no_strand <- genes[!genes$strand %in% c("+", "-"), , drop = FALSE]
-    if (nrow(no_strand) > 0) {
-      plt <- plt + geom_segment(
-        data = no_strand,
-        aes(x = .data$start / 1e6, xend = .data$end / 1e6,
-            y = .data$y, yend = .data$y),
-        linewidth = 3, color = no_strand$color
+    } else if (strand_i == "-") {
+      tip <- max(s - arrow_w, region_start / 1e6)
+      body_start <- s
+      data.frame(
+        x = c(e, body_start, tip, body_start, e),
+        y = c(top, top, mid, bot, bot),
+        id = i, fill = clr, gene = gname,
+        stringsAsFactors = FALSE
+      )
+    } else {
+      data.frame(
+        x = c(s, e, e, s),
+        y = c(top, top, bot, bot),
+        id = i, fill = clr, gene = gname,
+        stringsAsFactors = FALSE
       )
     }
-  } else {
-    plt <- ggplot(genes) +
-      geom_segment(
-        aes(x = .data$start / 1e6, xend = .data$end / 1e6,
-            y = .data$y, yend = .data$y),
-        linewidth = 3, color = genes$color
-      )
-  }
+  }))
 
-  plt <- plt +
+  label_df <- data.frame(
+    x = (genes$start + genes$end) / 2e6,
+    y = genes$y + bar_h / 2 + 0.18,
+    gene = genes$gene,
+    stringsAsFactors = FALSE
+  )
+
+  plt <- ggplot() +
+    ggplot2::geom_polygon(
+      data = arrow_polys,
+      aes(x = .data$x, y = .data$y, group = .data$id),
+      fill = arrow_polys$fill, color = NA
+    ) +
     ggrepel::geom_text_repel(
-      aes(x = (.data$start + .data$end) / 2e6, y = .data$y,
-          label = .data$gene),
-      size = label_size, fontface = "italic", direction = "y",
-      nudge_y = 0.3, min.segment.length = 0, segment.color = "grey70",
-      max.overlaps = 20
+      data = label_df,
+      aes(x = .data$x, y = .data$y, label = .data$gene),
+      size = label_size, fontface = "italic", color = "grey20",
+      direction = "x", nudge_y = 0.15,
+      min.segment.length = 0, segment.color = "grey70", segment.size = 0.3,
+      max.overlaps = 30, box.padding = 0.2, force = 5
     ) +
     scale_x_continuous(
       limits = c(region_start / 1e6, region_end / 1e6)
+    ) +
+    scale_y_continuous(
+      expand = ggplot2::expansion(mult = c(0.15, 0.4))
     ) +
     labs(x = NULL, y = NULL) +
     ggplot2::theme_void() +

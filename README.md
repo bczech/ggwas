@@ -37,9 +37,10 @@ and journal-specific themes.
 | <img src="man/figures/example_density.png" width="400" /> | <img src="man/figures/example_density_points.png" width="400" /> |
 | **Density vs signal** | **P-value heatmap** |
 | <img src="man/figures/example_density_signal.png" width="400" /> | <img src="man/figures/example_heatmap.png" width="400" /> |
-| **Locus zoom** | **Gene track** |
-| <img src="man/figures/example_locus.png" width="400" /> | <img src="man/figures/example_gene_track.png" width="400" /> |
-| **Genetic architecture** | **Journal themes** |
+| **Locus zoom** | **Genetic architecture** |
+| <img src="man/figures/example_locus.png" width="400" /> | <img src="man/figures/example_architecture.png" width="400" /> |
+| **Journal themes** | |
+| <img src="man/figures/example_themes.png" width="400" /> | |
 | <img src="man/figures/example_architecture.png" width="400" /> | <img src="man/figures/example_themes.png" width="400" /> |
 
 Full documentation with worked examples: **https://bczech.github.io/ggwas/**
