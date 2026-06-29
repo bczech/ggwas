@@ -8,7 +8,8 @@ read_gtf(
   path,
   feature_type = "gene",
   gene_name_attr = c("gene_name", "Name", "gene"),
-  gene_id_attr = "gene_id"
+  gene_id_attr = "gene_id",
+  biotype = NULL
 )
 }
 \arguments{
@@ -21,6 +22,9 @@ Default \code{"gene"}.}
 order. For GTF: \code{"gene_name"}, for GFF3: \code{"Name"}.}
 
 \item{gene_id_attr}{Attribute key for gene ID (e.g. ENSG...).}
+
+\item{biotype}{Character vector of gene biotypes to keep, e.g.
+\code{"protein_coding"}. If NULL (default), all biotypes are returned.}
 }
 \value{
 A data.frame with columns: chr (integer), start, end, gene,
