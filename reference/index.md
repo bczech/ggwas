@@ -52,8 +52,12 @@ Multi-trait, enrichment, and post-GWAS visualizations
 
 ## Annotation and analysis
 
-Gene annotation, region highlights, top hits
+Gene annotation, genomic tracks, region highlights, top hits
 
+- [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
+  : Gene annotation track
+- [`read_gtf()`](https://bczech.github.io/ggwas/reference/read_gtf.md) :
+  Read gene annotations from GTF/GFF3 file
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   : Add gene labels to a Manhattan plot
 - [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)
@@ -126,5 +130,7 @@ Filtering, merging, and extracting GWAS data
   Get significant loci
 - [`calc_lambda()`](https://bczech.github.io/ggwas/reference/calc_lambda.md)
   : Calculate genomic inflation factor (lambda GC)
+- [`set_sex_chr_map()`](https://bczech.github.io/ggwas/reference/set_sex_chr_map.md)
+  : Configure sex chromosome mapping
 - [`example_gwas`](https://bczech.github.io/ggwas/reference/example_gwas.md)
   : Example GWAS dataset

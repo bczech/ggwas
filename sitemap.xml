@@ -20,6 +20,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/example_gwas.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/filter_region.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/finemapping_plot.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/gene_track.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/genetic_correlation.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/get_loci.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/ggwas-package.html</loc></url>
@@ -42,6 +43,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/qq_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gcta_mlma.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gemma.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/read_gtf.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gwas_table.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_plink_assoc.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_plink_linear.html</loc></url>
@@ -49,6 +51,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/read_regenie.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/scale_color_chromosome.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/scale_color_gwas.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/set_sex_chr_map.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/snp_density.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/theme_gwas.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/top_hits.html</loc></url>

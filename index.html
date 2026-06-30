@@ -65,6 +65,8 @@
 <li>
 <strong>17 plot types</strong> — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations, SNP density karyogram)</li>
 <li>
+<strong>Genomic tracks</strong> — composable gene annotation panels from GTF/GFF3 files with strand arrows and highlighting</li>
+<li>
 <strong>Broken y-axis</strong> for Manhattan plots with extreme p-values (<code>y_truncate</code>)</li>
 <li>
 <strong>Smart downsampling</strong> for 10M+ variant datasets</li>
@@ -144,8 +146,20 @@
 <td align="center"><img src="reference/figures/example_heatmap.png" width="400"></td>
 </tr>
 <tr>
+<td align="center"><strong>Locus zoom</strong></td>
 <td align="center"><strong>Genetic architecture</strong></td>
+</tr>
+<tr>
+<td align="center"><img src="reference/figures/example_locus.png" width="400"></td>
+<td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
+</tr>
+<tr>
 <td align="center"><strong>Journal themes</strong></td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center"><img src="reference/figures/example_themes.png" width="400"></td>
+<td align="center"></td>
 </tr>
 <tr>
 <td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
@@ -431,10 +445,19 @@
 <span><span class="fu"><a href="reference/density_signal_plot.html">density_signal_plot</a></span><span class="op">(</span><span class="va">gwas</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="gene-annotation">Gene annotation<a class="anchor" aria-label="anchor" href="#gene-annotation"></a>
+<h3 id="gene-annotation-and-genomic-tracks">Gene annotation and genomic tracks<a class="anchor" aria-label="anchor" href="#gene-annotation-and-genomic-tracks"></a>
 </h3>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Label peaks with nearest gene names (instead of rs IDs)</span></span>
+<code class="sourceCode R"><span><span class="co"># Read gene annotations from GTF (no biomaRt needed)</span></span>
+<span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_gtf.html">read_gtf</a></span><span class="op">(</span><span class="st">"Homo_sapiens.GRCh38.110.gtf.gz"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Gene track below a locus plot</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/locus_plot.html">locus_plot</a></span><span class="op">(</span><span class="va">gwas</span>, region_chr <span class="op">=</span> <span class="fl">6</span>, region_start <span class="op">=</span> <span class="fl">25e6</span>, region_end <span class="op">=</span> <span class="fl">35e6</span><span class="op">)</span></span>
+<span><span class="va">gt</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/gene_track.html">gene_track</a></span><span class="op">(</span><span class="va">genes</span>, region_chr <span class="op">=</span> <span class="fl">6</span>, region_start <span class="op">=</span> <span class="fl">25e6</span>, region_end <span class="op">=</span> <span class="fl">35e6</span>,</span>
+<span>                  highlight_genes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"HLA-A"</span>, <span class="st">"HLA-B"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">gt</span>, ncol <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">0.2</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Label peaks with nearest gene names (instead of rs IDs)</span></span>
 <span><span class="fu"><a href="reference/manhattan_genes.html">manhattan_genes</a></span><span class="op">(</span><span class="va">gwas</span>, genes <span class="op">=</span> <span class="va">gene_table</span>, arrow <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Extract independent top hits with gene mapping</span></span>

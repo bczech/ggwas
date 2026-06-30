@@ -9,6 +9,8 @@ defaults and journal-specific themes.
 - **17 plot types** — from classic Manhattan and QQ to post-GWAS
   visualizations (PheWAS, colocalization, fine-mapping, genetic
   correlations, SNP density karyogram)
+- **Genomic tracks** — composable gene annotation panels from GTF/GFF3
+  files with strand arrows and highlighting
 - **Broken y-axis** for Manhattan plots with extreme p-values
   (`y_truncate`)
 - **Smart downsampling** for 10M+ variant datasets
@@ -36,7 +38,10 @@ defaults and journal-specific themes.
 | ![](reference/figures/example_density.png) | ![](reference/figures/example_density_points.png) |
 | **Density vs signal** | **P-value heatmap** |
 | ![](reference/figures/example_density_signal.png) | ![](reference/figures/example_heatmap.png) |
-| **Genetic architecture** | **Journal themes** |
+| **Locus zoom** | **Genetic architecture** |
+| ![](reference/figures/example_locus.png) | ![](reference/figures/example_architecture.png) |
+| **Journal themes** |  |
+| ![](reference/figures/example_themes.png) |  |
 | ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 
 Full documentation with worked examples:
@@ -155,9 +160,18 @@ snp_density(gwas, chr_info = chr_info_human())
 density_signal_plot(gwas)
 ```
 
-### Gene annotation
+### Gene annotation and genomic tracks
 
 ``` r
+
+# Read gene annotations from GTF (no biomaRt needed)
+genes <- read_gtf("Homo_sapiens.GRCh38.110.gtf.gz")
+
+# Gene track below a locus plot
+p <- locus_plot(gwas, region_chr = 6, region_start = 25e6, region_end = 35e6)
+gt <- gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6,
+                  highlight_genes = c("HLA-A", "HLA-B"))
+patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.8, 0.2))
 
 # Label peaks with nearest gene names (instead of rs IDs)
 manhattan_genes(gwas, genes = gene_table, arrow = TRUE)
