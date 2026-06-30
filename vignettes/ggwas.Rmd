@@ -381,6 +381,53 @@ regions <- data.frame(
 highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
 ```
 
+## Genomic tracks
+
+`gene_track()` creates a standalone gene annotation panel that can be
+composed with any ggwas plot using `patchwork`. Genes are rendered as
+directional chevrons showing strand orientation:
+
+```{r gene-track, fig.height=5}
+genes <- data.frame(
+  chr = c(1, 1, 1, 1, 1),
+  start = c(2e6, 15e6, 40e6, 55e6, 75e6),
+  end = c(8e6, 25e6, 50e6, 65e6, 85e6),
+  gene = c("MTOR", "NRXN1", "TCF7L2", "CDKAL1", "KCNQ1"),
+  strand = c("+", "-", "+", "-", "+")
+)
+
+p <- locus_plot(example_gwas, region_chr = 1,
+                region_start = 0, region_end = 100e6, point_size = 1)
+gt <- gene_track(genes, region_chr = 1, region_start = 0, region_end = 100e6,
+                  highlight_genes = "TCF7L2")
+patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.75, 0.25))
+```
+
+For real data, use `read_gtf()` to parse Ensembl or GENCODE annotation
+files directly — no `biomaRt` needed:
+
+```{r read-gtf, eval=FALSE}
+genes <- read_gtf("Homo_sapiens.GRCh38.113.gtf.gz",
+                   biotype = "protein_coding")
+gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6)
+```
+
+## Non-human organisms
+
+By default, ggwas uses human chromosome conventions (23 = X, 24 = Y).
+For other organisms, use `set_sex_chr_map()`:
+
+```{r sex-chr, eval=FALSE}
+# Mouse (20 = X, 21 = Y)
+set_sex_chr_map(c(X = 20L, Y = 21L))
+
+# Disable entirely (all chromosomes as numbers)
+set_sex_chr_map(NULL)
+
+# Restore human default
+set_sex_chr_map()
+```
+
 # Multi-study comparisons
 
 ## Multi-trait Manhattan

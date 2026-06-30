@@ -104,4 +104,5 @@ reference:
       - merge_gwas
       - get_loci
       - calc_lambda
+      - set_sex_chr_map
       - example_gwas
