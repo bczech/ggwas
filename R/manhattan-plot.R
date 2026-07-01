@@ -23,6 +23,11 @@
 #' @param chr_labels Custom chromosome labels. Options: NULL (all labels),
 #'   `"odd"` (only odd-numbered chromosomes labeled), or a character
 #'   vector of labels (same length as displayed chromosomes).
+#' @param y_metric What to plot on the y-axis. `"p"` (default) shows
+#'   -log10(p). `"beta_min"` shows the lower confidence bound of the
+#'   absolute effect size: |beta| - 2*SE. Variants whose confidence
+#'   interval overlaps zero are excluded. This highlights variants with
+#'   large, robust effect sizes rather than just small p-values.
 #' @param y_limit Upper y-axis limit for -log10(p).
 #' @param y_truncate Break the y-axis to cut out a middle region. Either
 #'   a single value (break point, resumes at max value) or a vector of
@@ -67,6 +72,9 @@
 #'
 #' # Label only odd chromosomes (less crowded x-axis)
 #' manhattan_plot(example_gwas, chr_labels = "odd")
+#'
+#' # Effect-size confidence bound (|beta| - 2*SE)
+#' manhattan_plot(example_gwas, y_metric = "beta_min")
 manhattan_plot <- function(data,
                            chr = NULL,
                            bp = NULL,
@@ -88,6 +96,7 @@ manhattan_plot <- function(data,
                            downsample_n = 200000,
                            chromosomes = NULL,
                            chr_labels = NULL,
+                           y_metric = "p",
                            y_limit = NULL,
                            y_truncate = NULL,
                            title = NULL) {
@@ -108,7 +117,23 @@ manhattan_plot <- function(data,
                              keep_snps = c(highlight_snps, label_snps))
   }
 
-  data$LOG10P <- -log10(data$P)
+  use_beta_min <- identical(y_metric, "beta_min")
+
+  if (use_beta_min) {
+    if (!all(c("BETA", "SE") %in% names(data))) {
+      cli_abort("{.arg y_metric = \"beta_min\"} requires BETA and SE columns.")
+    }
+    data$LOG10P <- abs(data$BETA) - 2 * data$SE
+    data <- data[!is.na(data$LOG10P) & data$LOG10P > 0, , drop = FALSE]
+    if (nrow(data) == 0) {
+      cli_abort("No variants with |BETA| - 2*SE > 0.")
+    }
+    y_label <- expression("|" * hat(beta) * "| - 2 SE")
+  } else {
+    data$LOG10P <- -log10(data$P)
+    y_label <- expression(-log[10](italic(p)))
+  }
+
   data <- add_cumulative_bp(data)
   chr_info <- attr(data, "chr_info")
   data$CHR_F <- factor(data$CHR)
@@ -133,21 +158,23 @@ manhattan_plot <- function(data,
       expand = c(0.01, 0)
     ) +
     labs(x = "Chromosome",
-         y = expression(-log[10](italic(p))),
+         y = y_label,
          title = title) +
     theme_gwas()
 
-  if (!is.null(genome_wide)) {
-    plt <- plt + geom_hline(
-      yintercept = -log10(genome_wide),
-      linetype = "dashed", color = threshold_colors[1], linewidth = 0.4
-    )
-  }
-  if (!is.null(suggestive)) {
-    plt <- plt + geom_hline(
-      yintercept = -log10(suggestive),
-      linetype = "dotted", color = threshold_colors[2], linewidth = 0.4
-    )
+  if (!use_beta_min) {
+    if (!is.null(genome_wide)) {
+      plt <- plt + geom_hline(
+        yintercept = -log10(genome_wide),
+        linetype = "dashed", color = threshold_colors[1], linewidth = 0.4
+      )
+    }
+    if (!is.null(suggestive)) {
+      plt <- plt + geom_hline(
+        yintercept = -log10(suggestive),
+        linetype = "dotted", color = threshold_colors[2], linewidth = 0.4
+      )
+    }
   }
 
   if (!is.null(highlight_snps) && "SNP" %in% names(data)) {

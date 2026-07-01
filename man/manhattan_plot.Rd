@@ -26,6 +26,7 @@ manhattan_plot(
   downsample_n = 2e+05,
   chromosomes = NULL,
   chr_labels = NULL,
+  y_metric = "p",
   y_limit = NULL,
   y_truncate = NULL,
   title = NULL
@@ -69,6 +70,12 @@ manhattan_plot(
 \item{chr_labels}{Custom chromosome labels. Options: NULL (all labels),
 \code{"odd"} (only odd-numbered chromosomes labeled), or a character
 vector of labels (same length as displayed chromosomes).}
+
+\item{y_metric}{What to plot on the y-axis. \code{"p"} (default) shows
+-log10(p). \code{"beta_min"} shows the lower confidence bound of the
+absolute effect size: |beta| - 2*SE. Variants whose confidence
+interval overlaps zero are excluded. This highlights variants with
+large, robust effect sizes rather than just small p-values.}
 
 \item{y_limit}{Upper y-axis limit for -log10(p).}
 
@@ -122,4 +129,7 @@ manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
 
 # Label only odd chromosomes (less crowded x-axis)
 manhattan_plot(example_gwas, chr_labels = "odd")
+
+# Effect-size confidence bound (|beta| - 2*SE)
+manhattan_plot(example_gwas, y_metric = "beta_min")
 }
