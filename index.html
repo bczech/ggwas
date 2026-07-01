@@ -69,6 +69,8 @@
 <li>
 <strong>Broken y-axis</strong> for Manhattan plots with extreme p-values (<code>y_truncate</code>)</li>
 <li>
+<strong>Effect-size confidence</strong> mode showing |beta| - 2*SE instead of p-values (<code>y_metric = "beta_min"</code>)</li>
+<li>
 <strong>Smart downsampling</strong> for 10M+ variant datasets</li>
 <li>
 <strong>Journal themes</strong> (Nature, Science, Cell, PLOS) and 14 color palettes</li>
@@ -147,19 +149,19 @@
 </tr>
 <tr>
 <td align="center"><strong>Locus zoom</strong></td>
-<td align="center"><strong>Genetic architecture</strong></td>
+<td align="center"><strong>Effect-size confidence</strong></td>
 </tr>
 <tr>
 <td align="center"><img src="reference/figures/example_locus.png" width="400"></td>
-<td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
+<td align="center"><img src="reference/figures/example_beta_min.png" width="400"></td>
 </tr>
 <tr>
+<td align="center"><strong>Genetic architecture</strong></td>
 <td align="center"><strong>Journal themes</strong></td>
-<td align="center"></td>
 </tr>
 <tr>
+<td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
 <td align="center"><img src="reference/figures/example_themes.png" width="400"></td>
-<td align="center"></td>
 </tr>
 <tr>
 <td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
@@ -416,6 +418,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">gwas</span>, label_top_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">gwas</span>, y_truncate <span class="op">=</span> <span class="fl">15</span><span class="op">)</span>  <span class="co"># broken y-axis for extreme p-values</span></span>
+<span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">gwas</span>, y_metric <span class="op">=</span> <span class="st">"beta_min"</span><span class="op">)</span>  <span class="co"># effect-size confidence bound</span></span>
 <span><span class="fu"><a href="reference/qq_plot.html">qq_plot</a></span><span class="op">(</span><span class="va">gwas</span>, show_lambda <span class="op">=</span> <span class="cn">TRUE</span>, ci <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/miami_plot.html">miami_plot</a></span><span class="op">(</span><span class="va">gwas1</span>, <span class="va">gwas2</span>, top_title <span class="op">=</span> <span class="st">"Study 1"</span>, bottom_title <span class="op">=</span> <span class="st">"Study 2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/locus_plot.html">locus_plot</a></span><span class="op">(</span><span class="va">gwas</span>, lead_snp <span class="op">=</span> <span class="st">"rs12345"</span>, flank <span class="op">=</span> <span class="fl">500000</span><span class="op">)</span></span></code></pre></div>

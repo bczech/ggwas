@@ -13,6 +13,8 @@ defaults and journal-specific themes.
   files with strand arrows and highlighting
 - **Broken y-axis** for Manhattan plots with extreme p-values
   (`y_truncate`)
+- **Effect-size confidence** mode showing \|beta\| - 2\*SE instead of
+  p-values (`y_metric = "beta_min"`)
 - **Smart downsampling** for 10M+ variant datasets
 - **Journal themes** (Nature, Science, Cell, PLOS) and 14 color palettes
 - **Gene annotation** with automatic nearest-gene mapping
@@ -38,10 +40,10 @@ defaults and journal-specific themes.
 | ![](reference/figures/example_density.png) | ![](reference/figures/example_density_points.png) |
 | **Density vs signal** | **P-value heatmap** |
 | ![](reference/figures/example_density_signal.png) | ![](reference/figures/example_heatmap.png) |
-| **Locus zoom** | **Genetic architecture** |
-| ![](reference/figures/example_locus.png) | ![](reference/figures/example_architecture.png) |
-| **Journal themes** |  |
-| ![](reference/figures/example_themes.png) |  |
+| **Locus zoom** | **Effect-size confidence** |
+| ![](reference/figures/example_locus.png) | ![](reference/figures/example_beta_min.png) |
+| **Genetic architecture** | **Journal themes** |
+| ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 | ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 
 Full documentation with worked examples:
@@ -129,6 +131,7 @@ manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 
 manhattan_plot(gwas, label_top_n = 5)
 manhattan_plot(gwas, y_truncate = 15)  # broken y-axis for extreme p-values
+manhattan_plot(gwas, y_metric = "beta_min")  # effect-size confidence bound
 qq_plot(gwas, show_lambda = TRUE, ci = 0.95)
 miami_plot(gwas1, gwas2, top_title = "Study 1", bottom_title = "Study 2")
 locus_plot(gwas, lead_snp = "rs12345", flank = 500000)

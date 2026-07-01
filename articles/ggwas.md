@@ -180,6 +180,22 @@ manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
 
 ![](ggwas_files/figure-html/manhattan-no-lines-1.png)
 
+#### Effect-size confidence bound
+
+For datasets with extreme p-values (e.g. biobank GWAS), small p-values
+do not always imply large, robust effects. `y_metric = "beta_min"` plots
+the lower bound of the effect-size confidence interval: \|beta\| -
+2\*SE. Variants whose CI overlaps zero are excluded. This highlights
+variants with large, replicable effects rather than statistical
+artifacts from rare alleles with perfect case/control assortment:
+
+``` r
+
+manhattan_plot(example_gwas, y_metric = "beta_min")
+```
+
+![](ggwas_files/figure-html/manhattan-beta-min-1.png)
+
 #### Palette and theme variations
 
 The same Manhattan plot can look very different with alternative
