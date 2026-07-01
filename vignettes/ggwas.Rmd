@@ -178,15 +178,45 @@ manhattan_plot(example_gwas, genome_wide = NULL, suggestive = NULL)
 ### Effect-size confidence bound
 
 For datasets with extreme p-values (e.g. biobank GWAS), small p-values
-do not always imply large, robust effects. `y_metric = "beta_min"` plots
-the lower bound of the effect-size confidence interval: |beta| - 2*SE.
-Variants whose CI overlaps zero are excluded. This highlights variants
-with large, replicable effects rather than statistical artifacts from
-rare alleles with perfect case/control assortment:
+do not always imply large, robust effects — rare alleles with perfect
+case/control assortment can produce astronomical p-values despite
+negligible or unreplicable effects. `y_metric = "beta_min"` plots the
+lower bound of the effect-size confidence interval: |beta| - 2*SE.
+Variants whose CI overlaps zero are excluded, revealing only those with
+large, robust effects:
 
-```{r manhattan-beta-min, fig.height=4}
-manhattan_plot(example_gwas, y_metric = "beta_min")
+```{r manhattan-beta-min, fig.height=7}
+set.seed(42)
+n <- 5000
+sim <- data.frame(
+  CHR = sample(1:22, n, replace = TRUE),
+  BP = sample(1:250e6, n),
+  SNP = paste0("rs", seq_len(n)),
+  P = runif(n)^3,
+  BETA = rnorm(n, 0, 0.02),
+  SE = abs(rnorm(n, 0.03, 0.005))
+)
+real <- sample(n, 15)
+sim$P[real] <- 10^(-runif(15, 5, 12))
+sim$BETA[real] <- rnorm(15, 0, 0.5)
+sim$SE[real] <- runif(15, 0.01, 0.03)
+fake <- sample(setdiff(seq_len(n), real), 10)
+sim$P[fake] <- 10^(-runif(10, 8, 15))
+sim$BETA[fake] <- rnorm(10, 0, 0.05)
+sim$SE[fake] <- runif(10, 0.08, 0.2)
+
+sim_gwas <- as_gwas_data(sim)
+
+library(patchwork)
+p1 <- manhattan_plot(sim_gwas) + ggtitle("Standard: -log10(p)")
+p2 <- manhattan_plot(sim_gwas, y_metric = "beta_min", label_top_n = 3) +
+  ggtitle("Effect confidence: |beta| - 2*SE")
+p1 / p2
 ```
+
+Many hits visible in the standard plot disappear in the effect-confidence
+view because their large SE makes the confidence interval overlap zero —
+a hallmark of artifacts from rare variants.
 
 ### Palette and theme variations
 
