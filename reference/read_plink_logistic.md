@@ -30,7 +30,12 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-gwas <- read_plink_logistic("my_results.assoc.logistic")
-} # }
+f <- system.file("extdata", "example_plink.assoc.logistic", package = "ggwas")
+gwas <- read_plink_logistic(f)
+#> Read 4 variants from example_plink.assoc.logistic
+gwas
+#> A gwas_data object: 4 variants across 3 chromosomes
+#>   Min p-value: 5.20e-08
+#>   Lambda GC:   3.171
+#>   Columns:     CHR, BP, SNP, P, A1, N, TEST, OR, STAT
 ```

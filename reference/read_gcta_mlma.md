@@ -26,7 +26,12 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-gwas <- read_gcta_mlma("my_results.mlma")
-} # }
+f <- system.file("extdata", "example_gcta.mlma", package = "ggwas")
+gwas <- read_gcta_mlma(f)
+#> Read 4 variants from example_gcta.mlma
+gwas
+#> A gwas_data object: 4 variants across 3 chromosomes
+#>   Min p-value: 5.20e-08
+#>   Lambda GC:   3.171
+#>   Columns:     CHR, BP, SNP, BETA, SE, A1, A2, AF, P
 ```

@@ -1,8 +1,9 @@
 # Gene annotation track
 
 Create a standalone gene annotation panel that can be composed with any
-ggwas plot using patchwork. Genes are displayed as horizontal bars with
-optional strand arrows and labels.
+ggwas plot using patchwork. Genes are drawn as directional bodies with
+strand arrows and labels; when `exon_data` is supplied, each gene is
+rendered as an intron backbone with exon boxes and a strand arrow.
 
 ## Usage
 
@@ -12,6 +13,7 @@ gene_track(
   region_chr,
   region_start,
   region_end,
+  exon_data = NULL,
   highlight_genes = NULL,
   highlight_color = "#E74C3C",
   label_size = 2.5,
@@ -36,6 +38,13 @@ gene_track(
 
   Region boundaries in base pairs.
 
+- exon_data:
+
+  Optional data.frame of exons (columns chr, start, end, gene) matching
+  genes in `gene_data` by the `gene` column. When supplied, genes are
+  drawn with exon structure. Read with
+  `read_gtf(path, feature_type = "exon")`.
+
 - highlight_genes:
 
   Character vector of gene names to highlight.
@@ -50,7 +59,7 @@ gene_track(
 
 - track_color:
 
-  Default color for gene bars.
+  Default color for gene bodies.
 
 - show_strand:
 
@@ -75,16 +84,16 @@ genes <- data.frame(
   strand = c("+", "-", "+")
 )
 
-# Standalone track
+# Gene-body track
 gene_track(genes, region_chr = 1, region_start = 0, region_end = 10e6)
 
 
-# Compose with Manhattan plot
-data(example_gwas, package = "ggwas")
-p <- locus_plot(example_gwas, region_chr = 1,
-                region_start = 1e6, region_end = 10e6)
-gt <- gene_track(genes, 1, 1e6, 10e6)
-if (FALSE) { # \dontrun{
-patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.8, 0.2))
-} # }
+# With exon structure
+exons <- data.frame(
+  chr = 1,
+  start = c(1.0e6, 1.5e6, 5.0e6, 5.6e6, 8.1e6),
+  end   = c(1.1e6, 1.7e6, 5.2e6, 5.9e6, 8.4e6),
+  gene  = c("GeneA", "GeneA", "GeneB", "GeneB", "GeneC")
+)
+gene_track(genes, 1, 0, 10e6, exon_data = exons)
 ```

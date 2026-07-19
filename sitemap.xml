@@ -16,10 +16,13 @@
 <url><loc>https://bczech.github.io/ggwas/reference/circular_manhattan.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/coloc_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/density_signal_plot.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/effect_compare_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/enrichment_manhattan.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/example_gwas.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/filter_region.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/finemapping_plot.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/forest_plot.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/gene_annotation.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/gene_track.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/genetic_correlation.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/get_loci.html</loc></url>
@@ -55,6 +58,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/snp_density.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/theme_gwas.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/top_hits.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/trumpet_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/validate_gwas_data.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/volcano_plot.html</loc></url>
 </urlset>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,17 @@
       <small>Source: <a href="https://github.com/bczech/ggwas/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.3" id="ggwas-0993">ggwas 0.99.3<a class="anchor" aria-label="anchor" href="#ggwas-0993"></a></h2>
+<ul><li>Added <code><a href="../reference/trumpet_plot.html">trumpet_plot()</a></code>: effect size versus minor allele frequency with statistical-power contours showing which variants a study can detect</li>
+<li>Added <code><a href="../reference/forest_plot.html">forest_plot()</a></code> for effect estimates with confidence intervals across cohorts or lead variants</li>
+<li>Added <code><a href="../reference/effect_compare_plot.html">effect_compare_plot()</a></code> comparing variant effects between two studies on their shared variants</li>
+<li>Added <code><a href="../reference/gene_annotation.html">gene_annotation()</a></code> with bundled protein-coding genes for GRCh37 and GRCh38, so regional and gene-labelled plots work without a GTF</li>
+<li>
+<code><a href="../reference/gene_track.html">gene_track()</a></code> now renders full exon structure when given <code>exon_data</code>
+</li>
+<li>Sped up <code>smart_downsample()</code> with exponential-key weighted sampling</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.2" id="ggwas-0992">ggwas 0.99.2<a class="anchor" aria-label="anchor" href="#ggwas-0992"></a></h2>
 <ul><li>Added <code>y_truncate</code> parameter for Manhattan plots with broken y-axis, showing extreme p-values in a compressed zone above the break</li>

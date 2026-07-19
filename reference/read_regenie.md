@@ -26,7 +26,12 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-gwas <- read_regenie("my_results.regenie")
-} # }
+f <- system.file("extdata", "example_regenie.regenie", package = "ggwas")
+gwas <- read_regenie(f)
+#> Read 4 variants from example_regenie.regenie
+gwas
+#> A gwas_data object: 4 variants across 3 chromosomes
+#>   Min p-value: 5.20e-08
+#>   Lambda GC:   1.438
+#>   Columns:     CHR, BP, SNP, BETA, SE, A1, A2, AF, N, P, TEST, CHISQ, EXTRA
 ```

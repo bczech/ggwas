@@ -43,6 +43,13 @@ Multi-trait, enrichment, and post-GWAS visualizations
   : SNP density karyogram
 - [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
   : Density–signal dual-track plot
+- [`trumpet_plot()`](https://bczech.github.io/ggwas/reference/trumpet_plot.md)
+  : Trumpet plot: effect size versus allele frequency with power
+  contours
+- [`forest_plot()`](https://bczech.github.io/ggwas/reference/forest_plot.md)
+  : Forest plot of effect estimates
+- [`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
+  : Compare variant effects between two GWAS
 - [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
   [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md)
   [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
@@ -58,6 +65,8 @@ Gene annotation, genomic tracks, region highlights, top hits
   : Gene annotation track
 - [`read_gtf()`](https://bczech.github.io/ggwas/reference/read_gtf.md) :
   Read gene annotations from GTF/GFF3 file
+- [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
+  : Built-in protein-coding gene annotations
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   : Add gene labels to a Manhattan plot
 - [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)

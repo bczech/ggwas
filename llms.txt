@@ -6,9 +6,12 @@ figures.
 
 ## Key features
 
-- **17 plot types**: from classic Manhattan and QQ to post-GWAS
+- **20 plot types**: from classic Manhattan and QQ to post-GWAS
   visualizations (PheWAS, colocalization, fine-mapping, genetic
-  correlations, SNP density karyogram)
+  correlations, SNP density, forest, effect comparison, and a
+  power-contour trumpet plot)
+- **Built-in gene models** (GRCh37/38) and exon-level gene tracks —
+  regional plots without a GTF
 - **Genomic tracks**: composable gene annotation panels from GTF/GFF3
   files with strand arrows and highlighting
 - **Broken y-axis** for Manhattan plots with extreme p-values
@@ -146,6 +149,7 @@ circular_manhattan(gwas, colors = gwas_palette("nature"))
 circular_manhattan(list(BMI = gwas1, Height = gwas2))  # multi-ring
 enrichment_manhattan(gwas, annotations = functional_regions)
 multitrait_manhattan(BMI = gwas1, Height = gwas2, highlight_shared = TRUE)
+trumpet_plot(gwas, n = 500000)  # effect vs MAF with statistical-power contours
 gwas_summary(gwas)  # multi-panel dashboard
 ```
 
@@ -160,16 +164,19 @@ genetic_correlation(ldsc_matrix, cluster = TRUE)
 architecture_plot(gwas)
 snp_density(gwas, chr_info = chr_info_human())
 density_signal_plot(gwas)
+forest_plot(lead_variants)                       # effect estimates + CI
+effect_compare_plot(discovery, replication)      # beta-vs-beta concordance
 ```
 
 ### Gene annotation and genomic tracks
 
 ``` r
 
-# Read gene annotations from GTF (no biomaRt needed)
-genes <- read_gtf("Homo_sapiens.GRCh38.110.gtf.gz")
+# Built-in gene models (GRCh37/38) — no GTF or biomaRt needed
+genes <- gene_annotation("GRCh38")
+# ...or read your own: genes <- read_gtf("Homo_sapiens.GRCh38.110.gtf.gz")
 
-# Gene track below a locus plot
+# Gene track below a locus plot (add exon_data for exon structure)
 p <- locus_plot(gwas, region_chr = 6, region_start = 25e6, region_end = 35e6)
 gt <- gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6,
                   highlight_genes = c("HLA-A", "HLA-B"))
@@ -295,6 +302,13 @@ Multi-trait, enrichment, and post-GWAS visualizations
   : SNP density karyogram
 - [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
   : Density–signal dual-track plot
+- [`trumpet_plot()`](https://bczech.github.io/ggwas/reference/trumpet_plot.md)
+  : Trumpet plot: effect size versus allele frequency with power
+  contours
+- [`forest_plot()`](https://bczech.github.io/ggwas/reference/forest_plot.md)
+  : Forest plot of effect estimates
+- [`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
+  : Compare variant effects between two GWAS
 - [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
   [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md)
   [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
@@ -310,6 +324,8 @@ Gene annotation, genomic tracks, region highlights, top hits
   : Gene annotation track
 - [`read_gtf()`](https://bczech.github.io/ggwas/reference/read_gtf.md) :
   Read gene annotations from GTF/GFF3 file
+- [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
+  : Built-in protein-coding gene annotations
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   : Add gene labels to a Manhattan plot
 - [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)

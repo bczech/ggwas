@@ -30,7 +30,12 @@ A `gwas_data` object.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-gwas <- read_gemma("my_results.assoc.txt")
-} # }
+f <- system.file("extdata", "example_gemma.assoc.txt", package = "ggwas")
+gwas <- read_gemma(f)
+#> Read 4 variants from example_gemma.assoc.txt
+gwas
+#> A gwas_data object: 4 variants across 3 chromosomes
+#>   Min p-value: 5.20e-08
+#>   Lambda GC:   3.171
+#>   Columns:     CHR, BP, SNP, P, BETA, SE, A1, A2, AF, n_miss, logl_H1, l_remle
 ```

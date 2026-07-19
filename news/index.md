@@ -1,5 +1,26 @@
 # Changelog
 
+## ggwas 0.99.3
+
+- Added
+  [`trumpet_plot()`](https://bczech.github.io/ggwas/reference/trumpet_plot.md):
+  effect size versus minor allele frequency with statistical-power
+  contours showing which variants a study can detect
+- Added
+  [`forest_plot()`](https://bczech.github.io/ggwas/reference/forest_plot.md)
+  for effect estimates with confidence intervals across cohorts or lead
+  variants
+- Added
+  [`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
+  comparing variant effects between two studies on their shared variants
+- Added
+  [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
+  with bundled protein-coding genes for GRCh37 and GRCh38, so regional
+  and gene-labelled plots work without a GTF
+- [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
+  now renders full exon structure when given `exon_data`
+- Sped up `smart_downsample()` with exponential-key weighted sampling
+
 ## ggwas 0.99.2
 
 - Added `y_truncate` parameter for Manhattan plots with broken y-axis,
