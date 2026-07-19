@@ -3,9 +3,9 @@
 Visualize the distribution of genotyped or imputed variants across
 chromosomes. Two rendering styles are available: `"heatmap"` (default)
 bins variants and colors tiles by count, while `"points"` draws
-individual variant positions on chromosome outlines — density is visible
-through natural clustering. Optionally marks centromere positions when
-`chr_info` is provided.
+individual variant positions on chromosome outlines, where density is
+visible through natural clustering. Optionally marks centromere
+positions when `chr_info` is provided.
 
 ## Usage
 
@@ -105,7 +105,7 @@ snp_density(example_gwas, bin_size = 5e6, palette = "magma",
   chr_info = chr_info_human())
 
 
-# Points style — individual variants on chromosome outlines
+# Points style: individual variants on chromosome outlines
 snp_density(example_gwas, style = "points", chr_info = chr_info_human())
 
 

@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>ggwas — Modern GWAS Visualizations • ggwas</title>
+<title>ggwas: Modern GWAS Visualizations • ggwas</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ggwas — Modern GWAS Visualizations">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="ggwas: Modern GWAS Visualizations">
 <meta name="description" content="Comprehensive ggplot2-based toolkit for visualizing GWAS results. Manhattan, QQ, Miami, PheWAS, fine-mapping, genetic correlations, and more.
 ">
 <meta property="og:description" content="Comprehensive ggplot2-based toolkit for visualizing GWAS results. Manhattan, QQ, Miami, PheWAS, fine-mapping, genetic correlations, and more.
@@ -57,15 +57,15 @@
 </div>
 <!-- badges: start -->
 
-<p>Modern, fast, and fully customizable GWAS visualizations built on <strong>ggplot2</strong>. Designed for publication-ready figures with sensible defaults and journal-specific themes.</p>
+<p>Fast, customizable GWAS visualizations built on <strong>ggplot2</strong>, with sensible defaults and journal-specific themes for publication-ready figures.</p>
 <div class="section level2">
 <h2 id="key-features">Key features<a class="anchor" aria-label="anchor" href="#key-features"></a>
 </h2>
 <ul>
 <li>
-<strong>17 plot types</strong> — from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations, SNP density karyogram)</li>
+<strong>17 plot types</strong>: from classic Manhattan and QQ to post-GWAS visualizations (PheWAS, colocalization, fine-mapping, genetic correlations, SNP density karyogram)</li>
 <li>
-<strong>Genomic tracks</strong> — composable gene annotation panels from GTF/GFF3 files with strand arrows and highlighting</li>
+<strong>Genomic tracks</strong>: composable gene annotation panels from GTF/GFF3 files with strand arrows and highlighting</li>
 <li>
 <strong>Broken y-axis</strong> for Manhattan plots with extreme p-values (<code>y_truncate</code>)</li>
 <li>
@@ -79,7 +79,7 @@
 <li>
 <strong>Auto-detects</strong> column names from PLINK, REGENIE, GCTA, GEMMA, and generic files</li>
 <li>
-<strong>Fully composable</strong> — every function returns a ggplot object</li>
+<strong>Fully composable</strong>: every function returns a ggplot object</li>
 </ul>
 </div>
 <div class="section level2">
@@ -158,10 +158,6 @@
 <tr>
 <td align="center"><strong>Genetic architecture</strong></td>
 <td align="center"><strong>Journal themes</strong></td>
-</tr>
-<tr>
-<td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
-<td align="center"><img src="reference/figures/example_themes.png" width="400"></td>
 </tr>
 <tr>
 <td align="center"><img src="reference/figures/example_architecture.png" width="400"></td>
@@ -347,7 +343,7 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bczech/ggwas" class="external-link">ggwas</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Read any GWAS results file — columns auto-detected</span></span>
+<span><span class="co"># Read any GWAS results file (columns auto-detected)</span></span>
 <span><span class="va">gwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/read_gwas_table.html">read_gwas_table</a></span><span class="op">(</span><span class="st">"my_results.txt"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Manhattan plot</span></span>
@@ -359,7 +355,7 @@
 <span><span class="co"># QQ plot with confidence band and lambda</span></span>
 <span><span class="fu"><a href="reference/qq_plot.html">qq_plot</a></span><span class="op">(</span><span class="va">gwas</span>, show_lambda <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Miami plot — discovery vs replication</span></span>
+<span><span class="co"># Miami plot: discovery vs replication</span></span>
 <span><span class="fu"><a href="reference/miami_plot.html">miami_plot</a></span><span class="op">(</span><span class="va">discovery</span>, <span class="va">replication</span>,</span>
 <span>           top_title <span class="op">=</span> <span class="st">"Discovery"</span>, bottom_title <span class="op">=</span> <span class="st">"Replication"</span><span class="op">)</span></span>
 <span></span>
@@ -492,7 +488,7 @@
 <div class="section level2">
 <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
 </h2>
-<p>Smart downsampling kicks in automatically for large datasets. It preserves all significant variants and bins the non-significant background — the plot looks identical but renders in seconds instead of minutes:</p>
+<p>Smart downsampling kicks in automatically for large datasets. It preserves all significant variants and bins the non-significant background. The plot looks identical but renders in seconds instead of minutes:</p>
 <table class="table">
 <thead><tr>
 <th>Variants</th>
@@ -613,7 +609,7 @@ doi: 10.5281/zenodo.20815110</code></pre>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

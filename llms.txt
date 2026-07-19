@@ -1,15 +1,15 @@
 # ggwas
 
-Modern, fast, and fully customizable GWAS visualizations built on
-**ggplot2**. Designed for publication-ready figures with sensible
-defaults and journal-specific themes.
+Fast, customizable GWAS visualizations built on **ggplot2**, with
+sensible defaults and journal-specific themes for publication-ready
+figures.
 
 ## Key features
 
-- **17 plot types** — from classic Manhattan and QQ to post-GWAS
+- **17 plot types**: from classic Manhattan and QQ to post-GWAS
   visualizations (PheWAS, colocalization, fine-mapping, genetic
   correlations, SNP density karyogram)
-- **Genomic tracks** — composable gene annotation panels from GTF/GFF3
+- **Genomic tracks**: composable gene annotation panels from GTF/GFF3
   files with strand arrows and highlighting
 - **Broken y-axis** for Manhattan plots with extreme p-values
   (`y_truncate`)
@@ -20,7 +20,7 @@ defaults and journal-specific themes.
 - **Gene annotation** with automatic nearest-gene mapping
 - **Auto-detects** column names from PLINK, REGENIE, GCTA, GEMMA, and
   generic files
-- **Fully composable** — every function returns a ggplot object
+- **Fully composable**: every function returns a ggplot object
 
 ## Gallery
 
@@ -43,7 +43,6 @@ defaults and journal-specific themes.
 | **Locus zoom** | **Effect-size confidence** |
 | ![](reference/figures/example_locus.png) | ![](reference/figures/example_beta_min.png) |
 | **Genetic architecture** | **Journal themes** |
-| ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 | ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
 
 Full documentation with worked examples:
@@ -91,7 +90,7 @@ pak::pak("bczech/ggwas")
 
 library(ggwas)
 
-# Read any GWAS results file — columns auto-detected
+# Read any GWAS results file (columns auto-detected)
 gwas <- read_gwas_table("my_results.txt")
 
 # Manhattan plot
@@ -103,7 +102,7 @@ manhattan_genes(gwas, genes = my_gene_table, gene_top_n = 10)
 # QQ plot with confidence band and lambda
 qq_plot(gwas, show_lambda = TRUE)
 
-# Miami plot — discovery vs replication
+# Miami plot: discovery vs replication
 miami_plot(discovery, replication,
            top_title = "Discovery", bottom_title = "Replication")
 
@@ -210,7 +209,7 @@ manhattan_plot(gwas, colors = gwas_palette("nature"))
 
 Smart downsampling kicks in automatically for large datasets. It
 preserves all significant variants and bins the non-significant
-background — the plot looks identical but renders in seconds instead of
+background. The plot looks identical but renders in seconds instead of
 minutes:
 
 | Variants | qqman | ggwas | Speedup  |

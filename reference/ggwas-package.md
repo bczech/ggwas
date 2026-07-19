@@ -6,7 +6,7 @@ zoom, PheWAS, colocalization, fine-mapping, genetic correlation, SNP
 density, and density-signal comparison plots. Reads PLINK, REGENIE,
 GCTA, and GEMMA formats natively. All plot functions return 'ggplot2'
 objects for full customization. Smart downsampling handles datasets with
-10 million+ variants efficiently.
+10 million+ variants.
 
 ## See also
 

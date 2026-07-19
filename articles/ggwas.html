@@ -56,7 +56,7 @@ Czech</h4>
                   <a class="author_email" href="mailto:#"></a><a href="mailto:bartosz.w.czech@gmail.com" class="email">bartosz.w.czech@gmail.com</a>
       
                   
-            <h4 data-toc-skip class="date">2026-07-06</h4>
+            <h4 data-toc-skip class="date">2026-07-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bczech/ggwas/blob/main/vignettes/ggwas.Rmd" class="external-link"><code>vignettes/ggwas.Rmd</code></a></small>
       <div class="d-none name"><code>ggwas.Rmd</code></div>
@@ -67,12 +67,12 @@ Czech</h4>
       <p class="abstract">Abstract</p>
       <p>The ggwas package provides a comprehensive, ggplot2-based
       toolkit for visualizing genome-wide association study results. It
-      covers the full spectrum of GWAS plots — from standard Manhattan
-      and QQ plots to novel visualizations like genome-wide heatmaps,
-      enrichment overlays, and multi-trait comparisons. All functions
-      return ggplot objects, making them fully composable with the
-      tidyverse graphics ecosystem. This vignette demonstrates the main
-      functionality with worked examples.</p>
+      covers a range of GWAS plots, from standard Manhattan and QQ plots
+      to novel visualizations like genome-wide heatmaps, enrichment
+      overlays, and multi-trait comparisons. All functions return ggplot
+      objects, making them fully composable with the tidyverse graphics
+      ecosystem. This vignette demonstrates the main functionality with
+      worked examples.</p>
     </div>
     
 <div class="section level2">
@@ -83,20 +83,20 @@ summary statistics that require effective visualization for
 interpretation and publication. The standard tools in R
 (<code>qqman</code>, <code>CMplot</code>) rely on base R graphics and
 offer limited customization. Modern genomics workflows benefit from a
-plotting system that integrates with ggplot2 — enabling layered
-customization, journal-specific theming, and seamless composition of
-multi-panel figures.</p>
+plotting system that integrates with ggplot2. This allows layered
+customization, journal-specific theming, and composition of multi-panel
+figures.</p>
 <p><code>ggwas</code> was designed with three goals:</p>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Comprehensive coverage</strong> — 17 plot types in one
+<strong>Comprehensive coverage</strong>: 17 plot types in one
 package, including novel visualizations not available elsewhere.</li>
 <li>
-<strong>Publication-ready defaults</strong> — sensible colors,
-proper axis formatting, and built-in journal themes so plots look good
-without tweaking.</li>
+<strong>Publication-ready defaults</strong>: sensible colors, proper
+axis formatting, and built-in journal themes so plots look good without
+tweaking.</li>
 <li>
-<strong>Performance at scale</strong> — smart downsampling handles
+<strong>Performance at scale</strong>: smart downsampling handles
 10M+ variant datasets without manual intervention.</li>
 </ol>
 <p>The package reads output from PLINK, REGENIE, GCTA, GEMMA, and any
@@ -135,7 +135,7 @@ etc.):</p>
 <span><span class="co">#&gt;   Min p-value: 1.19e-14</span></span>
 <span><span class="co">#&gt;   Lambda GC:   3.996</span></span>
 <span><span class="co">#&gt;   Columns:     CHR, BP, SNP, P, BETA, SE, A1, A2, AF</span></span></code></pre></div>
-<p>The result is a <code>gwas_data</code> object — a data.frame with
+<p>The result is a <code>gwas_data</code> object: a data.frame with
 validated columns and a custom print method showing key QC metrics at a
 glance.</p>
 <p>For specific tools, dedicated readers handle format quirks
@@ -147,7 +147,7 @@ automatically:</p>
 <span><span class="va">gwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_regenie.html">read_regenie</a></span><span class="op">(</span><span class="st">"results.regenie"</span><span class="op">)</span>      <span class="co"># REGENIE (handles LOG10P)</span></span>
 <span><span class="va">gwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_gcta_mlma.html">read_gcta_mlma</a></span><span class="op">(</span><span class="st">"results.mlma"</span><span class="op">)</span>       <span class="co"># GCTA</span></span>
 <span><span class="va">gwas</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_gemma.html">read_gemma</a></span><span class="op">(</span><span class="st">"results.assoc.txt"</span><span class="op">)</span>      <span class="co"># GEMMA</span></span></code></pre></div>
-<p>You can also pass any <code>data.frame</code> directly — just specify
+<p>You can also pass any <code>data.frame</code> directly, specifying
 non-standard column names:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">my_df</span>, chr <span class="op">=</span> <span class="st">"chrom"</span>, bp <span class="op">=</span> <span class="st">"position"</span>, p <span class="op">=</span> <span class="st">"pval"</span><span class="op">)</span></span></code></pre></div>
@@ -159,8 +159,8 @@ non-standard column names:</p>
 <div class="section level3">
 <h3 id="manhattan-plot">Manhattan plot<a class="anchor" aria-label="anchor" href="#manhattan-plot"></a>
 </h3>
-<p>The Manhattan plot is the workhorse of GWAS visualization — each
-point is a tested variant, plotted by genomic position (x) against its
+<p>The Manhattan plot is the most common GWAS visualization. Each point
+is a tested variant, plotted by genomic position (x) against its
 association strength as -log10(p-value) (y). Chromosomes alternate in
 color for visual separation.</p>
 <p><strong>How to interpret:</strong> Look for “towers” of points rising
@@ -168,7 +168,7 @@ above the genome-wide significance line (red dashed, p = 5×10⁻⁸). Each
 tower is a locus with evidence of true association. Isolated points
 above the line are worth investigating but may be artifacts. A broad
 signal spanning multiple chromosomes equally (rather than discrete
-peaks) can indicate unresolved population stratification — check the QQ
+peaks) can indicate unresolved population stratification. Check the QQ
 plot in that case.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">example_gwas</span><span class="op">)</span></span></code></pre></div>
@@ -185,9 +185,9 @@ plot in that case.</p>
 <h4 id="broken-y-axis-for-extreme-p-values">Broken y-axis for extreme p-values<a class="anchor" aria-label="anchor" href="#broken-y-axis-for-extreme-p-values"></a>
 </h4>
 <p>When a few loci have extremely low p-values (e.g., 1e-50), they
-compress the rest of the plot. <code>y_truncate</code> breaks the y-axis
-— the region between the two values is cut out, and a break symbol (//)
-marks the transition:</p>
+compress the rest of the plot. <code>y_truncate</code> breaks the
+y-axis: the region between the two values is cut out, and a break symbol
+(//) marks the transition:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Add extreme p-values for demonstration</span></span>
 <span><span class="va">gwas_extreme</span> <span class="op">&lt;-</span> <span class="va">example_gwas</span></span>
@@ -221,7 +221,7 @@ variants, correction method, and organism:</p>
 <h4 id="effect-size-confidence-bound">Effect-size confidence bound<a class="anchor" aria-label="anchor" href="#effect-size-confidence-bound"></a>
 </h4>
 <p>For datasets with extreme p-values (e.g. biobank GWAS), small
-p-values do not always imply large, robust effects — rare alleles with
+p-values do not always imply large, robust effects: rare alleles with
 perfect case/control assortment can produce astronomical p-values
 despite negligible or unreplicable effects.
 <code>y_metric = "beta_min"</code> plots the lower bound of the
@@ -258,13 +258,14 @@ effects:</p>
 <p><img src="ggwas_files/figure-html/manhattan-beta-min-1.png" class="r-plt" alt="" width="100%"></p>
 <p>Many hits visible in the standard plot disappear in the
 effect-confidence view because their large SE makes the confidence
-interval overlap zero — a hallmark of artifacts from rare variants.</p>
+interval overlap zero, a hallmark of artifacts from rare variants.</p>
 </div>
 <div class="section level4">
 <h4 id="palette-and-theme-variations">Palette and theme variations<a class="anchor" aria-label="anchor" href="#palette-and-theme-variations"></a>
 </h4>
 <p>The same Manhattan plot can look very different with alternative
-palettes and themes — useful when matching journal style guides:</p>
+palettes and themes, which is useful when matching journal style
+guides:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">example_gwas</span>, colors <span class="op">=</span> <span class="fu"><a href="../reference/gwas_palette.html">gwas_palette</a></span><span class="op">(</span><span class="st">"lancet"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/journal_themes.html">theme_science</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggwas_files/figure-html/manhattan-themes-1.png" class="r-plt" alt="" width="100%"></p>
@@ -281,7 +282,7 @@ against the expectation under the null hypothesis.</p>
 <p><strong>How to interpret:</strong> Points should follow the diagonal
 closely in the lower left (bulk of non-associated variants) and only
 deviate upward in the tail (true signals). If points lift off the
-diagonal early and uniformly, that indicates genomic inflation — either
+diagonal early and uniformly, that indicates genomic inflation, either
 population stratification or cryptic relatedness in your sample. The
 grey band is the 95% confidence interval under the null: points inside
 it are consistent with no association. λ_GC &gt; 1.05 in a well-powered
@@ -305,7 +306,7 @@ uniform:</p>
 <div class="section level3">
 <h3 id="miami-plot">Miami plot<a class="anchor" aria-label="anchor" href="#miami-plot"></a>
 </h3>
-<p>The Miami plot mirrors two Manhattan plots vertically — one pointing
+<p>The Miami plot mirrors two Manhattan plots vertically: one pointing
 up, one pointing down. This is the standard way to compare discovery and
 replication cohorts, or two related traits, on a shared genomic
 coordinate axis.</p>
@@ -330,9 +331,9 @@ to see shared loci:</p>
 structure of association within that locus.</p>
 <p><strong>How to interpret:</strong> The lead SNP (lowest p-value)
 anchors the plot. When LD data is provided, points are colored by r²
-with the lead — red points (high LD) that also reach significance
-support the same association signal, while blue points (low LD) that
-reach significance independently may represent a secondary signal at the
+with the lead. Red points (high LD) that also reach significance support
+the same association signal, while blue points (low LD) that reach
+significance independently may represent a secondary signal at the
 locus. The gene track underneath shows which genes fall within the
 region, guiding biological follow-up:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
@@ -350,7 +351,7 @@ region, guiding biological follow-up:</p>
 genome. The x-axis is binned genomic position, the y-axis is chromosome,
 and color intensity reflects the strongest signal in each bin.</p>
 <p><strong>When to use:</strong> This works well as a supplementary
-overview figure — it shows genome-wide patterns that Manhattan plots can
+overview figure. It shows genome-wide patterns that Manhattan plots can
 obscure through overplotting. Hot spots (bright tiles) across multiple
 chromosomes suggest polygenicity; a single intense cluster points to one
 major locus. It also handles 10M+ variant datasets without downsampling
@@ -397,10 +398,10 @@ comparisons where each trait occupies its own ring:</p>
 <div class="section level3">
 <h3 id="summary-dashboard">Summary dashboard<a class="anchor" aria-label="anchor" href="#summary-dashboard"></a>
 </h3>
-<p>When you need a single figure that shows the full picture —
-Manhattan, QQ, top hits table, and p-value distribution —
-<code><a href="../reference/gwas_summary.html">gwas_summary()</a></code> assembles them into a multi-panel layout
-with automatic tags (A, B, C, D) suitable for supplementary figures:</p>
+<p>When you need a single figure combining Manhattan, QQ, top hits
+table, and p-value distribution, <code><a href="../reference/gwas_summary.html">gwas_summary()</a></code> assembles
+them into a multi-panel layout with automatic tags (A, B, C, D) suitable
+for supplementary figures:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/gwas_summary.html">gwas_summary</a></span><span class="op">(</span><span class="va">example_gwas</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggwas_files/figure-html/summary-1.png" class="r-plt" alt="" width="100%"></p>
@@ -415,7 +416,7 @@ with automatic tags (A, B, C, D) suitable for supplementary figures:</p>
 <p>In manuscripts, rs IDs are less informative than gene names.
 <code><a href="../reference/manhattan_genes.html">manhattan_genes()</a></code> takes a gene annotation table and labels
 each lead SNP with its nearest gene. In practice, you would extract this
-table from a GTF file or via <code>biomaRt</code> — here we define a
+table from a GTF file or via <code>biomaRt</code>. Here we define a
 small set manually:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
@@ -463,7 +464,7 @@ is a plain data.frame ready for export to a manuscript table:</p>
 <div class="section level3">
 <h3 id="region-highlights">Region highlights<a class="anchor" aria-label="anchor" href="#region-highlights"></a>
 </h3>
-<p>Mark specific genomic regions with a colored band — for example the
+<p>Mark specific genomic regions with a colored band, for example the
 MHC (chr6:25-34 Mb), known risk loci from prior GWAS, or candidate
 regions from linkage studies:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -502,7 +503,8 @@ orientation:</p>
 <span><span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/wrap_plots.html" class="external-link">wrap_plots</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">gt</span>, ncol <span class="op">=</span> <span class="fl">1</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.75</span>, <span class="fl">0.25</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggwas_files/figure-html/gene-track-1.png" class="r-plt" alt="" width="100%"></p>
 <p>For real data, use <code><a href="../reference/read_gtf.html">read_gtf()</a></code> to parse Ensembl or
-GENCODE annotation files directly — no <code>biomaRt</code> needed:</p>
+GENCODE annotation files directly, with no <code>biomaRt</code>
+needed:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/read_gtf.html">read_gtf</a></span><span class="op">(</span><span class="st">"Homo_sapiens.GRCh38.113.gtf.gz"</span>,</span>
 <span>                   biotype <span class="op">=</span> <span class="st">"protein_coding"</span><span class="op">)</span></span>
@@ -530,9 +532,9 @@ For other organisms, use <code><a href="../reference/set_sex_chr_map.html">set_s
 <div class="section level3">
 <h3 id="multi-trait-manhattan">Multi-trait Manhattan<a class="anchor" aria-label="anchor" href="#multi-trait-manhattan"></a>
 </h3>
-<p>Pleiotropy — one variant influencing multiple traits — is pervasive
-in complex genetics. Visualizing it requires overlaying GWAS results
-from multiple traits on a shared genomic axis.</p>
+<p>Pleiotropy (one variant influencing multiple traits) is pervasive in
+complex genetics. Visualizing it requires overlaying GWAS results from
+multiple traits on a shared genomic axis.</p>
 <p><strong>How to interpret:</strong> Diamond-shaped highlighted points
 are variants reaching genome-wide significance in more than one trait
 simultaneously. Peaks that appear in multiple colors at the same
@@ -580,7 +582,7 @@ regulatory mechanism and tissue of action:</p>
 <div class="section level3">
 <h3 id="circular-manhattan-multi-ring">Circular Manhattan (multi-ring)<a class="anchor" aria-label="anchor" href="#circular-manhattan-multi-ring"></a>
 </h3>
-<p>The multi-ring layout stacks traits concentrically — each ring is an
+<p>The multi-ring layout stacks traits concentrically: each ring is an
 independent GWAS, sharing the same angular coordinate system:</p>
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/circular_manhattan.html">circular_manhattan</a></span><span class="op">(</span></span>
@@ -597,7 +599,7 @@ independent GWAS, sharing the same angular coordinate system:</p>
 <h3 id="phewas-plot">PheWAS plot<a class="anchor" aria-label="anchor" href="#phewas-plot"></a>
 </h3>
 <p>Phenome-wide association studies test one variant against hundreds or
-thousands of phenotypes — common in biobank-era research (UK Biobank,
+thousands of phenotypes, common in biobank-era research (UK Biobank,
 FinnGen, All of Us).</p>
 <p><strong>How to interpret:</strong> Each point is a phenotype.
 Phenotypes are grouped by domain (metabolic, immune, cardiovascular,
@@ -628,8 +630,8 @@ different variants that happen to be nearby?</p>
 <p><strong>How to interpret:</strong> The two panels share a genomic
 coordinate axis. If the peak in the top panel (GWAS) aligns with the
 peak in the bottom panel (eQTL), the signals likely share a causal
-variant — the gene regulated by that eQTL is a strong candidate for the
-GWAS hit. Offset peaks suggest distinct causal variants in LD. This
+variant, and the gene regulated by that eQTL is a strong candidate for
+the GWAS hit. Offset peaks suggest distinct causal variants in LD. This
 visual check complements formal colocalization methods (coloc,
 eCAVIAR):</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
@@ -651,8 +653,8 @@ eCAVIAR):</p>
 variant is most likely causal. Tools like SuSiE and FINEMAP assign each
 variant a posterior inclusion probability (PIP, 0–1) and group high-PIP
 variants into credible sets.</p>
-<p><strong>How to interpret:</strong> Large points have high PIP — they
-are strong causal candidates. Color indicates credible set membership:
+<p><strong>How to interpret:</strong> Large points have high PIP and are
+strong causal candidates. Color indicates credible set membership:
 variants in the same set are in LD and cannot be statistically
 distinguished. A locus with one large red point (PIP &gt; 0.8) is
 well-resolved; a locus with many medium-sized points in one set has
@@ -708,7 +710,7 @@ relationships in cross-trait genomics:</p>
 <p>The relationship between minor allele frequency and effect size
 reveals a trait’s genetic architecture.</p>
 <p><strong>How to interpret:</strong> Most complex traits show a cloud
-of small effects at common frequencies (lower left) — this is
+of small effects at common frequencies (lower left): this is
 polygenicity. Rare variants with large effects (upper left) are
 characteristic of more Mendelian-like architecture. An empty upper-right
 corner (large effects at common MAF) is expected because natural
@@ -730,12 +732,12 @@ the genome. Regions with low coverage (centromeres, heterochromatin)
 appear as gaps, while high-density regions stand out. Two rendering
 styles are available.</p>
 <p><strong>Heatmap style</strong> bins variants and colors tiles by
-count — best for large datasets:</p>
+count, best for large datasets:</p>
 <div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/snp_density.html">snp_density</a></span><span class="op">(</span><span class="va">example_gwas</span>, bin_size <span class="op">=</span> <span class="fl">5e6</span>, chr_info <span class="op">=</span> <span class="fu"><a href="../reference/chr_info.html">chr_info_human</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggwas_files/figure-html/density-heatmap-1.png" class="r-plt" alt="" width="100%"></p>
 <p><strong>Points style</strong> draws individual variants on chromosome
-outlines — density is visible through natural clustering:</p>
+outlines, where density is visible through natural clustering:</p>
 <div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/snp_density.html">snp_density</a></span><span class="op">(</span><span class="va">example_gwas</span>, style <span class="op">=</span> <span class="st">"points"</span>, chr_info <span class="op">=</span> <span class="fu"><a href="../reference/chr_info.html">chr_info_human</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="ggwas_files/figure-html/density-points-1.png" class="r-plt" alt="" width="100%"></p>
@@ -773,7 +775,7 @@ UCSC:</p>
 <p>A critical quality-control visualization: compare genotyping density
 (top track) against association signal strength (bottom track) for each
 chromosome. This helps distinguish genuine signals from density
-artifacts — if a region shows strong association AND high variant
+artifacts: if a region shows strong association AND high variant
 density, the signal could be driven by uneven coverage rather than
 biology.</p>
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
@@ -789,7 +791,7 @@ are the most convincing signals.</p>
 <div class="section level3">
 <h3 id="color-palettes">Color palettes<a class="anchor" aria-label="anchor" href="#color-palettes"></a>
 </h3>
-<p>ggwas ships with 14 palettes covering different use cases —
+<p>ggwas ships with 14 palettes covering different use cases:
 colorblind-safe defaults, journal-inspired schemes, and RColorBrewer
 integrations:</p>
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
@@ -875,7 +877,7 @@ requirements:</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fig</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">example_gwas</span>, label_top_n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="../reference/journal_themes.html">theme_nature</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Nature — single column (89 mm width)</span></span>
+<span><span class="co"># Nature: single column (89 mm width)</span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggsave.html" class="external-link">ggsave</a></span><span class="op">(</span><span class="st">"figure1.pdf"</span>, <span class="va">fig</span>, width <span class="op">=</span> <span class="fl">89</span>, height <span class="op">=</span> <span class="fl">55</span>, units <span class="op">=</span> <span class="st">"mm"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Full-width figure (183 mm)</span></span>
@@ -914,15 +916,15 @@ requirements:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     </span></span>
-<span><span class="co">#&gt;  [4] BiocManager_1.30.27 Rcpp_1.1.1-1.1      gridExtra_2.3.1    </span></span>
+<span><span class="co">#&gt;  [4] BiocManager_1.30.27 Rcpp_1.1.2          gridExtra_2.3.1    </span></span>
 <span><span class="co">#&gt;  [7] jquerylib_0.1.4     systemfonts_1.3.2   scales_1.4.0       </span></span>
 <span><span class="co">#&gt; [10] textshaping_1.0.5   yaml_2.3.12         fastmap_1.2.0      </span></span>
 <span><span class="co">#&gt; [13] R6_2.6.1            labeling_0.4.3      knitr_1.51         </span></span>
 <span><span class="co">#&gt; [16] ggrepel_0.9.8       bookdown_0.47       desc_1.4.3         </span></span>
-<span><span class="co">#&gt; [19] bslib_0.11.0        RColorBrewer_1.1-3  rlang_1.2.0        </span></span>
-<span><span class="co">#&gt; [22] cachem_1.1.0        xfun_0.59           fs_2.1.0           </span></span>
+<span><span class="co">#&gt; [19] bslib_0.11.0        RColorBrewer_1.1-3  rlang_1.3.0        </span></span>
+<span><span class="co">#&gt; [22] cachem_1.1.0        xfun_0.60           fs_2.1.0           </span></span>
 <span><span class="co">#&gt; [25] sass_0.4.10         S7_0.2.2            otel_0.2.0         </span></span>
-<span><span class="co">#&gt; [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.0      </span></span>
+<span><span class="co">#&gt; [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.1      </span></span>
 <span><span class="co">#&gt; [31] withr_3.0.3         digest_0.6.39       grid_4.6.1         </span></span>
 <span><span class="co">#&gt; [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     </span></span>
 <span><span class="co">#&gt; [37] glue_1.8.1          data.table_1.18.4   farver_2.1.2       </span></span>
@@ -940,7 +942,7 @@ requirements:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>

@@ -1,9 +1,9 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   ggwas: ggwas.html
-last_built: 2026-07-06T13:51Z
+last_built: 2026-07-19T17:43Z
 urls:
   reference: https://bczech.github.io/ggwas/reference
   article: https://bczech.github.io/ggwas/articles
