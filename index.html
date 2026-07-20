@@ -188,17 +188,20 @@
 <div class="section level2">
 <h2 id="comparison">Comparison<a class="anchor" aria-label="anchor" href="#comparison"></a>
 </h2>
+<p>The closest ggplot2-native package is <a href="https://github.com/totajuliusd/topr" class="external-link">topr</a>; ggwas matches its regional/gene depth and adds the genome-wide and post-GWAS breadth below.</p>
 <table class="table">
 <colgroup>
-<col width="25%">
-<col width="25%">
-<col width="25%">
-<col width="25%">
+<col width="20%">
+<col width="20%">
+<col width="20%">
+<col width="20%">
+<col width="20%">
 </colgroup>
 <thead><tr>
 <th>Feature</th>
 <th>qqman</th>
 <th>CMplot</th>
+<th>topr</th>
 <th><strong>ggwas</strong></th>
 </tr></thead>
 <tbody>
@@ -206,106 +209,159 @@
 <td>ggplot2-native</td>
 <td>No</td>
 <td>No</td>
+<td>Yes</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Manhattan + QQ</td>
 <td>Yes</td>
 <td>Yes</td>
-<td><strong>Yes + CI + lambda + stratified</strong></td>
+<td>Yes</td>
+<td><strong>Yes + CI + λ + MAF-stratified</strong></td>
 </tr>
 <tr>
 <td>Miami plot</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
-<td>Locus Zoom</td>
+<td>Locus zoom</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (with LD + gene track)</strong></td>
+<td>Yes</td>
+<td><strong>Yes (LD + gene track)</strong></td>
 </tr>
 <tr>
 <td>Circular Manhattan</td>
 <td>No</td>
-<td>Yes (base R)</td>
-<td><strong>Yes (ggplot2, multi-ring)</strong></td>
+<td>Yes</td>
+<td>No</td>
+<td><strong>Yes (multi-ring)</strong></td>
 </tr>
 <tr>
 <td>Enrichment Manhattan</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Multi-trait overlay</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel, pleiotropy)</strong></td>
+<td>Yes</td>
+<td><strong>Yes (pleiotropy)</strong></td>
 </tr>
 <tr>
 <td>Genome-wide heatmap</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Effect-size volcano</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Summary dashboard</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>PheWAS plot</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
-<td>Colocalization plot</td>
+<td>Colocalization</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Fine-mapping (PIP)</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Genetic correlation</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Architecture plot</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Trumpet (power) plot</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Forest plot</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Effect comparison</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>SNP density karyogram</td>
 <td>No</td>
+<td>Yes</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Density vs signal</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (novel)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
-<td>Gene labels on peaks</td>
+<td>Gene track (with exons)</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td>Built-in gene models</td>
+<td>No</td>
+<td>No</td>
+<td>Yes</td>
+<td><strong>Yes (GRCh37/38)</strong></td>
+</tr>
+<tr>
+<td>GRanges interoperability</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 <td><strong>Yes</strong></td>
@@ -314,16 +370,19 @@
 <td>Region highlights</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
-<td>Top hits table</td>
+<td>Top hits (clumping)</td>
 <td>No</td>
 <td>No</td>
-<td><strong>Yes (with clumping)</strong></td>
+<td>No</td>
+<td><strong>Yes</strong></td>
 </tr>
 <tr>
 <td>Journal themes</td>
+<td>No</td>
 <td>No</td>
 <td>No</td>
 <td><strong>6 themes + 4 presets</strong></td>
@@ -332,18 +391,21 @@
 <td>Color palettes</td>
 <td>Limited</td>
 <td>Limited</td>
-<td><strong>14 palettes (colorblind-safe)</strong></td>
+<td>Limited</td>
+<td><strong>14 (colorblind-safe)</strong></td>
 </tr>
 <tr>
 <td>Auto-detect formats</td>
 <td>No</td>
 <td>No</td>
+<td>No</td>
 <td><strong>Yes</strong></td>
 </tr>
 <tr>
-<td>Smart downsampling</td>
+<td>Downsampling</td>
 <td>No</td>
 <td>No</td>
+<td>Yes</td>
 <td><strong>Yes</strong></td>
 </tr>
 </tbody>
@@ -510,48 +572,54 @@
 <div class="section level2">
 <h2 id="performance">Performance<a class="anchor" aria-label="anchor" href="#performance"></a>
 </h2>
-<p>Smart downsampling kicks in automatically for large datasets. It preserves all significant variants and bins the non-significant background. The plot looks identical but renders in seconds instead of minutes:</p>
+<p>Smart downsampling keeps every significant variant and spatially bins the denser background, capping the number of plotted points. Render time therefore stays roughly flat as datasets grow, while base-R (<code>qqman</code>, <code>CMplot</code>) and other ggplot2 tools (<code>topr</code>) scale with variant count. Median of 5 runs on the GIANT height GWAS, Manhattan render time in seconds:</p>
 <table class="table">
 <thead><tr>
 <th>Variants</th>
 <th>qqman</th>
+<th>CMplot</th>
+<th>topr</th>
 <th>ggwas</th>
-<th>Speedup</th>
 </tr></thead>
 <tbody>
 <tr>
 <td>50k</td>
-<td>0.17s</td>
-<td>0.06s</td>
-<td><strong>2.6x</strong></td>
+<td>0.33</td>
+<td>0.21</td>
+<td>0.26</td>
+<td><strong>0.19</strong></td>
 </tr>
 <tr>
 <td>200k</td>
-<td>0.80s</td>
-<td>0.11s</td>
-<td><strong>7.0x</strong></td>
+<td>1.31</td>
+<td>0.70</td>
+<td>0.73</td>
+<td><strong>0.53</strong></td>
 </tr>
 <tr>
 <td>500k</td>
-<td>2.03s</td>
-<td>1.01s</td>
-<td><strong>2.0x</strong></td>
+<td>3.12</td>
+<td>1.65</td>
+<td>2.01</td>
+<td><strong>1.26</strong></td>
 </tr>
 <tr>
 <td>1M</td>
-<td>4.08s</td>
-<td>1.24s</td>
-<td><strong>3.3x</strong></td>
+<td>6.56</td>
+<td>3.37</td>
+<td>3.96</td>
+<td><strong>1.48</strong></td>
 </tr>
 <tr>
 <td>1.37M</td>
-<td>5.71s</td>
-<td>0.65s</td>
-<td><strong>8.8x</strong></td>
+<td>9.15</td>
+<td>6.32</td>
+<td>6.61</td>
+<td><strong>1.30</strong></td>
 </tr>
 </tbody>
 </table>
-<p><img src="reference/figures/benchmark.png" width="600" alt="Benchmark: ggwas vs qqman"></p>
+<p><img src="reference/figures/benchmark.png" width="600" alt="Manhattan render time vs dataset size for qqman, CMplot, topr and ggwas"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/manhattan_plot.html">manhattan_plot</a></span><span class="op">(</span><span class="va">large_gwas</span><span class="op">)</span>  <span class="co"># 10M SNPs, auto-downsampled to ~200k points</span></span></code></pre></div>
 </div>

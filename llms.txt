@@ -57,32 +57,42 @@ Full documentation with worked examples:
 
 ## Comparison
 
-| Feature | qqman | CMplot | **ggwas** |
-|----|----|----|----|
-| ggplot2-native | No | No | **Yes** |
-| Manhattan + QQ | Yes | Yes | **Yes + CI + lambda + stratified** |
-| Miami plot | No | No | **Yes** |
-| Locus Zoom | No | No | **Yes (with LD + gene track)** |
-| Circular Manhattan | No | Yes (base R) | **Yes (ggplot2, multi-ring)** |
-| Enrichment Manhattan | No | No | **Yes (novel)** |
-| Multi-trait overlay | No | No | **Yes (novel, pleiotropy)** |
-| Genome-wide heatmap | No | No | **Yes (novel)** |
-| Effect-size volcano | No | No | **Yes (novel)** |
-| Summary dashboard | No | No | **Yes (novel)** |
-| PheWAS plot | No | No | **Yes** |
-| Colocalization plot | No | No | **Yes (novel)** |
-| Fine-mapping (PIP) | No | No | **Yes (novel)** |
-| Genetic correlation | No | No | **Yes (novel)** |
-| Architecture plot | No | No | **Yes (novel)** |
-| SNP density karyogram | No | No | **Yes (novel)** |
-| Density vs signal | No | No | **Yes (novel)** |
-| Gene labels on peaks | No | No | **Yes** |
-| Region highlights | No | No | **Yes** |
-| Top hits table | No | No | **Yes (with clumping)** |
-| Journal themes | No | No | **6 themes + 4 presets** |
-| Color palettes | Limited | Limited | **14 palettes (colorblind-safe)** |
-| Auto-detect formats | No | No | **Yes** |
-| Smart downsampling | No | No | **Yes** |
+The closest ggplot2-native package is
+[topr](https://github.com/totajuliusd/topr); ggwas matches its
+regional/gene depth and adds the genome-wide and post-GWAS breadth
+below.
+
+| Feature | qqman | CMplot | topr | **ggwas** |
+|----|----|----|----|----|
+| ggplot2-native | No | No | Yes | **Yes** |
+| Manhattan + QQ | Yes | Yes | Yes | **Yes + CI + λ + MAF-stratified** |
+| Miami plot | No | No | No | **Yes** |
+| Locus zoom | No | No | Yes | **Yes (LD + gene track)** |
+| Circular Manhattan | No | Yes | No | **Yes (multi-ring)** |
+| Enrichment Manhattan | No | No | No | **Yes** |
+| Multi-trait overlay | No | No | Yes | **Yes (pleiotropy)** |
+| Genome-wide heatmap | No | No | No | **Yes** |
+| Effect-size volcano | No | No | No | **Yes** |
+| Summary dashboard | No | No | No | **Yes** |
+| PheWAS plot | No | No | No | **Yes** |
+| Colocalization | No | No | No | **Yes** |
+| Fine-mapping (PIP) | No | No | No | **Yes** |
+| Genetic correlation | No | No | No | **Yes** |
+| Architecture plot | No | No | No | **Yes** |
+| Trumpet (power) plot | No | No | No | **Yes** |
+| Forest plot | No | No | Yes | **Yes** |
+| Effect comparison | No | No | Yes | **Yes** |
+| SNP density karyogram | No | Yes | No | **Yes** |
+| Density vs signal | No | No | No | **Yes** |
+| Gene track (with exons) | No | No | Yes | **Yes** |
+| Built-in gene models | No | No | Yes | **Yes (GRCh37/38)** |
+| GRanges interoperability | No | No | No | **Yes** |
+| Region highlights | No | No | No | **Yes** |
+| Top hits (clumping) | No | No | No | **Yes** |
+| Journal themes | No | No | No | **6 themes + 4 presets** |
+| Color palettes | Limited | Limited | Limited | **14 (colorblind-safe)** |
+| Auto-detect formats | No | No | No | **Yes** |
+| Downsampling | No | No | Yes | **Yes** |
 
 ## Installation
 
@@ -218,20 +228,23 @@ manhattan_plot(gwas, colors = gwas_palette("nature"))
 
 ## Performance
 
-Smart downsampling kicks in automatically for large datasets. It
-preserves all significant variants and bins the non-significant
-background. The plot looks identical but renders in seconds instead of
-minutes:
+Smart downsampling keeps every significant variant and spatially bins
+the denser background, capping the number of plotted points. Render time
+therefore stays roughly flat as datasets grow, while base-R (`qqman`,
+`CMplot`) and other ggplot2 tools (`topr`) scale with variant count.
+Median of 5 runs on the GIANT height GWAS, Manhattan render time in
+seconds:
 
-| Variants | qqman | ggwas | Speedup  |
-|----------|-------|-------|----------|
-| 50k      | 0.17s | 0.06s | **2.6x** |
-| 200k     | 0.80s | 0.11s | **7.0x** |
-| 500k     | 2.03s | 1.01s | **2.0x** |
-| 1M       | 4.08s | 1.24s | **3.3x** |
-| 1.37M    | 5.71s | 0.65s | **8.8x** |
+| Variants | qqman | CMplot | topr | ggwas    |
+|----------|-------|--------|------|----------|
+| 50k      | 0.33  | 0.21   | 0.26 | **0.19** |
+| 200k     | 1.31  | 0.70   | 0.73 | **0.53** |
+| 500k     | 3.12  | 1.65   | 2.01 | **1.26** |
+| 1M       | 6.56  | 3.37   | 3.96 | **1.48** |
+| 1.37M    | 9.15  | 6.32   | 6.61 | **1.30** |
 
-![Benchmark: ggwas vs qqman](reference/figures/benchmark.png)
+![Manhattan render time vs dataset size for qqman, CMplot, topr and
+ggwas](reference/figures/benchmark.png)
 
 ``` r
 
