@@ -98,7 +98,7 @@ A ggplot object.
 
 ``` r
 phewas_data <- data.frame(
-  phenotype = paste0("Pheno_", 1:50),
+  phenotype = paste0("Pheno_", seq_len(50)),
   p = 10^(-runif(50, 0, 8)),
   category = rep(c("Metabolic", "Immune", "Neuro", "Cardio", "Other"), 10),
   beta = rnorm(50, 0, 0.2)

@@ -27,7 +27,9 @@ as_gwas_data(
 
 - x:
 
-  A data.frame, tibble, or data.table.
+  A data.frame, tibble, data.table, or a Bioconductor `GRanges` object
+  (variant positions are taken from the ranges and association
+  statistics from the metadata columns).
 
 - chr, bp, snp, p, beta, se, a1, a2, af, n, info:
 

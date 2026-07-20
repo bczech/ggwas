@@ -47,6 +47,10 @@ figures.
 | ![](reference/figures/example_locus.png) | ![](reference/figures/example_beta_min.png) |
 | **Genetic architecture** | **Journal themes** |
 | ![](reference/figures/example_architecture.png) | ![](reference/figures/example_themes.png) |
+| **Trumpet plot (power contours)** | **Forest plot** |
+| ![](reference/figures/example_trumpet.png) | ![](reference/figures/example_forest.png) |
+| **Effect comparison** | **Gene track with exons** |
+| ![](reference/figures/example_effect_compare.png) | ![](reference/figures/example_gene_exons.png) |
 
 Full documentation with worked examples:
 **<https://bczech.github.io/ggwas/>**

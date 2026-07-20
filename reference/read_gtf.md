@@ -53,14 +53,13 @@ or `locus_plot(gene_data = ...)`.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
-# Ensembl GTF
-genes <- read_gtf("Homo_sapiens.GRCh38.110.gtf.gz")
-
-# Use with gene_track
-gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6)
-
-# GFF3 format
-genes <- read_gtf("gencode.v44.annotation.gff3.gz")
-} # }
+f <- system.file("extdata", "example.gtf", package = "ggwas")
+genes <- read_gtf(f)
+#> Read 4 gene features from example.gtf.
+head(genes)
+#>   chr   start     end strand  gene      gene_id
+#> 1   1 1000000 2000000      + GeneA ENSG00000001
+#> 2   1 5000000 6500000      - GeneB ENSG00000002
+#> 3   1 8000000 9000000      + GeneC ENSG00000003
+#> 4   2 3000000 4000000      + GeneD ENSG00000004
 ```

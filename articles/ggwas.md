@@ -22,8 +22,8 @@ multi-panel figures.
 
 `ggwas` was designed with three goals:
 
-1.  **Comprehensive coverage**: 17 plot types in one package, including
-    novel visualizations not available elsewhere.
+1.  **Broad coverage**: 20 plot types in one package, including views
+    not found in other GWAS plotting packages.
 2.  **Publication-ready defaults**: sensible colors, proper axis
     formatting, and built-in journal themes so plots look good without
     tweaking.
@@ -780,6 +780,55 @@ architecture_plot(example_gwas, p_threshold = 0.001, label_top_n = 5)
 ```
 
 ![](ggwas_files/figure-html/architecture-1.png)
+
+### Trumpet plot: power to detect
+
+The trumpet plot overlays statistical-power contours on the
+effect-versus-frequency relationship, showing which variants a study of
+a given sample size is powered to detect. The contours flare toward rare
+variants, giving the plot its shape; points below them fall in the
+region the study is underpowered for.
+
+``` r
+
+trumpet_plot(example_gwas, n = 50000, label_top_n = 3)
+```
+
+![](ggwas_files/figure-html/trumpet-1.png)
+
+### Forest plots and cross-study comparison
+
+A forest plot summarizes effect estimates with confidence intervals, for
+example across cohorts or for a set of lead variants:
+
+``` r
+
+lead <- head(example_gwas[order(example_gwas$P), ], 10)
+forest_plot(lead, order_by = "effect")
+```
+
+![](ggwas_files/figure-html/forest-1.png)
+
+[`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
+scatters the effects of two studies on their shared variants to assess
+replication and effect concordance:
+
+``` r
+
+set.seed(1)
+replication <- example_gwas
+replication$BETA <- replication$BETA + rnorm(nrow(replication), 0, 0.02)
+effect_compare_plot(example_gwas, replication,
+                    labels = c("Discovery", "Replication"), p_threshold = 1e-3)
+```
+
+![](ggwas_files/figure-html/effect-compare-1.png)
+
+Regional and gene-labelled plots can use the bundled protein-coding gene
+models via `gene_annotation("GRCh38")` (or `"GRCh37"`), so no GTF
+download is needed; passing `exon_data` to
+[`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
+draws full exon structure.
 
 ## Genome-wide density
 

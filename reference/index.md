@@ -96,6 +96,8 @@ Reading GWAS summary statistics
   : Read GEMMA association results
 - [`as_gwas_data()`](https://bczech.github.io/ggwas/reference/as_gwas_data.md)
   : Create a gwas_data object
+- [`as_granges()`](https://bczech.github.io/ggwas/reference/as_granges.md)
+  : Convert GWAS results to a GRanges object
 - [`validate_gwas_data()`](https://bczech.github.io/ggwas/reference/validate_gwas_data.md)
   : Validate a gwas_data object
 

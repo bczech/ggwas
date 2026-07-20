@@ -2,6 +2,11 @@
 
 ## ggwas 0.99.3
 
+- Added GRanges interoperability:
+  [`as_granges()`](https://bczech.github.io/ggwas/reference/as_granges.md)
+  exports results to a Bioconductor GRanges, and
+  [`as_gwas_data()`](https://bczech.github.io/ggwas/reference/as_gwas_data.md)
+  now accepts GRanges input
 - Added
   [`trumpet_plot()`](https://bczech.github.io/ggwas/reference/trumpet_plot.md):
   effect size versus minor allele frequency with statistical-power

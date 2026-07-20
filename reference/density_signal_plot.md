@@ -76,7 +76,7 @@ density_signal_plot(example_gwas, bin_size = 5e6,
 
 
 # Subset to specific chromosomes
-density_signal_plot(example_gwas, bin_size = 5e6, chromosomes = 1:5)
+density_signal_plot(example_gwas, bin_size = 5e6, chromosomes = seq_len(5))
 
 
 # Different palettes
