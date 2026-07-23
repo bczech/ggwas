@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,11 +33,17 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.5" id="ggwas-0995">ggwas 0.99.5<a class="anchor" aria-label="anchor" href="#ggwas-0995"></a></h2>
+<ul><li>
+<code><a href="../reference/trumpet_plot.html">trumpet_plot()</a></code>, <code><a href="../reference/forest_plot.html">forest_plot()</a></code> and <code><a href="../reference/effect_compare_plot.html">effect_compare_plot()</a></code> match column names case-insensitively, like <code><a href="../reference/as_gwas_data.html">as_gwas_data()</a></code>
+</li>
+</ul></div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.4" id="ggwas-0994">ggwas 0.99.4<a class="anchor" aria-label="anchor" href="#ggwas-0994"></a></h2>
 <ul><li>Column auto-detection is now case-insensitive, so lowercase headers (<code>pos</code>, <code>#chrom</code>, <code>alt</code>, …) are recognized</li>
 <li>
 <code>-log10(p)</code> columns (<code>LOG10P</code>, <code>neg_log_pvalue</code>, …) are auto-detected and back-transformed</li>
-<li>Fixed an error (“Multiple quantities for pluralization”) when more than one required column could not be detected; the message is now clear and actionable</li>
+<li>Fixed a crash when more than one required column could not be detected; the error now lists the missing columns</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.3" id="ggwas-0993">ggwas 0.99.3<a class="anchor" aria-label="anchor" href="#ggwas-0993"></a></h2>
