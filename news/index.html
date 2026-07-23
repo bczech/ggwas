@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,13 @@
       <small>Source: <a href="https://github.com/bczech/ggwas/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.4" id="ggwas-0994">ggwas 0.99.4<a class="anchor" aria-label="anchor" href="#ggwas-0994"></a></h2>
+<ul><li>Column auto-detection is now case-insensitive, so lowercase headers (<code>pos</code>, <code>#chrom</code>, <code>alt</code>, …) are recognized</li>
+<li>
+<code>-log10(p)</code> columns (<code>LOG10P</code>, <code>neg_log_pvalue</code>, …) are auto-detected and back-transformed</li>
+<li>Fixed an error (“Multiple quantities for pluralization”) when more than one required column could not be detected; the message is now clear and actionable</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.3" id="ggwas-0993">ggwas 0.99.3<a class="anchor" aria-label="anchor" href="#ggwas-0993"></a></h2>
 <ul><li>Added GRanges interoperability: <code><a href="../reference/as_granges.html">as_granges()</a></code> exports results to a Bioconductor GRanges, and <code><a href="../reference/as_gwas_data.html">as_gwas_data()</a></code> now accepts GRanges input</li>

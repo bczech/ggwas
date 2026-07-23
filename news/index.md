@@ -1,5 +1,15 @@
 # Changelog
 
+## ggwas 0.99.4
+
+- Column auto-detection is now case-insensitive, so lowercase headers
+  (`pos`, `#chrom`, `alt`, …) are recognized
+- `-log10(p)` columns (`LOG10P`, `neg_log_pvalue`, …) are auto-detected
+  and back-transformed
+- Fixed an error (“Multiple quantities for pluralization”) when more
+  than one required column could not be detected; the message is now
+  clear and actionable
+
 ## ggwas 0.99.3
 
 - Added GRanges interoperability:
