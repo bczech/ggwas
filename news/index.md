@@ -1,5 +1,13 @@
 # Changelog
 
+## ggwas 0.99.6
+
+- [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md)
+  with a single `y_truncate` value now keeps the peaks above the break
+  and compresses them, instead of dropping everything up to the top
+- The summary dashboard top-hits table shows the base-pair position
+  again (it was printing `NULL`)
+
 ## ggwas 0.99.5
 
 - [`trumpet_plot()`](https://bczech.github.io/ggwas/reference/trumpet_plot.md),

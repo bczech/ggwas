@@ -14,6 +14,8 @@ Useful links:
 
 - <https://github.com/bczech/ggwas>
 
+- <https://bczech.github.io/ggwas/>
+
 - Report bugs at <https://github.com/bczech/ggwas/issues>
 
 ## Author

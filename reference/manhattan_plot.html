@@ -9,7 +9,7 @@ Returns a ggplot2 object for further customization."><meta property="og:image" c
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -162,11 +162,13 @@ large, robust effect sizes rather than just small p-values.</p></dd>
 
 
 <dt id="arg-y-truncate">y_truncate<a class="anchor" aria-label="anchor" href="#arg-y-truncate"></a></dt>
-<dd><p>Break the y-axis to cut out a middle region. Either
-a single value (break point, resumes at max value) or a vector of
-two values <code>c(break_from, resume_at)</code> defining the cut range in
--log10(p) units. For example, <code>y_truncate = c(15, 50)</code> shows 0-15
-at full scale, cuts 15-50, then shows 50+ above the break.</p></dd>
+<dd><p>Break the y-axis for datasets with extreme peaks. A
+single value shows 0 to that value at full scale and compresses
+everything above it into a band above the break (nothing is dropped),
+e.g. <code>y_truncate = 15</code>. A vector of two values <code>c(break_from, resume_at)</code>
+instead cuts out the middle region: <code>y_truncate = c(15, 50)</code> shows 0-15
+at full scale, drops 15-50, then shows 50+ above the break. Units are
+-log10(p).</p></dd>
 
 
 <dt id="arg-title">title<a class="anchor" aria-label="anchor" href="#arg-title"></a></dt>
