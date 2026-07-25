@@ -58,7 +58,7 @@ BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 ``` r
 
 library(ggwas)
-#> ggwas v0.99.6
+#> ggwas v0.99.7
 library(ggplot2)
 
 data(example_gwas)
@@ -1061,7 +1061,7 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.6     BiocStyle_2.40.0
+#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.7     BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     

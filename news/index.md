@@ -1,5 +1,13 @@
 # Changelog
 
+## ggwas 0.99.7
+
+- SNP and gene labels across all plots now share one repel style, so
+  they spread out, always keep a connector line, and stay off the points
+- Manhattan plots leave headroom at the top, giving top-hit labels room
+  to sit
+- The summary dashboard top-hits table no longer clips its bottom rows
+
 ## ggwas 0.99.6
 
 - [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md)
