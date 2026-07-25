@@ -1,5 +1,12 @@
 # Changelog
 
+## ggwas 0.99.8
+
+- Point labels now sit in the empty part of the plot with a connector
+  line down to the variant, instead of landing on the points. Manhattan
+  labels go into the headroom above the peaks; trumpet and volcano
+  labels move off the dense band
+
 ## ggwas 0.99.7
 
 - SNP and gene labels across all plots now share one repel style, so
