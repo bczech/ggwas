@@ -10,6 +10,7 @@
 ^ggwas\.Rcheck$
 ^ggwas\.BiocCheck$
 ^paper$
+^paper-scripts$
 ^Meta$
 ^doc$
 ^Rplots\.pdf$
