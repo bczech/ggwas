@@ -107,6 +107,10 @@ pak::pak("bczech/ggwas")
 
 library(ggwas)
 
+# Try it on the bundled example dataset
+data(example_gwas)          # a data.frame of GWAS results (CHR, BP, SNP, P, ...)
+manhattan_plot(example_gwas)
+
 # Read any GWAS results file (columns auto-detected)
 gwas <- read_gwas_table("my_results.txt")
 
