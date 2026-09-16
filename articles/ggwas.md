@@ -58,7 +58,7 @@ BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 ``` r
 
 library(ggwas)
-#> ggwas v0.99.8
+#> ggwas v0.99.9
 library(ggplot2)
 
 data(example_gwas)
@@ -1042,7 +1042,7 @@ ggsave("figure1.png", fig, width = 10, height = 5, dpi = 300)
 sessionInfo()
 #> R version 4.6.1 (2026-06-24)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.4 LTS
+#> Running under: Ubuntu 24.04.5 LTS
 #> 
 #> Matrix products: default
 #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
@@ -1061,22 +1061,22 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.8     BiocStyle_2.40.0
+#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.9     BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
 #>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
 #>  [4] BiocManager_1.30.27 Rcpp_1.1.2          gridExtra_2.3.1    
 #>  [7] jquerylib_0.1.4     systemfonts_1.3.2   scales_1.4.0       
 #> [10] textshaping_1.0.5   yaml_2.3.12         fastmap_1.2.0      
-#> [13] R6_2.6.1            labeling_0.4.3      knitr_1.51         
-#> [16] ggrepel_0.9.8       bookdown_0.47       desc_1.4.3         
-#> [19] bslib_0.11.0        RColorBrewer_1.1-3  rlang_1.3.0        
+#> [13] R6_2.6.1            labeling_0.4.3      knitr_1.52         
+#> [16] ggrepel_0.9.8       bookdown_0.48       desc_1.4.3         
+#> [19] bslib_0.12.0        RColorBrewer_1.1-3  rlang_1.3.0        
 #> [22] cachem_1.1.0        xfun_0.60           fs_2.1.0           
 #> [25] sass_0.4.10         S7_0.2.2            otel_0.2.0         
 #> [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.1      
 #> [31] withr_3.0.3         digest_0.6.39       grid_4.6.1         
 #> [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     
-#> [37] glue_1.8.1          data.table_1.18.4   farver_2.1.2       
-#> [40] ragg_1.5.2          rmarkdown_2.31      tools_4.6.1        
+#> [37] glue_1.8.1          data.table_1.18.6.1 farver_2.1.2       
+#> [40] ragg_1.5.2          rmarkdown_2.32      tools_4.6.1        
 #> [43] htmltools_0.5.9
 ```

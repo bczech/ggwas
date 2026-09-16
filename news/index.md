@@ -1,5 +1,18 @@
 # Changelog
 
+## ggwas 0.99.9
+
+- Chromosome colours now follow the chromosomes present in the data
+  instead of assuming the human set of 26. Manhattan, Miami and volcano
+  plots of non-human genomes (for example cattle, with 29 autosomes
+  plus X) no longer leave the extra chromosomes uncoloured.
+  [`scale_color_chromosome()`](https://bczech.github.io/ggwas/reference/scale_color_chromosome.md),
+  [`scale_fill_chromosome()`](https://bczech.github.io/ggwas/reference/scale_color_chromosome.md),
+  [`scale_color_gwas()`](https://bczech.github.io/ggwas/reference/scale_color_gwas.md)
+  and
+  [`scale_fill_gwas()`](https://bczech.github.io/ggwas/reference/scale_color_gwas.md)
+  gain a `chromosomes` argument for the same reason.
+
 ## ggwas 0.99.8
 
 - Point labels now sit in the empty part of the plot with a connector

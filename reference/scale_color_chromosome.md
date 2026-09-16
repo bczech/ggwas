@@ -5,9 +5,17 @@ Alternating color scale for chromosomes in Manhattan plots.
 ## Usage
 
 ``` r
-scale_color_chromosome(colors = c("#1A5276", "#76D7C4"), ...)
+scale_color_chromosome(
+  colors = c("#1A5276", "#76D7C4"),
+  chromosomes = NULL,
+  ...
+)
 
-scale_fill_chromosome(colors = c("#1A5276", "#76D7C4"), ...)
+scale_fill_chromosome(
+  colors = c("#1A5276", "#76D7C4"),
+  chromosomes = NULL,
+  ...
+)
 ```
 
 ## Arguments
@@ -15,6 +23,14 @@ scale_fill_chromosome(colors = c("#1A5276", "#76D7C4"), ...)
 - colors:
 
   Two-element character vector of alternating colors.
+
+- chromosomes:
+
+  Chromosome codes present in the data, in the order they appear along
+  the genome. Colors alternate across this set, so any organism is
+  handled (e.g. cattle with 29 autosomes plus X coded as 30). When
+  `NULL`, defaults to the human coding (autosomes 1-22 plus X/Y/XY/MT as
+  23-26).
 
 - ...:
 

@@ -5,9 +5,9 @@ Scale using colorblind-friendly alternating colors for chromosomes.
 ## Usage
 
 ``` r
-scale_color_gwas(palette = "colorblind", ...)
+scale_color_gwas(palette = "colorblind", chromosomes = NULL, ...)
 
-scale_fill_gwas(palette = "colorblind", ...)
+scale_fill_gwas(palette = "colorblind", chromosomes = NULL, ...)
 ```
 
 ## Arguments
@@ -16,6 +16,12 @@ scale_fill_gwas(palette = "colorblind", ...)
 
   Palette name from
   [`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md).
+
+- chromosomes:
+
+  Chromosome codes present in the data, in genomic order. Colors cycle
+  across this set, so non-human karyotypes are handled. When `NULL`,
+  defaults to the human coding (26 chromosomes).
 
 - ...:
 
