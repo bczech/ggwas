@@ -39,6 +39,7 @@ reference:
     desc: "Standard GWAS visualizations"
     contents:
       - manhattan_plot
+      - value_manhattan
       - qq_plot
       - miami_plot
       - locus_plot
@@ -71,6 +72,7 @@ reference:
       - gene_track
       - read_gtf
       - gene_annotation
+      - annotate_positions
       - manhattan_genes
       - annotate_genes
       - highlight_regions

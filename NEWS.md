@@ -1,3 +1,13 @@
+# ggwas 0.99.10
+
+* Add `value_manhattan()` to plot any per-feature value (rankings, effect
+  sizes, scores) along the genome in Manhattan style.
+* Add `annotate_positions()` to map Ensembl gene IDs or symbols to genome
+  coordinates from a GTF, bundled data, biomaRt, or an EnsDb.
+* `value_manhattan()` can look up coordinates from a gene-ID column directly
+  via `annotate` and `id`.
+* Bundled gene annotations now include an Ensembl `gene_id` column.
+
 # ggwas 0.99.9
 
 * Chromosome colours now follow the chromosomes present in the data instead of

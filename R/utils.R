@@ -10,6 +10,14 @@
 
   "SNP", "ID", "rs", "rsid", "MarkerName", "variant_id", "SNPID", "rsID"
 )
+# Gene identifier columns (for value_manhattan annotation lookups).
+.id_patterns <- c(
+  "gene_id", "GeneID", "ensembl_gene_id", "ENSEMBL", "ensembl",
+  "feature_id", "gene"
+)
+# Gene-level position columns, used only as a value_manhattan fallback so GWAS
+# position detection stays unchanged.
+.bp_gene_patterns <- c("start", "gene_start", "txStart", "Start")
 .p_patterns <- c(
   "P", "PVALUE", "P_VALUE", "p_value", "pvalue", "p.value",
   "P_BOLT_LMM_INF", "P_BOLT_LMM", "p_wald", "p_lrt", "Pvalue"

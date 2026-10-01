@@ -8,7 +8,7 @@
 #'
 #' @param build Genome build: `"GRCh38"` (default) or `"GRCh37"`.
 #' @return A data.frame with columns `chr` (integer), `start`, `end`,
-#'   `gene`, and `strand`.
+#'   `gene` (symbol), `strand`, and `gene_id` (Ensembl gene ID).
 #' @export
 #' @examples
 #' genes <- gene_annotation("GRCh38")

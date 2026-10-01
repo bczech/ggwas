@@ -11,7 +11,7 @@ gene_annotation(build = c("GRCh38", "GRCh37"))
 }
 \value{
 A data.frame with columns \code{chr} (integer), \code{start}, \code{end},
-\code{gene}, and \code{strand}.
+\code{gene} (symbol), \code{strand}, and \code{gene_id} (Ensembl gene ID).
 }
 \description{
 Return a data.frame of protein-coding gene positions bundled with ggwas,
