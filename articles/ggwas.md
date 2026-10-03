@@ -58,7 +58,7 @@ BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 ``` r
 
 library(ggwas)
-#> ggwas v0.99.9
+#> ggwas v0.99.10
 library(ggplot2)
 
 data(example_gwas)
@@ -1061,22 +1061,24 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> other attached packages:
-#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.9     BiocStyle_2.40.0
+#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.10    BiocStyle_2.40.0
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
-#>  [4] BiocManager_1.30.27 Rcpp_1.1.2          gridExtra_2.3.1    
-#>  [7] jquerylib_0.1.4     systemfonts_1.3.2   scales_1.4.0       
-#> [10] textshaping_1.0.5   yaml_2.3.12         fastmap_1.2.0      
-#> [13] R6_2.6.1            labeling_0.4.3      knitr_1.52         
-#> [16] ggrepel_0.9.8       bookdown_0.48       desc_1.4.3         
-#> [19] bslib_0.12.0        RColorBrewer_1.1-3  rlang_1.3.0        
-#> [22] cachem_1.1.0        xfun_0.60           fs_2.1.0           
-#> [25] sass_0.4.10         S7_0.2.2            otel_0.2.0         
-#> [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.1      
-#> [31] withr_3.0.3         digest_0.6.39       grid_4.6.1         
-#> [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     
-#> [37] glue_1.8.1          data.table_1.18.6.1 farver_2.1.2       
-#> [40] ragg_1.5.2          rmarkdown_2.32      tools_4.6.1        
-#> [43] htmltools_0.5.9
+#>  [1] gtable_0.3.6        jsonlite_2.0.0      dplyr_1.2.1        
+#>  [4] compiler_4.6.1      BiocManager_1.30.27 Rcpp_1.1.2         
+#>  [7] tidyselect_1.2.1    gridExtra_2.3.1     jquerylib_0.1.4    
+#> [10] systemfonts_1.3.2   scales_1.4.0        textshaping_1.0.5  
+#> [13] yaml_2.3.12         fastmap_1.2.0       R6_2.6.1           
+#> [16] labeling_0.4.3      generics_0.1.4      knitr_1.52         
+#> [19] ggrepel_0.9.8       tibble_3.3.1        bookdown_0.48      
+#> [22] desc_1.4.3          bslib_0.12.0        pillar_1.11.1      
+#> [25] RColorBrewer_1.1-3  rlang_1.3.0         cachem_1.1.0       
+#> [28] xfun_0.61           fs_2.1.0            sass_0.4.10        
+#> [31] S7_0.2.2            otel_0.2.0          viridisLite_0.4.3  
+#> [34] cli_3.6.6           withr_3.0.3         pkgdown_2.2.1      
+#> [37] magrittr_2.0.5      digest_0.6.39       grid_4.6.1         
+#> [40] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     
+#> [43] glue_1.8.1          data.table_1.18.6.1 farver_2.1.2       
+#> [46] ragg_1.5.2          rmarkdown_2.32      pkgconfig_2.0.3    
+#> [49] tools_4.6.1         htmltools_0.5.9
 ```

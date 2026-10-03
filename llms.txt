@@ -286,6 +286,8 @@ Standard GWAS visualizations
 
 - [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md)
   : Manhattan plot
+- [`value_manhattan()`](https://bczech.github.io/ggwas/reference/value_manhattan.md)
+  : Manhattan plot of an arbitrary per-feature value
 - [`qq_plot()`](https://bczech.github.io/ggwas/reference/qq_plot.md) :
   QQ plot for GWAS p-values
 - [`miami_plot()`](https://bczech.github.io/ggwas/reference/miami_plot.md)
@@ -347,6 +349,8 @@ Gene annotation, genomic tracks, region highlights, top hits
   Read gene annotations from GTF/GFF3 file
 - [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
   : Built-in protein-coding gene annotations
+- [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md)
+  : Map gene IDs or symbols to genome coordinates
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   : Add gene labels to a Manhattan plot
 - [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)

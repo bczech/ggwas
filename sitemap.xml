@@ -8,6 +8,7 @@
 <url><loc>https://bczech.github.io/ggwas/index.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/news/index.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/annotate_genes.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/annotate_positions.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/architecture_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/as_granges.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/as_gwas_data.html</loc></url>
@@ -61,6 +62,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/top_hits.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/trumpet_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/validate_gwas_data.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/value_manhattan.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/volcano_plot.html</loc></url>
 </urlset>
 

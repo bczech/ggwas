@@ -24,21 +24,21 @@ gene_annotation(build = c("GRCh38", "GRCh37"))
 
 ## Value
 
-A data.frame with columns `chr` (integer), `start`, `end`, `gene`, and
-`strand`.
+A data.frame with columns `chr` (integer), `start`, `end`, `gene`
+(symbol), `strand`, and `gene_id` (Ensembl gene ID).
 
 ## Examples
 
 ``` r
 genes <- gene_annotation("GRCh38")
 head(genes)
-#>   chr  start    end   gene strand
-#> 1   1  65419  71585  OR4F5      +
-#> 2   1 450740 451678 OR4F29      -
-#> 3   1 685679 686673 OR4F16      -
-#> 4   1 923923 944575 SAMD11      +
-#> 5   1 944203 959309  NOC2L      -
-#> 6   1 960584 965719 KLHL17      +
+#>   chr  start    end   gene strand         gene_id
+#> 1   1  65419  71585  OR4F5      + ENSG00000186092
+#> 2   1 450740 451678 OR4F29      - ENSG00000284733
+#> 3   1 685679 686673 OR4F16      - ENSG00000284662
+#> 4   1 923923 944575 SAMD11      + ENSG00000187634
+#> 5   1 944203 959309  NOC2L      - ENSG00000188976
+#> 6   1 960584 965719 KLHL17      + ENSG00000187961
 
 # Gene track for a region, no GTF needed
 gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 34e6)

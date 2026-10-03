@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,14 @@
       <small>Source: <a href="https://github.com/bczech/ggwas/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.10" id="ggwas-09910">ggwas 0.99.10<a class="anchor" aria-label="anchor" href="#ggwas-09910"></a></h2>
+<ul><li>Add <code><a href="../reference/value_manhattan.html">value_manhattan()</a></code> to plot any per-feature value (rankings, effect sizes, scores) along the genome in Manhattan style.</li>
+<li>Add <code><a href="../reference/annotate_positions.html">annotate_positions()</a></code> to map Ensembl gene IDs or symbols to genome coordinates from a GTF, bundled data, biomaRt, or an EnsDb.</li>
+<li>
+<code><a href="../reference/value_manhattan.html">value_manhattan()</a></code> can look up coordinates from a gene-ID column directly via <code>annotate</code> and <code>id</code>.</li>
+<li>Bundled gene annotations now include an Ensembl <code>gene_id</code> column.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.9" id="ggwas-0999">ggwas 0.99.9<a class="anchor" aria-label="anchor" href="#ggwas-0999"></a></h2>
 <ul><li>Chromosome colours now follow the chromosomes present in the data instead of assuming the human set of 26. Manhattan, Miami and volcano plots of non-human genomes (for example cattle, with 29 autosomes plus X) no longer leave the extra chromosomes uncoloured. <code><a href="../reference/scale_color_chromosome.html">scale_color_chromosome()</a></code>, <code><a href="../reference/scale_color_chromosome.html">scale_fill_chromosome()</a></code>, <code><a href="../reference/scale_color_gwas.html">scale_color_gwas()</a></code> and <code><a href="../reference/scale_color_gwas.html">scale_fill_gwas()</a></code> gain a <code>chromosomes</code> argument for the same reason.</li>
