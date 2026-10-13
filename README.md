@@ -83,7 +83,7 @@ breadth below.
 | Region highlights | No | No | No | **Yes** |
 | Top hits (clumping) | No | No | No | **Yes** |
 | Journal themes | No | No | No | **6 themes + 4 presets** |
-| Color palettes | Limited | Limited | Limited | **14 (colorblind-safe)** |
+| Color palettes | Limited | Limited | Limited | **14 (colorblind-safe default)** |
 | Auto-detect formats | No | No | No | **Yes** |
 | Downsampling | No | No | Yes | **Yes** |
 

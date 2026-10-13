@@ -121,7 +121,7 @@ Initial Bioconductor pre-release.
 
 ## Themes and palettes
 * Journal themes: Nature, Science, Cell, PLOS, presentation, poster
-* 14 colorblind-safe palettes
+* 14 color palettes, with a colorblind-safe default for chromosome colors
 * Publication presets via `gwas_preset()`
 
 ## Data I/O

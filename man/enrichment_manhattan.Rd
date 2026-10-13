@@ -44,7 +44,7 @@ If a named list, names are used as category labels.}
 \item{background_alpha}{Transparency of background points.}
 
 \item{annotation_colors}{Named vector of colors for each annotation
-category. If NULL, uses a colorblind-friendly palette.}
+category. If NULL, colors are taken from \code{palette}.}
 
 \item{annotation_size}{Point size for annotated SNPs.}
 

@@ -20,8 +20,15 @@ gwas_palette(name = "default", n = NULL, type = "alternating")
 A character vector of hex colors.
 }
 \description{
-Pre-defined color palettes optimized for GWAS visualizations.
-All palettes are colorblind-friendly by default.
+Pre-defined color palettes for GWAS visualizations. The two-color palettes
+used by default for chromosomes stay distinguishable under the common
+forms of color blindness: "default" (dark blue and light teal, used by
+\code{\link[=manhattan_plot]{manhattan_plot()}}, \code{\link[=miami_plot]{miami_plot()}}, and \code{\link[=circular_manhattan]{circular_manhattan()}}) and
+"colorblind" (Okabe-Ito blue and orange, used by \code{\link[=scale_color_gwas]{scale_color_gwas()}} and
+\code{\link[=gwas_summary]{gwas_summary()}}). The journal palettes ("nature", "science",
+"lancet", "nejm", "aaas") and "brewer_set1" and "brewer_paired" match
+common figure styles, but they contain both red and green and are not
+colorblind-safe.
 }
 \examples{
 gwas_palette("colorblind")

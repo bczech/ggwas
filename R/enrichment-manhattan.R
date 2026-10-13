@@ -14,7 +14,7 @@
 #' @param background_color Color for non-annotated SNPs.
 #' @param background_alpha Transparency of background points.
 #' @param annotation_colors Named vector of colors for each annotation
-#'   category. If NULL, uses a colorblind-friendly palette.
+#'   category. If NULL, colors are taken from `palette`.
 #' @param annotation_size Point size for annotated SNPs.
 #' @param annotation_alpha Transparency of annotated SNPs.
 #' @param annotation_shape Point shape for annotated SNPs (default 16, circle).
