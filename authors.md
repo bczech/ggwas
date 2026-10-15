@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/bczech/ggwas/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/bczech/ggwas/blob/v0.99.9/inst/CITATION)
 
 Czech B (2026). *ggwas: Modern ggplot2 Visualizations for GWAS Summary
 Statistics*.
