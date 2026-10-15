@@ -1,6 +1,6 @@
 # Reproducibility scripts
 
-Scripts that reproduce the figure and the benchmark in the ggwas Application Note.
+Scripts that reproduce the figure and the benchmark in the ggwas manuscript.
 These files are kept in the repository but excluded from the built package (see
 `.Rbuildignore`).
 
@@ -35,9 +35,16 @@ cd bench
 bash run_bench.sh    # writes results.csv
 ```
 
-`results.csv` in this folder holds the numbers reported in the manuscript.
+`results.csv` holds a run with ggwas 0.99.9 made on 15 October 2026 (R 4.5.1,
+qqman 0.1.9, CMplot 4.5.1, topr 2.0.4, ggplot2 4.0.3, data.table 1.18.4; Apple
+M3 Pro, 18 GB). Table 1 in the submitted manuscript comes from an earlier run in
+July 2026. Most cells differ by less than 10% and the tools rank the same at
+every size.
 
 ## Session
 
 Results depend on the installed versions of qqman, CMplot, topr, and ggwas.
 Record them with `sessionInfo()` when reproducing.
+
+Run the benchmark on mains power. On a MacBook running on battery in low power
+mode, every tool was 1.5 to 1.9 times slower.
