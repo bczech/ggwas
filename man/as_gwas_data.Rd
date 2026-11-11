@@ -32,7 +32,7 @@ If NULL, auto-detection is attempted.}
 will be back-transformed.}
 }
 \value{
-A tibble with class \code{gwas_data}.
+A data.frame with class \code{gwas_data}.
 }
 \description{
 Convert a data.frame to the standardized gwas_data format used by all

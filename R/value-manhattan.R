@@ -8,27 +8,24 @@
 #' transcriptome references, conservation scores, read counts, and similar
 #' per-feature metrics. Returns a ggplot2 object for further customization.
 #'
-#' @param data A data.frame (or tibble/data.table) with one row per feature.
+#' @param data A data.frame (or tibble/data.table) with one row per feature, or
+#'   a [GenomicRanges::GRanges] whose metadata columns hold the value (the
+#'   range start is used as the position).
 #' @param value Name of the column holding the value to plot on the y-axis.
 #'   Required.
 #' @param chr,bp Column names for chromosome and genomic position
-#'   (auto-detected if NULL). Ignored when `annotate` is set, because the
+#'   (auto-detected if NULL). Ignored when `annotation` is set, because the
 #'   coordinates are then looked up from the gene IDs.
-#' @param id Column holding gene identifiers (Ensembl gene IDs or symbols),
-#'   used when `annotate` is set (auto-detected if NULL).
-#' @param annotate Annotation backend to map `id` to genomic coordinates:
-#'   one of `"gtf"`, `"builtin"`, `"biomart"` or `"ensdb"` (see
+#' @param id Column holding gene identifiers (gene IDs or symbols), used when
+#'   `annotation` is set (auto-detected if NULL).
+#' @param annotation Optional gene models used to look up coordinates for the
+#'   `id` column: a [GenomicRanges::GRanges], `TxDb` or `EnsDb` object (see
 #'   [annotate_positions()]). `NULL` (default) means the data already carry
 #'   `chr`/`bp` columns.
-#' @param build Genome build for `annotate = "builtin"`/`"biomart"`:
-#'   `"GRCh38"` (default) or `"GRCh37"`.
-#' @param release Ensembl release for `annotate = "biomart"` (`NULL` = current).
-#' @param gtf Path to a GTF/GFF3 file for `annotate = "gtf"`.
-#' @param ensdb An `EnsDb` object for `annotate = "ensdb"`.
-#' @param id_type Whether `id` holds Ensembl gene IDs (`"ensembl_gene_id"`,
-#'   default) or gene symbols (`"symbol"`).
+#' @param id_type Whether `id` holds gene IDs (`"gene_id"`, default) or gene
+#'   symbols (`"symbol"`).
 #' @param label Column holding feature labels (e.g. gene symbol), used by
-#'   `highlight`, `label_ids` and `label_top_n`. When `annotate` is set and
+#'   `highlight`, `label_ids` and `label_top_n`. When `annotation` is set and
 #'   `label` is NULL, the looked-up gene symbol is used.
 #' @param colors Two-color vector for alternating chromosomes.
 #' @param point_size Point size.
@@ -75,12 +72,8 @@ value_manhattan <- function(data,
                             chr = NULL,
                             bp = NULL,
                             id = NULL,
-                            annotate = NULL,
-                            build = c("GRCh38", "GRCh37"),
-                            release = NULL,
-                            gtf = NULL,
-                            ensdb = NULL,
-                            id_type = c("ensembl_gene_id", "symbol"),
+                            annotation = NULL,
+                            id_type = c("gene_id", "symbol"),
                             label = NULL,
                             colors = c("#1A5276", "#76D7C4"),
                             point_size = 0.8,
@@ -98,6 +91,11 @@ value_manhattan <- function(data,
                             y_limit = NULL,
                             title = NULL) {
 
+  if (methods::is(data, "GRanges")) {
+    data <- .ranges_to_df(data)
+    chr <- "chr"
+    bp <- "start"
+  }
   data <- as.data.frame(data)
   header <- names(data)
 
@@ -110,9 +108,7 @@ value_manhattan <- function(data,
 
   # Look up coordinates from gene IDs when requested, then fall through to the
   # usual chr/bp handling using the columns we just added.
-  if (!is.null(annotate)) {
-    annotate <- match.arg(annotate, c("gtf", "biomart", "ensdb", "builtin"))
-    build <- match.arg(build)
+  if (!is.null(annotation)) {
     id_type <- match.arg(id_type)
 
     id <- id %||% .match_col(header, .id_patterns)
@@ -122,9 +118,8 @@ value_manhattan <- function(data,
         "i" = "Pass it via {.arg id}."
       ))
     }
-    ann <- annotate_positions(data[[id]], source = annotate, build = build,
-                              release = release, gtf = gtf, ensdb = ensdb,
-                              id_type = id_type)
+    ann <- .ranges_to_df(annotate_positions(data[[id]], annotation,
+                                            id_type = id_type))
     hit <- match(data[[id]], ann$id)
     data$.ggwas_chr <- ann$chr[hit]
     data$.ggwas_bp <- ann$start[hit]

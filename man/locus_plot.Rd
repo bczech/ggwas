@@ -10,15 +10,14 @@ locus_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   ld = NULL,
   ld_colors = c("#2166AC", "#67A9CF", "#78C679", "#F4A582", "#D73027"),
   ld_breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1),
-  gene_data = NULL,
+  genes = NULL,
+  exons = NULL,
   gene_height = 0.25,
   point_size = 2,
   lead_snp_shape = 23,
@@ -31,9 +30,9 @@ locus_plot(
 
 \item{chr, bp, p, snp}{Column name overrides.}
 
-\item{region_chr}{Chromosome of the region to plot.}
-
-\item{region_start, region_end}{Start and end positions.}
+\item{region}{The region to plot: a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} of length 1,
+or a string such as \code{"chr1:1000000-20000000"}. Not needed when
+\code{lead_snp} is given.}
 
 \item{lead_snp}{SNP ID to center the region around.}
 
@@ -46,7 +45,11 @@ Names are SNP IDs, values are r2.}
 
 \item{ld_breaks}{Breaks for LD color bins.}
 
-\item{gene_data}{A data.frame with columns: chr, start, end, gene, strand.}
+\item{genes}{Optional gene models drawn as a track under the plot: a
+\link[GenomicRanges:GRanges]{GenomicRanges::GRanges}, \code{TxDb} or \code{EnsDb} object (see \code{\link[=gene_track]{gene_track()}}).}
+
+\item{exons}{Optional exon structure for the gene track (see
+\code{\link[=gene_track]{gene_track()}}).}
 
 \item{gene_height}{Proportion of plot height for the gene track.}
 
@@ -59,7 +62,8 @@ Names are SNP IDs, values are r2.}
 \item{title}{Plot title.}
 }
 \value{
-A ggplot object (or patchwork composition if gene_data is provided).
+A ggplot object, or a patchwork composition when \code{genes} is
+provided.
 }
 \description{
 Create a regional association plot centered on a genomic region or
@@ -67,6 +71,12 @@ lead SNP, with optional LD coloring and gene annotation track.
 }
 \examples{
 data(example_gwas, package = "ggwas")
-locus_plot(example_gwas, region_chr = 1,
-           region_start = 1e6, region_end = 20e6)
+locus_plot(example_gwas, region = "chr1:1000000-20000000")
+
+# With a gene track
+genes <- GenomicRanges::GRanges(
+  c("chr1:2000000-4000000:+", "chr1:9000000-12000000:-"),
+  gene_name = c("GeneA", "GeneB")
+)
+locus_plot(example_gwas, region = "chr1:1000000-20000000", genes = genes)
 }

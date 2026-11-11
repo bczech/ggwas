@@ -3,7 +3,7 @@
 \name{scale_color_gwas}
 \alias{scale_color_gwas}
 \alias{scale_fill_gwas}
-\title{Colorblind-safe chromosome color scale}
+\title{Chromosome color scale}
 \usage{
 scale_color_gwas(palette = "colorblind", chromosomes = NULL, ...)
 
@@ -22,7 +22,8 @@ Colors cycle across this set, so non-human karyotypes are handled. When
 A ggplot2 color scale.
 }
 \description{
-Scale using colorblind-friendly alternating colors for chromosomes.
+Alternating colors for chromosomes. The default palette ("colorblind")
+is colorblind-safe; see \code{\link[=gwas_palette]{gwas_palette()}} for the other options.
 }
 \examples{
 scale_color_gwas("nature")

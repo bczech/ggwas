@@ -1,26 +1,27 @@
 #' Annotate peaks with nearest gene names
 #'
-#' Maps significant SNPs to their nearest gene using a provided gene
-#' annotation table. Returns the data with a `gene` column, or adds
-#' gene labels directly to a Manhattan plot.
+#' Maps significant SNPs to their nearest gene with
+#' [GenomicRanges::distanceToNearest()].
 #'
-#' @param data A `gwas_data` object or data.frame.
-#' @param genes A data.frame with gene positions. Required columns:
-#'   `chr` (integer or "chr1" format), `start`, `end`, `gene` (gene symbol).
-#'   Optional: `strand`.
+#' @param data A `gwas_data` object, data.frame or `GRanges` of variants.
+#' @param genes Gene models as a [GenomicRanges::GRanges], `TxDb` or `EnsDb`
+#'   object. Gene names are taken as described in [gene_track()].
 #' @param p_threshold Only annotate SNPs with p < this value.
-#' @param max_distance Maximum distance (bp) from SNP to gene midpoint
-#'   to assign annotation. Default 500kb.
+#' @param max_distance Maximum distance (bp) between a SNP and the nearest
+#'   gene. The distance is 0 for a SNP inside a gene and otherwise the gap
+#'   to the closest gene end. Default 500kb.
 #' @param top_n Annotate only the top N most significant SNPs.
 #' @param clump_window Clumping window in bp. Within each window, only
 #'   the most significant SNP is annotated. Default 1Mb.
-#' @return A data.frame with added `nearest_gene` and `gene_distance` columns.
+#' @return The input as a `gwas_data` object with added `nearest_gene` and
+#'   `gene_distance` columns.
 #' @export
 #' @examples
 #' data(example_gwas)
-#' genes <- data.frame(
-#'   chr = c(1, 2, 5), start = c(1e6, 50e6, 80e6),
-#'   end = c(1.5e6, 51e6, 82e6), gene = c("GENE_A", "GENE_B", "GENE_C")
+#' genes <- GenomicRanges::GRanges(
+#'   c("chr1:1000000-1500000", "chr2:50000000-51000000",
+#'     "chr5:80000000-82000000"),
+#'   gene_name = c("GENE_A", "GENE_B", "GENE_C")
 #' )
 #' annotated <- annotate_genes(example_gwas, genes, top_n = 10)
 #' head(annotated[!is.na(annotated$nearest_gene), ])
@@ -31,54 +32,33 @@ annotate_genes <- function(data,
                            top_n = NULL,
                            clump_window = 1e6) {
 
+  .check_genes(genes)
   if (!inherits(data, "gwas_data")) {
     data <- as_gwas_data(data)
   }
 
-  genes$chr <- chr_to_int(genes$chr)
-  genes$midpoint <- (genes$start + genes$end) / 2
+  data$nearest_gene <- NA_character_
+  data$gene_distance <- NA_real_
+  data$.row <- seq_len(nrow(data))
 
   candidates <- data[data$P < p_threshold & !is.na(data$P), , drop = FALSE]
-
   if (nrow(candidates) == 0) {
-    data$nearest_gene <- NA_character_
-    data$gene_distance <- NA_real_
+    data$.row <- NULL
     return(data)
   }
 
   candidates <- candidates[order(candidates$P), , drop = FALSE]
-
   if (!is.null(clump_window)) {
     candidates <- .clump_snps(candidates, window = clump_window)
   }
-
   if (!is.null(top_n)) {
     candidates <- utils::head(candidates, top_n)
   }
 
-  data$nearest_gene <- NA_character_
-  data$gene_distance <- NA_real_
-
-  for (i in seq_len(nrow(candidates))) {
-    snp_chr <- candidates$CHR[i]
-    snp_bp <- candidates$BP[i]
-
-    chr_genes <- genes[genes$chr == snp_chr, , drop = FALSE]
-    if (nrow(chr_genes) == 0) next
-
-    distances <- abs(chr_genes$midpoint - snp_bp)
-    min_idx <- which.min(distances)
-    min_dist <- distances[min_idx]
-
-    if (min_dist <= max_distance) {
-      row_idx <- which(data$CHR == snp_chr & data$BP == snp_bp)[1]
-      if (!is.na(row_idx)) {
-        data$nearest_gene[row_idx] <- chr_genes$gene[min_idx]
-        data$gene_distance[row_idx] <- min_dist
-      }
-    }
-  }
-
+  near <- .nearest_genes(candidates$CHR, candidates$BP, genes, max_distance)
+  data$nearest_gene[candidates$.row] <- near$gene
+  data$gene_distance[candidates$.row] <- near$distance
+  data$.row <- NULL
   data
 }
 
@@ -109,7 +89,8 @@ annotate_genes <- function(data,
 #' Manhattan plot with gene names as labels instead of SNP IDs.
 #'
 #' @inheritParams manhattan_plot
-#' @param genes Gene annotation data.frame (see [annotate_genes()]).
+#' @param genes Gene models as a `GRanges`, `TxDb` or `EnsDb` object (see
+#'   [annotate_genes()]).
 #' @param gene_p_threshold P-value threshold for gene annotation.
 #' @param gene_top_n Number of top genes to label.
 #' @param gene_max_distance Maximum distance to nearest gene.
@@ -122,10 +103,11 @@ annotate_genes <- function(data,
 #' @export
 #' @examples
 #' data(example_gwas)
-#' genes <- data.frame(
-#'   chr = c(1, 2, 5, 7, 11), start = c(1e6, 50e6, 80e6, 30e6, 60e6),
-#'   end = c(2e6, 52e6, 85e6, 35e6, 65e6),
-#'   gene = c("BRCA1", "FTO", "TCF7L2", "CDKAL1", "KCNQ1")
+#' genes <- GenomicRanges::GRanges(
+#'   c("chr1:1000000-2000000", "chr2:50000000-52000000",
+#'     "chr5:80000000-85000000", "chr7:30000000-35000000",
+#'     "chr11:60000000-65000000"),
+#'   gene_name = c("GENE_A", "GENE_B", "GENE_C", "GENE_D", "GENE_E")
 #' )
 #' manhattan_genes(example_gwas, genes = genes, gene_top_n = 5)
 manhattan_genes <- function(data,
@@ -153,7 +135,10 @@ manhattan_genes <- function(data,
 
   if (nrow(label_data) > 0) {
     label_data$LOG10P <- -log10(label_data$P)
-    label_data <- add_cumulative_bp(label_data)
+    # Use the chromosome offsets of the plotted data. Recomputing them from the
+    # labelled rows alone would shift labels when chromosomes are missing.
+    offsets <- tapply(plt$data$BP_CUM - plt$data$BP, plt$data$CHR, min)
+    label_data$BP_CUM <- label_data$BP + offsets[as.character(label_data$CHR)]
 
     if (arrow) {
       plt <- plt + ggplot2::geom_segment(

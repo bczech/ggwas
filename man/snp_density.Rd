@@ -12,7 +12,8 @@ snp_density(
   style = c("heatmap", "points"),
   bin_size = 1e+06,
   color_by = c("density", "significance", "uniform"),
-  chr_info = NULL,
+  seqinfo = NULL,
+  centromeres = NULL,
   palette = "viridis",
   point_size = 0.3,
   point_alpha = 0.5,
@@ -37,10 +38,14 @@ when \code{style = "heatmap"}.}
 \code{"density"} (default) colors by local density, \code{"significance"}
 colors by -log10(p), or \code{"uniform"} for a single color.}
 
-\item{chr_info}{Optional data.frame with columns \code{chr}, \code{length}, and
-optionally \code{centromere_start}, \code{centromere_end}. Use
-\code{\link[=chr_info_human]{chr_info_human()}} for hg38. If NULL, chromosome lengths are
-inferred from the data.}
+\item{seqinfo}{Optional chromosome lengths as a \code{Seqinfo} object
+(\pkg{GenomeInfoDb}) or any object that has one, such as a \code{TxDb},
+\code{EnsDb} or \code{BSgenome}. If NULL, chromosome lengths are inferred from
+the data.}
+
+\item{centromeres}{Optional centromere positions as a
+\link[GenomicRanges:GRanges]{GenomicRanges::GRanges}, one or more ranges per chromosome (for
+example the UCSC "Centromeres" track imported with \pkg{rtracklayer}).}
 
 \item{palette}{Color palette: "viridis", "magma", "inferno", or
 "plasma".}
@@ -49,8 +54,8 @@ inferred from the data.}
 
 \item{point_alpha}{Point transparency for \code{style = "points"}.}
 
-\item{show_centromeres}{If TRUE and centromere positions are available
-in \code{chr_info}, draw centromere markers.}
+\item{show_centromeres}{If TRUE and \code{centromeres} are given, draw
+centromere markers.}
 
 \item{downsample_n}{Maximum number of points to plot in \code{"points"}
 style. Set to NULL to plot all variants (can be slow for >500k).}
@@ -66,26 +71,30 @@ chromosomes. Two rendering styles are available: \code{"heatmap"} (default)
 bins variants and colors tiles by count, while \code{"points"} draws
 individual variant positions on chromosome outlines, where density is
 visible through natural clustering. Optionally marks centromere
-positions when \code{chr_info} is provided.
+positions when \code{centromeres} are provided.
 }
 \examples{
 data(example_gwas, package = "ggwas")
 
-# Heatmap style (default)
-snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+# Heatmap style (default); chromosome lengths taken from the data
+snp_density(example_gwas, bin_size = 5e6)
 
 # Different palette
-snp_density(example_gwas, bin_size = 5e6, palette = "magma",
-  chr_info = chr_info_human())
+snp_density(example_gwas, bin_size = 5e6, palette = "magma")
 
-# Points style: individual variants on chromosome outlines
-snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+# Points style with centromere markers (hg38 positions for chr1 and chr2)
+cen <- GenomicRanges::GRanges(
+  c("chr1:122026460-124932724", "chr2:92188146-94090557")
+)
+snp_density(example_gwas, style = "points", centromeres = cen)
 
 # Points colored by significance
-snp_density(example_gwas, style = "points", color_by = "significance",
-  chr_info = chr_info_human())
+snp_density(example_gwas, style = "points", color_by = "significance")
 
-# Uniform color, no centromeres
-snp_density(example_gwas, style = "points", color_by = "uniform",
-  show_centromeres = FALSE)
+# Full chromosome lengths from a Seqinfo, here taken from a TxDb
+if (requireNamespace("TxDb.Hsapiens.UCSC.hg38.knownGene", quietly = TRUE)) {
+  txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
+  snp_density(example_gwas, bin_size = 5e6,
+    seqinfo = GenomeInfoDb::seqinfo(txdb))
+}
 }

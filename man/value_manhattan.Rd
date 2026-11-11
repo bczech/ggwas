@@ -10,12 +10,8 @@ value_manhattan(
   chr = NULL,
   bp = NULL,
   id = NULL,
-  annotate = NULL,
-  build = c("GRCh38", "GRCh37"),
-  release = NULL,
-  gtf = NULL,
-  ensdb = NULL,
-  id_type = c("ensembl_gene_id", "symbol"),
+  annotation = NULL,
+  id_type = c("gene_id", "symbol"),
   label = NULL,
   colors = c("#1A5276", "#76D7C4"),
   point_size = 0.8,
@@ -35,37 +31,30 @@ value_manhattan(
 )
 }
 \arguments{
-\item{data}{A data.frame (or tibble/data.table) with one row per feature.}
+\item{data}{A data.frame (or tibble/data.table) with one row per feature, or
+a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} whose metadata columns hold the value (the
+range start is used as the position).}
 
 \item{value}{Name of the column holding the value to plot on the y-axis.
 Required.}
 
 \item{chr, bp}{Column names for chromosome and genomic position
-(auto-detected if NULL). Ignored when \code{annotate} is set, because the
+(auto-detected if NULL). Ignored when \code{annotation} is set, because the
 coordinates are then looked up from the gene IDs.}
 
-\item{id}{Column holding gene identifiers (Ensembl gene IDs or symbols),
-used when \code{annotate} is set (auto-detected if NULL).}
+\item{id}{Column holding gene identifiers (gene IDs or symbols), used when
+\code{annotation} is set (auto-detected if NULL).}
 
-\item{annotate}{Annotation backend to map \code{id} to genomic coordinates:
-one of \code{"gtf"}, \code{"builtin"}, \code{"biomart"} or \code{"ensdb"} (see
+\item{annotation}{Optional gene models used to look up coordinates for the
+\code{id} column: a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges}, \code{TxDb} or \code{EnsDb} object (see
 \code{\link[=annotate_positions]{annotate_positions()}}). \code{NULL} (default) means the data already carry
 \code{chr}/\code{bp} columns.}
 
-\item{build}{Genome build for \code{annotate = "builtin"}/\code{"biomart"}:
-\code{"GRCh38"} (default) or \code{"GRCh37"}.}
-
-\item{release}{Ensembl release for \code{annotate = "biomart"} (\code{NULL} = current).}
-
-\item{gtf}{Path to a GTF/GFF3 file for \code{annotate = "gtf"}.}
-
-\item{ensdb}{An \code{EnsDb} object for \code{annotate = "ensdb"}.}
-
-\item{id_type}{Whether \code{id} holds Ensembl gene IDs (\code{"ensembl_gene_id"},
-default) or gene symbols (\code{"symbol"}).}
+\item{id_type}{Whether \code{id} holds gene IDs (\code{"gene_id"}, default) or gene
+symbols (\code{"symbol"}).}
 
 \item{label}{Column holding feature labels (e.g. gene symbol), used by
-\code{highlight}, \code{label_ids} and \code{label_top_n}. When \code{annotate} is set and
+\code{highlight}, \code{label_ids} and \code{label_top_n}. When \code{annotation} is set and
 \code{label} is NULL, the looked-up gene symbol is used.}
 
 \item{colors}{Two-color vector for alternating chromosomes.}

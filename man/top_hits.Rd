@@ -21,10 +21,11 @@ top_hits(
 \item{clump_window}{Window size in bp for clumping. Only the most
 significant SNP within each window is retained.}
 
-\item{genes}{Optional gene annotation data.frame (chr, start, end, gene).
-If provided, nearest gene is added.}
+\item{genes}{Optional gene models as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges}, \code{TxDb} or
+\code{EnsDb} object. If provided, the nearest gene is added (see
+\code{\link[=annotate_genes]{annotate_genes()}}).}
 
-\item{max_gene_distance}{Maximum distance to assign a gene.}
+\item{max_gene_distance}{Maximum distance (bp) to the nearest gene.}
 
 \item{n}{Maximum number of hits to return.}
 }

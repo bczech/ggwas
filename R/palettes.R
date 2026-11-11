@@ -1,7 +1,14 @@
 #' GWAS Color Palettes
 #'
-#' Pre-defined color palettes optimized for GWAS visualizations.
-#' All palettes are colorblind-friendly by default.
+#' Pre-defined color palettes for GWAS visualizations. The two-color palettes
+#' used by default for chromosomes stay distinguishable under the common
+#' forms of color blindness: "default" (dark blue and light teal, used by
+#' [manhattan_plot()], [miami_plot()], and [circular_manhattan()]) and
+#' "colorblind" (Okabe-Ito blue and orange, used by [scale_color_gwas()] and
+#' [gwas_summary()]). The journal palettes ("nature", "science",
+#' "lancet", "nejm", "aaas") and "brewer_set1" and "brewer_paired" match
+#' common figure styles, but they contain both red and green and are not
+#' colorblind-safe.
 #'
 #' @param name Palette name. One of: "default", "colorblind", "vibrant",
 #'   "pastel", "dark", "nature", "science", "lancet", "nejm", "aaas",
@@ -12,6 +19,7 @@
 #' @return A character vector of hex colors.
 #' @export
 #' @examples
+#' data(example_gwas)
 #' gwas_palette("colorblind")
 #' gwas_palette("nature", n = 5)
 #' manhattan_plot(example_gwas, colors = gwas_palette("vibrant"))
@@ -83,9 +91,10 @@ gwas_palettes <- function() {
   )
 }
 
-#' Colorblind-safe chromosome color scale
+#' Chromosome color scale
 #'
-#' Scale using colorblind-friendly alternating colors for chromosomes.
+#' Alternating colors for chromosomes. The default palette ("colorblind")
+#' is colorblind-safe; see [gwas_palette()] for the other options.
 #'
 #' @param palette Palette name from [gwas_palette()].
 #' @param chromosomes Chromosome codes present in the data, in genomic order.

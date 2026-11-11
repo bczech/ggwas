@@ -146,7 +146,6 @@ manhattan_plot <- function(data,
     chr_labels <- int_to_chr(chr_info$CHR)
     chr_labels[seq(2, length(chr_labels), by = 2)] <- ""
   }
-  n_chr_displayed <- nrow(chr_info)
 
   plt <- ggplot(data, aes(x = .data$BP_CUM, y = .data$LOG10P,
                            color = .data$CHR_F)) +

@@ -82,7 +82,9 @@ forest_plot <- function(data,
   d$lo <- d$est - z * d$se
   d$hi <- d$est + z * d$se
   if (exponentiate) {
-    d$est <- exp(d$est); d$lo <- exp(d$lo); d$hi <- exp(d$hi)
+    d$est <- exp(d$est)
+    d$lo <- exp(d$lo)
+    d$hi <- exp(d$hi)
   }
 
   lev <- if (order_by == "effect") {

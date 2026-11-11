@@ -5,7 +5,7 @@
 #' bins variants and colors tiles by count, while `"points"` draws
 #' individual variant positions on chromosome outlines, where density is
 #' visible through natural clustering. Optionally marks centromere
-#' positions when `chr_info` is provided.
+#' positions when `centromeres` are provided.
 #'
 #' @param data A `gwas_data` object or data.frame with GWAS results.
 #' @param chr,bp,p Column name overrides.
@@ -17,16 +17,19 @@
 #' @param color_by For `style = "points"`: how to color dots.
 #'   `"density"` (default) colors by local density, `"significance"`
 #'   colors by -log10(p), or `"uniform"` for a single color.
-#' @param chr_info Optional data.frame with columns `chr`, `length`, and
-#'   optionally `centromere_start`, `centromere_end`. Use
-#'   [chr_info_human()] for hg38. If NULL, chromosome lengths are
-#'   inferred from the data.
+#' @param seqinfo Optional chromosome lengths as a `Seqinfo` object
+#'   (\pkg{GenomeInfoDb}) or any object that has one, such as a `TxDb`,
+#'   `EnsDb` or `BSgenome`. If NULL, chromosome lengths are inferred from
+#'   the data.
+#' @param centromeres Optional centromere positions as a
+#'   [GenomicRanges::GRanges], one or more ranges per chromosome (for
+#'   example the UCSC "Centromeres" track imported with \pkg{rtracklayer}).
 #' @param palette Color palette: "viridis", "magma", "inferno", or
 #'   "plasma".
 #' @param point_size Point size for `style = "points"`.
 #' @param point_alpha Point transparency for `style = "points"`.
-#' @param show_centromeres If TRUE and centromere positions are available
-#'   in `chr_info`, draw centromere markers.
+#' @param show_centromeres If TRUE and `centromeres` are given, draw
+#'   centromere markers.
 #' @param downsample_n Maximum number of points to plot in `"points"`
 #'   style. Set to NULL to plot all variants (can be slow for >500k).
 #' @param title Plot title.
@@ -35,23 +38,27 @@
 #' @examples
 #' data(example_gwas, package = "ggwas")
 #'
-#' # Heatmap style (default)
-#' snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+#' # Heatmap style (default); chromosome lengths taken from the data
+#' snp_density(example_gwas, bin_size = 5e6)
 #'
 #' # Different palette
-#' snp_density(example_gwas, bin_size = 5e6, palette = "magma",
-#'   chr_info = chr_info_human())
+#' snp_density(example_gwas, bin_size = 5e6, palette = "magma")
 #'
-#' # Points style: individual variants on chromosome outlines
-#' snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+#' # Points style with centromere markers (hg38 positions for chr1 and chr2)
+#' cen <- GenomicRanges::GRanges(
+#'   c("chr1:122026460-124932724", "chr2:92188146-94090557")
+#' )
+#' snp_density(example_gwas, style = "points", centromeres = cen)
 #'
 #' # Points colored by significance
-#' snp_density(example_gwas, style = "points", color_by = "significance",
-#'   chr_info = chr_info_human())
+#' snp_density(example_gwas, style = "points", color_by = "significance")
 #'
-#' # Uniform color, no centromeres
-#' snp_density(example_gwas, style = "points", color_by = "uniform",
-#'   show_centromeres = FALSE)
+#' # Full chromosome lengths from a Seqinfo, here taken from a TxDb
+#' if (requireNamespace("TxDb.Hsapiens.UCSC.hg38.knownGene", quietly = TRUE)) {
+#'   txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
+#'   snp_density(example_gwas, bin_size = 5e6,
+#'     seqinfo = GenomeInfoDb::seqinfo(txdb))
+#' }
 snp_density <- function(data,
                         chr = NULL,
                         bp = NULL,
@@ -59,7 +66,8 @@ snp_density <- function(data,
                         style = c("heatmap", "points"),
                         bin_size = 1e6,
                         color_by = c("density", "significance", "uniform"),
-                        chr_info = NULL,
+                        seqinfo = NULL,
+                        centromeres = NULL,
                         palette = "viridis",
                         point_size = 0.3,
                         point_alpha = 0.5,
@@ -78,17 +86,9 @@ snp_density <- function(data,
 
   present_chrs <- sort(unique(data$CHR))
 
-  if (is.null(chr_info)) {
-    chr_max <- tapply(data$BP, data$CHR, max)
-    chr_info <- data.frame(
-      chr = as.integer(names(chr_max)),
-      length = as.numeric(chr_max)
-    )
-  }
-
+  chr_info <- .chr_lengths(data, seqinfo)
   chr_info <- chr_info[chr_info$chr %in% present_chrs, , drop = FALSE]
-  has_centromeres <- show_centromeres &&
-    all(c("centromere_start", "centromere_end") %in% names(chr_info))
+  has_centromeres <- show_centromeres && !is.null(centromeres)
 
   pal_option <- switch(palette,
     "viridis" = "D", "magma" = "A", "inferno" = "B", "plasma" = "C", "D")
@@ -105,9 +105,8 @@ snp_density <- function(data,
     if (is.null(chr_levels)) {
       chr_levels <- rev(int_to_chr(present_chrs))
     }
-    cen <- chr_info[, c("chr", "centromere_start", "centromere_end")]
-    cen <- cen[!is.na(cen$centromere_start) & !is.na(cen$centromere_end), ,
-               drop = FALSE]
+    cen <- .centromere_df(centromeres)
+    cen <- cen[cen$chr %in% present_chrs, , drop = FALSE]
     if (nrow(cen) > 0) {
       cen$CHR_label <- factor(int_to_chr(cen$chr), levels = chr_levels)
       cen$cen_mid_mb <- (cen$centromere_start + cen$centromere_end) / 2 / 1e6

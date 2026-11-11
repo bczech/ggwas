@@ -63,15 +63,11 @@ reference:
       - trumpet_plot
       - forest_plot
       - effect_compare_plot
-      - chr_info
-      - chr_info_ucsc
 
   - title: "Annotation and analysis"
     desc: "Gene annotation, genomic tracks, region highlights, top hits"
     contents:
       - gene_track
-      - read_gtf
-      - gene_annotation
       - annotate_positions
       - manhattan_genes
       - annotate_genes

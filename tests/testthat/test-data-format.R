@@ -53,7 +53,7 @@ test_that("print.gwas_data produces output", {
 test_that("summary.gwas_data produces output", {
   df <- data.frame(CHR = c(1, 2), BP = c(100, 200), P = c(0.1, 0.5))
   gd <- as_gwas_data(df)
-  expect_output(summary(gd), "GWAS Data Summary")
+  expect_output(print(summary(gd)), "GWAS Data Summary")
 })
 
 test_that("as_gwas_data auto-detects common column names", {
@@ -71,4 +71,31 @@ test_that("as_gwas_data preserves extra columns", {
 test_that("validate_gwas_data warns on NA p-values", {
   df <- data.frame(CHR = c(1, 1), BP = c(100, 200), P = c(0.05, NA))
   expect_warning(as_gwas_data(df), "NA")
+})
+
+test_that("as_gwas_data rejects other inputs and unknown columns", {
+  expect_error(as_gwas_data(list(a = 1)), "data.frame")
+  df <- data.frame(CHR = 1, BP = 1e6, P = 0.1)
+  expect_error(as_gwas_data(df, p = "nope"), "not found")
+})
+
+test_that("as_granges converts a data.frame and keeps SNP names back", {
+  df <- data.frame(CHR = c(1, 2), BP = c(1e6, 2e6), P = c(0.1, 0.2))
+  gr <- as_granges(df)
+  expect_s4_class(gr, "GRanges")
+  expect_equal(GenomicRanges::start(gr), c(1e6, 2e6))
+  names(gr) <- c("rsA", "rsB")
+  gd <- as_gwas_data(gr)
+  expect_equal(gd$SNP, c("rsA", "rsB"))
+})
+
+test_that("summary of gwas_data reports counts and effect sizes", {
+  df <- data.frame(CHR = 1, BP = c(1e6, 2e6, 3e6), P = c(1e-9, 1e-6, 0.5),
+                   BETA = c(0.1, 0.2, 0.3))
+  s <- summary(as_gwas_data(df))
+  expect_s3_class(s, "summary.gwas_data")
+  expect_equal(s$n_5e8, 1L)
+  expect_equal(s$n_1e5, 2L)
+  expect_equal(s$beta[["median"]], 0.2)
+  expect_output(print(s), "Effect sizes")
 })

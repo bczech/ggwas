@@ -5,8 +5,8 @@
 #' of interest.
 #'
 #' @param plt A ggplot object from [manhattan_plot()] or similar.
-#' @param regions A data.frame with columns: `chr` (integer), `start`, `end`.
-#'   Optional: `label`, `color`, `alpha`.
+#' @param regions Regions as a [GenomicRanges::GRanges] object. Optional
+#'   metadata columns: `label`, `color`, `alpha`.
 #' @param color Default fill color for regions (if not specified per region).
 #' @param alpha Default transparency.
 #' @param label_size Font size for region labels.
@@ -18,8 +18,8 @@
 #' @examples
 #' data(example_gwas)
 #' plt <- manhattan_plot(example_gwas)
-#' regions <- data.frame(
-#'   chr = c(6, 1), start = c(25e6, 5e6), end = c(35e6, 20e6),
+#' regions <- GenomicRanges::GRanges(
+#'   c("chr6:25000000-35000000", "chr1:5000000-20000000"),
 #'   label = c("MHC", "1p36")
 #' )
 #' highlight_regions(plt, regions)
@@ -36,7 +36,8 @@ highlight_regions <- function(plt,
     cli_abort("{.arg plt} must be a ggplot object (e.g., from manhattan_plot()).")
   }
 
-  regions$chr <- chr_to_int(regions$chr)
+  if (!methods::is(regions, "GRanges")) .abort_not_granges("regions", regions)
+  regions <- .ranges_to_df(regions)
 
   if (!"color" %in% names(regions)) regions$color <- color
   if (!"alpha" %in% names(regions)) regions$alpha <- alpha
@@ -44,14 +45,6 @@ highlight_regions <- function(plt,
   build <- ggplot2::ggplot_build(plt)
   y_range <- build$layout$panel_params[[1]]$y.range
   y_max <- y_range[2]
-
-  plot_data <- build$data[[1]]
-  if ("x" %in% names(plot_data)) {
-    all_x <- plot_data$x
-    all_groups <- plot_data$colour
-
-    chr_info <- .extract_chr_info_from_plot(plt)
-  }
 
   for (i in seq_len(nrow(regions))) {
     r <- regions[i, ]
@@ -140,13 +133,4 @@ highlight_regions <- function(plt,
 
   frac <- bp / (diff(range(data_layer$x)) / length(x_breaks) * 2)
   chr_min_x + frac * chr_width
-}
-
-#' @noRd
-.extract_chr_info_from_plot <- function(plt) {
-  build <- ggplot2::ggplot_build(plt)
-  list(
-    breaks = build$layout$panel_params[[1]]$x$breaks,
-    labels = build$layout$panel_params[[1]]$x$get_labels()
-  )
 }

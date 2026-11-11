@@ -175,6 +175,7 @@ theme_poster <- function(base_size = 20, base_family = "") {
 #'   `label_size`.
 #' @export
 #' @examples
+#' data(example_gwas)
 #' p <- gwas_preset("publication")
 #' manhattan_plot(example_gwas, colors = p$colors, point_size = p$point_size) +
 #'   p$theme

@@ -12,9 +12,7 @@ finemapping_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   pip_min_size = 0.3,
@@ -37,7 +35,9 @@ Variants in the same set get the same color.}
 
 \item{chr, bp, p, snp}{Column name overrides.}
 
-\item{region_chr, region_start, region_end}{Region to plot.}
+\item{region}{The region to plot: a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} of length 1,
+or a string such as \code{"chr1:1000000-50000000"}. Not needed when
+\code{lead_snp} is given.}
 
 \item{lead_snp}{Center on this SNP ± flank.}
 
@@ -73,6 +73,5 @@ example_gwas$PIP <- runif(nrow(example_gwas))^4
 example_gwas$PIP[which.min(example_gwas$P)] <- 0.95
 example_gwas$credible_set <- NA
 example_gwas$credible_set[example_gwas$PIP > 0.1] <- 1L
-finemapping_plot(example_gwas, region_chr = 1,
-                 region_start = 1e6, region_end = 50e6)
+finemapping_plot(example_gwas, region = "chr1:1000000-50000000")
 }

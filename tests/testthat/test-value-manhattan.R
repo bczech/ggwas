@@ -66,3 +66,13 @@ test_that("negative values draw a zero line", {
     function(l) inherits(l$geom, "GeomHline"), logical(1)))
   expect_true(has_hline)
 })
+
+test_that("value_manhattan accepts a GRanges with the value in mcols", {
+  gr <- GenomicRanges::GRanges(
+    c("chr1:1000000-1001000", "chr2:5000000-5001000", "chr3:100-200"),
+    score = c(5, 10, 15)
+  )
+  plt <- value_manhattan(gr, value = "score")
+  expect_s3_class(plt, "ggplot")
+  expect_equal(plt$data$VALUE, c(5, 10, 15))
+})

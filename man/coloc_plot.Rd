@@ -11,9 +11,7 @@ coloc_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   ld = NULL,
@@ -32,9 +30,9 @@ coloc_plot(
 
 \item{chr, bp, p, snp}{Column name overrides (applied to both datasets).}
 
-\item{region_chr}{Chromosome of the region to plot.}
-
-\item{region_start, region_end}{Start and end positions.}
+\item{region}{The region to plot: a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} of length 1,
+or a string such as \code{"chr1:1000000-30000000"}. Not needed when
+\code{lead_snp} is given.}
 
 \item{lead_snp}{SNP ID to center on (± flank).}
 
@@ -67,6 +65,6 @@ data(example_gwas)
 gwas2 <- example_gwas
 gwas2$P <- runif(nrow(gwas2))^2
 coloc_plot(example_gwas, gwas2,
-           region_chr = 1, region_start = 1e6, region_end = 30e6,
+           region = "chr1:1000000-30000000",
            top_title = "GWAS", bottom_title = "eQTL")
 }

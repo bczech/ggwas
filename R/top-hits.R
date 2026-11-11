@@ -8,9 +8,10 @@
 #' @param p_threshold Significance threshold for lead SNPs.
 #' @param clump_window Window size in bp for clumping. Only the most
 #'   significant SNP within each window is retained.
-#' @param genes Optional gene annotation data.frame (chr, start, end, gene).
-#'   If provided, nearest gene is added.
-#' @param max_gene_distance Maximum distance to assign a gene.
+#' @param genes Optional gene models as a [GenomicRanges::GRanges], `TxDb` or
+#'   `EnsDb` object. If provided, the nearest gene is added (see
+#'   [annotate_genes()]).
+#' @param max_gene_distance Maximum distance (bp) to the nearest gene.
 #' @param n Maximum number of hits to return.
 #' @return A data.frame with columns: SNP, CHR, BP, P, BETA, SE,
 #'   nearest_gene (if genes provided), gene_distance, cytoband.
@@ -25,6 +26,7 @@ top_hits <- function(data,
                      max_gene_distance = 500000,
                      n = 20) {
 
+  if (!is.null(genes)) .check_genes(genes)
   if (!inherits(data, "gwas_data")) {
     data <- as_gwas_data(data)
   }
@@ -52,21 +54,9 @@ top_hits <- function(data,
   result$cytoband <- .estimate_cytoband(result$CHR, result$BP)
 
   if (!is.null(genes)) {
-    genes$chr <- chr_to_int(genes$chr)
-    genes$midpoint <- (genes$start + genes$end) / 2
-    result$nearest_gene <- NA_character_
-    result$gene_distance <- NA_integer_
-
-    for (i in seq_len(nrow(result))) {
-      chr_genes <- genes[genes$chr == result$CHR[i], , drop = FALSE]
-      if (nrow(chr_genes) == 0) next
-      distances <- abs(chr_genes$midpoint - result$BP[i])
-      min_idx <- which.min(distances)
-      if (distances[min_idx] <= max_gene_distance) {
-        result$nearest_gene[i] <- chr_genes$gene[min_idx]
-        result$gene_distance[i] <- as.integer(distances[min_idx])
-      }
-    }
+    near <- .nearest_genes(result$CHR, result$BP, genes, max_gene_distance)
+    result$nearest_gene <- near$gene
+    result$gene_distance <- as.integer(near$distance)
   }
 
   result$CHR_label <- int_to_chr(result$CHR)

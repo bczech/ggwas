@@ -11,7 +11,9 @@
 #' @param credible_set Column name for credible set assignment (integer).
 #'   Variants in the same set get the same color.
 #' @param chr,bp,p,snp Column name overrides.
-#' @param region_chr,region_start,region_end Region to plot.
+#' @param region The region to plot: a [GenomicRanges::GRanges] of length 1,
+#'   or a string such as `"chr1:1000000-50000000"`. Not needed when
+#'   `lead_snp` is given.
 #' @param lead_snp Center on this SNP ± flank.
 #' @param flank Flank size in bp.
 #' @param pip_min_size Minimum point size (for PIP ≈ 0).
@@ -30,8 +32,7 @@
 #' example_gwas$PIP[which.min(example_gwas$P)] <- 0.95
 #' example_gwas$credible_set <- NA
 #' example_gwas$credible_set[example_gwas$PIP > 0.1] <- 1L
-#' finemapping_plot(example_gwas, region_chr = 1,
-#'                  region_start = 1e6, region_end = 50e6)
+#' finemapping_plot(example_gwas, region = "chr1:1000000-50000000")
 finemapping_plot <- function(data,
                              pip = "PIP",
                              credible_set = "credible_set",
@@ -39,9 +40,7 @@ finemapping_plot <- function(data,
                              bp = NULL,
                              p = NULL,
                              snp = NULL,
-                             region_chr = NULL,
-                             region_start = NULL,
-                             region_end = NULL,
+                             region = NULL,
                              lead_snp = NULL,
                              flank = 500000,
                              pip_min_size = 0.3,
@@ -62,16 +61,10 @@ finemapping_plot <- function(data,
     cli_abort("Column {.field {pip}} (posterior inclusion probability) not found.")
   }
 
-  if (!is.null(lead_snp) && "SNP" %in% names(data)) {
-    lead_row <- data[data$SNP == lead_snp, , drop = FALSE]
-    if (nrow(lead_row) == 0) cli_abort("Lead SNP {.val {lead_snp}} not found.")
-    region_chr <- lead_row$CHR[1]
-    region_start <- lead_row$BP[1] - flank
-    region_end <- lead_row$BP[1] + flank
-  }
-
-  if (is.null(region_chr)) cli_abort("Specify {.arg region_chr} or {.arg lead_snp}.")
-  region_start <- max(region_start, 0)
+  reg <- .resolve_region(data, region, lead_snp, flank)
+  region_chr <- reg$chr
+  region_start <- reg$start
+  region_end <- reg$end
 
   region <- data[data$CHR == region_chr &
                    data$BP >= region_start &
