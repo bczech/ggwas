@@ -1,30 +1,35 @@
 Package: ggwas
-Title: Modern 'ggplot2' Visualizations for Genome-Wide Association Studies
-Version: 0.99.10
+Title: Modern ggplot2 Visualizations for Genome-Wide Association Studies
+Version: 0.99.11
 Authors@R: person("Bartosz", "Czech", email = "bartosz.w.czech@gmail.com",
                   role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9908-3007"))
 Description: Create publication-ready visualizations for genome-wide association
     studies. Provides 21 plot types including Manhattan, value Manhattan, QQ,
     Miami, locus zoom, PheWAS, colocalization, fine-mapping, genetic
     correlation, SNP density, and density-signal comparison plots.
-    Reads PLINK, REGENIE, GCTA, and GEMMA formats natively.
-    All plot functions return 'ggplot2' objects for full customization.
+    Reads PLINK, REGENIE, GCTA, and GEMMA formats natively and accepts
+    variants as 'GRanges'. Gene models, annotation regions and chromosome
+    lengths come from Bioconductor objects ('GRanges', 'TxDb', 'EnsDb',
+    'Seqinfo'). All plot functions return 'ggplot2' objects for full
+    customization.
     Smart downsampling handles datasets with 10 million+ variants.
 License: MIT + file LICENSE
 URL: https://github.com/bczech/ggwas, https://bczech.github.io/ggwas/
 BugReports: https://github.com/bczech/ggwas/issues
 Encoding: UTF-8
-LazyData: true
+LazyData: false
 Roxygen: list(markdown = TRUE)
-Depends: R (>= 4.5.0)
+Depends: R (>= 4.6.0)
 Imports:
     cli,
     data.table (>= 1.14.0),
     ggplot2 (>= 3.5.0),
     ggrepel (>= 0.9.0),
+    GenomeInfoDb,
     grDevices,
     grid,
     gridExtra,
+    methods,
     patchwork (>= 1.2.0),
     RColorBrewer,
     rlang (>= 1.0.0),
@@ -36,13 +41,19 @@ Imports:
     IRanges,
     S4Vectors
 Suggests:
+    AnnotationDbi,
     BiocStyle,
-    biomaRt,
+    EnsDb.Hsapiens.v86,
     ensembldb,
+    GenomicFeatures,
     knitr,
+    org.Hs.eg.db,
     rmarkdown,
-    testthat (>= 3.0.0)
+    rtracklayer,
+    testthat (>= 3.0.0),
+    TxDb.Hsapiens.UCSC.hg38.knownGene
 VignetteBuilder: knitr
+BiocType: Software
 biocViews: Visualization, GenomeWideAssociation, Annotation, DataImport,
     Software
 Config/testthat/edition: 3

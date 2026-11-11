@@ -18,8 +18,16 @@ A \code{gwas_data} data.frame with 8000 rows and 9 columns:
 \item{AF}{Allele frequency}
 }
 }
+\source{
+Simulated with \code{data-raw/example_gwas.R} in the package source.
+Positions are drawn within GRCh38 (hg38) chromosome lengths.
+}
 \usage{
-example_gwas
+data(example_gwas)
+}
+\value{
+A \code{gwas_data} data.frame, loaded into the workspace by
+\code{data(example_gwas)}.
 }
 \description{
 A simulated GWAS dataset with 8000 variants across 22 autosomal

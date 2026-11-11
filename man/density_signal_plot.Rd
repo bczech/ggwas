@@ -10,7 +10,7 @@ density_signal_plot(
   bp = NULL,
   p = NULL,
   bin_size = 1e+06,
-  chr_info = NULL,
+  seqinfo = NULL,
   density_palette = "viridis",
   signal_palette = "magma",
   chromosomes = NULL,
@@ -24,8 +24,10 @@ density_signal_plot(
 
 \item{bin_size}{Bin size in base pairs (default 1 Mb).}
 
-\item{chr_info}{Optional data.frame with \code{chr} and \code{length} columns.
-If NULL, chromosome lengths are inferred from the data.}
+\item{seqinfo}{Optional chromosome lengths as a \code{Seqinfo} object
+(\pkg{GenomeInfoDb}) or any object that has one, such as a \code{TxDb},
+\code{EnsDb} or \code{BSgenome}. If NULL, chromosome lengths are inferred from
+the data.}
 
 \item{density_palette}{Color palette for the density track.}
 
@@ -50,9 +52,11 @@ imputation coverage.
 data(example_gwas, package = "ggwas")
 density_signal_plot(example_gwas, bin_size = 5e6)
 
-# With chromosome info for accurate lengths
-density_signal_plot(example_gwas, bin_size = 5e6,
-  chr_info = chr_info_human())
+# Full chromosome lengths from a Seqinfo
+si <- GenomeInfoDb::Seqinfo(paste0("chr", 1:3),
+  seqlengths = c(248956422, 242193529, 198295559), genome = "hg38")
+density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
+  chromosomes = 1:3)
 
 # Subset to specific chromosomes
 density_signal_plot(example_gwas, bin_size = 5e6, chromosomes = seq_len(5))

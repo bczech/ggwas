@@ -16,6 +16,10 @@
 #'   \item{A2}{Other allele}
 #'   \item{AF}{Allele frequency}
 #' }
+#' @return A `gwas_data` data.frame, loaded into the workspace by
+#'   `data(example_gwas)`.
+#' @source Simulated with `data-raw/example_gwas.R` in the package source.
+#'   Positions are drawn within GRCh38 (hg38) chromosome lengths.
 #' @examples
 #' data(example_gwas)
 #' manhattan_plot(example_gwas)

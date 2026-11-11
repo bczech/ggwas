@@ -18,8 +18,8 @@ highlight_regions(
 \arguments{
 \item{plt}{A ggplot object from \code{\link[=manhattan_plot]{manhattan_plot()}} or similar.}
 
-\item{regions}{A data.frame with columns: \code{chr} (integer), \code{start}, \code{end}.
-Optional: \code{label}, \code{color}, \code{alpha}.}
+\item{regions}{Regions as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} object. Optional
+metadata columns: \code{label}, \code{color}, \code{alpha}.}
 
 \item{color}{Default fill color for regions (if not specified per region).}
 
@@ -44,8 +44,8 @@ of interest.
 \examples{
 data(example_gwas)
 plt <- manhattan_plot(example_gwas)
-regions <- data.frame(
-  chr = c(6, 1), start = c(25e6, 5e6), end = c(35e6, 20e6),
+regions <- GenomicRanges::GRanges(
+  c("chr6:25000000-35000000", "chr1:5000000-20000000"),
   label = c("MHC", "1p36")
 )
 highlight_regions(plt, regions)

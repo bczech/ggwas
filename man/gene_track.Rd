@@ -5,11 +5,9 @@
 \title{Gene annotation track}
 \usage{
 gene_track(
-  gene_data,
-  region_chr,
-  region_start,
-  region_end,
-  exon_data = NULL,
+  genes,
+  region,
+  exons = NULL,
   highlight_genes = NULL,
   highlight_color = "#E74C3C",
   label_size = 2.5,
@@ -19,17 +17,22 @@ gene_track(
 )
 }
 \arguments{
-\item{gene_data}{A data.frame with columns: chr, start, end, gene.
-Optional: strand ("+"/"-").}
+\item{genes}{Gene models as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} object, or a \code{TxDb}
+(\pkg{GenomicFeatures}) or \code{EnsDb} (\pkg{ensembldb}) annotation object.
+Labels are taken from the first metadata column named \code{gene_name},
+\code{symbol}, \code{gene} or \code{Name}, falling back to \code{gene_id} and then to
+\code{names(genes)}. A \code{TxDb} only carries gene IDs; add a \code{gene_name} column
+to \code{GenomicFeatures::genes(txdb)} to show symbols (see the vignette).
+GTF and GFF3 files can be read with \code{rtracklayer::import()}.}
 
-\item{region_chr}{Chromosome to display (integer or string).}
+\item{region}{The region to draw: a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} of length 1,
+or a string such as \code{"chr6:25000000-34000000"}.}
 
-\item{region_start, region_end}{Region boundaries in base pairs.}
-
-\item{exon_data}{Optional data.frame of exons (columns chr, start, end,
-gene) matching genes in \code{gene_data} by the \code{gene} column. When supplied,
-genes are drawn with exon structure. Read with
-\code{read_gtf(path, feature_type = "exon")}.}
+\item{exons}{Optional exon structure: a \code{GRangesList} of exons split by
+gene ID (as returned by \code{GenomicFeatures::exonsBy(txdb, by = "gene")}), a
+\code{GRanges} with a \code{gene_id} or gene name column, or \code{TRUE} to take exons
+from \code{genes} when it is a \code{TxDb} or \code{EnsDb}. Exons are matched to genes by
+gene ID.}
 
 \item{highlight_genes}{Character vector of gene names to highlight.}
 
@@ -51,25 +54,29 @@ A ggplot object. Compose with a Manhattan or locus plot using
 \description{
 Create a standalone gene annotation panel that can be composed with
 any ggwas plot using patchwork. Genes are drawn as directional bodies
-with strand arrows and labels; when \code{exon_data} is supplied, each gene is
+with strand arrows and labels; when \code{exons} are supplied, each gene is
 rendered as an intron backbone with exon boxes and a strand arrow.
 }
 \examples{
-genes <- data.frame(
-  chr = c(1, 1, 1), start = c(1e6, 5e6, 8e6),
-  end = c(2e6, 6e6, 9e6), gene = c("GeneA", "GeneB", "GeneC"),
-  strand = c("+", "-", "+")
+library(GenomicRanges)
+genes <- GRanges(
+  c("chr1:1000000-2000000:+", "chr1:5000000-6000000:-",
+    "chr1:8000000-9000000:+"),
+  gene_name = c("GeneA", "GeneB", "GeneC")
 )
 
 # Gene-body track
-gene_track(genes, region_chr = 1, region_start = 0, region_end = 10e6)
+gene_track(genes, region = "chr1:1-10000000")
 
-# With exon structure
-exons <- data.frame(
-  chr = 1,
-  start = c(1.0e6, 1.5e6, 5.0e6, 5.6e6, 8.1e6),
-  end   = c(1.1e6, 1.7e6, 5.2e6, 5.9e6, 8.4e6),
-  gene  = c("GeneA", "GeneA", "GeneB", "GeneB", "GeneC")
+# With exon structure, one GRanges per gene
+exons <- GRangesList(
+  GeneA = GRanges(c("chr1:1000000-1100000", "chr1:1500000-1700000")),
+  GeneB = GRanges(c("chr1:5000000-5200000", "chr1:5600000-5900000")),
+  GeneC = GRanges("chr1:8100000-8400000")
 )
-gene_track(genes, 1, 0, 10e6, exon_data = exons)
+names(genes) <- names(exons)
+gene_track(genes, "chr1:1-10000000", exons = exons)
+}
+\seealso{
+\code{\link[=locus_plot]{locus_plot()}}, which adds this track under a regional plot.
 }

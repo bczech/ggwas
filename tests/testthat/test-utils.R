@@ -46,3 +46,27 @@ test_that("add_cumulative_bp adds BP_CUM column", {
   expect_true("BP_CUM" %in% names(result))
   expect_true(!is.null(attr(result, "chr_info")))
 })
+
+test_that("set_sex_chr_map derives codes from a Seqinfo", {
+  old <- set_sex_chr_map(
+    GenomeInfoDb::Seqinfo(c(1:19, "X", "Y", "MT", "JH584299.1"))
+  )
+  on.exit(set_sex_chr_map(old))
+  expect_equal(getOption("ggwas.sex_chr_map"), c(X = 20L, Y = 21L, MT = 22L))
+  expect_equal(chr_to_int("chrX"), 20L)
+  expect_equal(int_to_chr(21L), "Y")
+})
+
+test_that("set_sex_chr_map maps UCSC chrM to MT", {
+  old <- set_sex_chr_map(GenomeInfoDb::Seqinfo(c(paste0("chr", 1:22),
+                                                  "chrX", "chrY", "chrM")))
+  on.exit(set_sex_chr_map(old))
+  expect_equal(chr_to_int(c("chrM", "MT")), c(25L, 25L))
+})
+
+test_that("set_sex_chr_map(NULL) really disables the mapping", {
+  old <- set_sex_chr_map(NULL)
+  on.exit(set_sex_chr_map(old))
+  expect_equal(int_to_chr(23L), "23")
+  expect_error(set_sex_chr_map("X"), "Seqinfo")
+})

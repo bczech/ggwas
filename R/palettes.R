@@ -19,6 +19,7 @@
 #' @return A character vector of hex colors.
 #' @export
 #' @examples
+#' data(example_gwas)
 #' gwas_palette("colorblind")
 #' gwas_palette("nature", n = 5)
 #' manhattan_plot(example_gwas, colors = gwas_palette("vibrant"))

@@ -14,16 +14,16 @@ annotate_genes(
 )
 }
 \arguments{
-\item{data}{A \code{gwas_data} object or data.frame.}
+\item{data}{A \code{gwas_data} object, data.frame or \code{GRanges} of variants.}
 
-\item{genes}{A data.frame with gene positions. Required columns:
-\code{chr} (integer or "chr1" format), \code{start}, \code{end}, \code{gene} (gene symbol).
-Optional: \code{strand}.}
+\item{genes}{Gene models as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges}, \code{TxDb} or \code{EnsDb}
+object. Gene names are taken as described in \code{\link[=gene_track]{gene_track()}}.}
 
 \item{p_threshold}{Only annotate SNPs with p < this value.}
 
-\item{max_distance}{Maximum distance (bp) from SNP to gene midpoint
-to assign annotation. Default 500kb.}
+\item{max_distance}{Maximum distance (bp) between a SNP and the nearest
+gene. The distance is 0 for a SNP inside a gene and otherwise the gap
+to the closest gene end. Default 500kb.}
 
 \item{top_n}{Annotate only the top N most significant SNPs.}
 
@@ -31,18 +31,19 @@ to assign annotation. Default 500kb.}
 the most significant SNP is annotated. Default 1Mb.}
 }
 \value{
-A data.frame with added \code{nearest_gene} and \code{gene_distance} columns.
+The input as a \code{gwas_data} object with added \code{nearest_gene} and
+\code{gene_distance} columns.
 }
 \description{
-Maps significant SNPs to their nearest gene using a provided gene
-annotation table. Returns the data with a \code{gene} column, or adds
-gene labels directly to a Manhattan plot.
+Maps significant SNPs to their nearest gene with
+\code{\link[GenomicRanges:distanceToNearest]{GenomicRanges::distanceToNearest()}}.
 }
 \examples{
 data(example_gwas)
-genes <- data.frame(
-  chr = c(1, 2, 5), start = c(1e6, 50e6, 80e6),
-  end = c(1.5e6, 51e6, 82e6), gene = c("GENE_A", "GENE_B", "GENE_C")
+genes <- GenomicRanges::GRanges(
+  c("chr1:1000000-1500000", "chr2:50000000-51000000",
+    "chr5:80000000-82000000"),
+  gene_name = c("GENE_A", "GENE_B", "GENE_C")
 )
 annotated <- annotate_genes(example_gwas, genes, top_n = 10)
 head(annotated[!is.na(annotated$nearest_gene), ])

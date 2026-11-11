@@ -10,8 +10,10 @@
 #' @param data A `gwas_data` object or data.frame with GWAS results.
 #' @param chr,bp,p Column name overrides.
 #' @param bin_size Bin size in base pairs (default 1 Mb).
-#' @param chr_info Optional data.frame with `chr` and `length` columns.
-#'   If NULL, chromosome lengths are inferred from the data.
+#' @param seqinfo Optional chromosome lengths as a `Seqinfo` object
+#'   (\pkg{GenomeInfoDb}) or any object that has one, such as a `TxDb`,
+#'   `EnsDb` or `BSgenome`. If NULL, chromosome lengths are inferred from
+#'   the data.
 #' @param density_palette Color palette for the density track.
 #' @param signal_palette Color palette for the signal track.
 #' @param chromosomes Optional integer vector of chromosomes to display.
@@ -22,9 +24,11 @@
 #' data(example_gwas, package = "ggwas")
 #' density_signal_plot(example_gwas, bin_size = 5e6)
 #'
-#' # With chromosome info for accurate lengths
-#' density_signal_plot(example_gwas, bin_size = 5e6,
-#'   chr_info = chr_info_human())
+#' # Full chromosome lengths from a Seqinfo
+#' si <- GenomeInfoDb::Seqinfo(paste0("chr", 1:3),
+#'   seqlengths = c(248956422, 242193529, 198295559), genome = "hg38")
+#' density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
+#'   chromosomes = 1:3)
 #'
 #' # Subset to specific chromosomes
 #' density_signal_plot(example_gwas, bin_size = 5e6, chromosomes = seq_len(5))
@@ -37,7 +41,7 @@ density_signal_plot <- function(data,
                                 bp = NULL,
                                 p = NULL,
                                 bin_size = 1e6,
-                                chr_info = NULL,
+                                seqinfo = NULL,
                                 density_palette = "viridis",
                                 signal_palette = "magma",
                                 chromosomes = NULL,
@@ -56,14 +60,7 @@ density_signal_plot <- function(data,
 
   present_chrs <- sort(unique(data$CHR))
 
-  if (is.null(chr_info)) {
-    chr_max <- tapply(data$BP, data$CHR, max)
-    chr_info <- data.frame(
-      chr = as.integer(names(chr_max)),
-      length = as.numeric(chr_max)
-    )
-  }
-
+  chr_info <- .chr_lengths(data, seqinfo)
   chr_info <- chr_info[chr_info$chr %in% present_chrs, , drop = FALSE]
 
   data$bin <- floor(data$BP / bin_size) * bin_size
@@ -154,12 +151,6 @@ density_signal_plot <- function(data,
       axis.text.y = element_text(size = 7),
       legend.position = "right"
     )
-
-  legend_density <- data.frame(
-    x = rep(0, 2), y = rep(0, 2),
-    fill = c(density_colors[1], density_colors[256]),
-    label = c("Low", "High")
-  )
 
   plt <- plt +
     ggplot2::annotate("text", x = max(combined$bin_mb) * 0.85,

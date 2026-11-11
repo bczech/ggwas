@@ -1,3 +1,39 @@
+# ggwas 0.99.11
+
+Changes from the Bioconductor review. They break the API of the functions
+listed below.
+
+* Gene models are now `GRanges`, `TxDb` or `EnsDb` objects in
+  `gene_track()`, `locus_plot()`, `annotate_genes()`, `manhattan_genes()`,
+  `top_hits()` and `annotate_positions()`. A data.frame is no longer accepted.
+* Annotation regions in `enrichment_manhattan()` and `highlight_regions()` are
+  now `GRanges` (or a named `GRangesList`), and overlaps use
+  `GenomicRanges::findOverlaps()`.
+* `gene_track()`, `locus_plot()`, `coloc_plot()` and `finemapping_plot()` take
+  one `region` (a `GRanges` or a `"chr:start-end"` string) instead of
+  `region_chr`, `region_start` and `region_end`. `gene_track()` takes exons as
+  a `GRangesList` from `exonsBy()`, or `exons = TRUE` with a `TxDb`/`EnsDb`.
+* The nearest gene is found with `GenomicRanges::distanceToNearest()`, so the
+  distance is now measured to the gene body (0 inside a gene), not to its
+  midpoint.
+* `snp_density()` and `density_signal_plot()` take chromosome lengths from a
+  `Seqinfo` (`seqinfo =`) and `snp_density()` takes centromeres as `GRanges`
+  (`centromeres =`).
+* `set_sex_chr_map()` accepts a `Seqinfo` and numbers X, Y, Z, W and MT from
+  it. `set_sex_chr_map(NULL)` now really turns the mapping off.
+* `annotate_positions()` takes an `annotation` object and returns a `GRanges`;
+  `value_manhattan()` takes `annotation =` and also accepts a `GRanges`.
+* Remove `read_gtf()` (use `rtracklayer::import()`), `gene_annotation()` and
+  the bundled gene tables (use `TxDb`/`EnsDb` packages), and
+  `chr_info_human()`, `chr_info_mouse()`, `chr_info_cattle()` and
+  `chr_info_ucsc()` (use `Seqinfo`).
+* Fix `manhattan_genes()` placing gene labels over the wrong chromosomes when
+  only some chromosomes have labelled peaks.
+* `summary()` of a `gwas_data` object now returns a summary object with its own
+  print method.
+* Set `LazyData: false`, depend on R >= 4.6.0, add `BiocType: Software`, and
+  drop `inst/CITATION` (Bioconductor generates the citation).
+
 # ggwas 0.99.10
 
 * Add `value_manhattan()` to plot any per-feature value (rankings, effect

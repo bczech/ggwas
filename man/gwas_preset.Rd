@@ -18,6 +18,7 @@ Apply a preset configuration to any ggwas function. Presets combine
 a theme, color palette, and sizing appropriate for the context.
 }
 \examples{
+data(example_gwas)
 p <- gwas_preset("publication")
 manhattan_plot(example_gwas, colors = p$colors, point_size = p$point_size) +
   p$theme

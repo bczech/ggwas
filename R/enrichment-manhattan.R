@@ -5,11 +5,13 @@
 #' categories) are highlighted with distinct colors, connecting GWAS results
 #' with functional genomics.
 #'
-#' @param data A `gwas_data` object or data.frame.
-#' @param annotations A data.frame or list of data.frames with annotation
-#'   regions. Each must have columns: `chr` (integer), `start`, `end`.
-#'   Optionally: `category` (annotation type), `name` (region label).
-#'   If a named list, names are used as category labels.
+#' @param data A `gwas_data` object, data.frame or `GRanges` of variants.
+#' @param annotations Annotation regions as a [GenomicRanges::GRanges] with
+#'   an optional `category` metadata column (annotation type), or a named
+#'   `GRangesList` (or named list of `GRanges`) whose names are used as
+#'   categories. BED, GFF or bigBed
+#'   files can be read with `rtracklayer::import()`. A variant falling in
+#'   several regions takes the category of the first one.
 #' @param chr,bp,p,snp Column name overrides.
 #' @param background_color Color for non-annotated SNPs.
 #' @param background_alpha Transparency of background points.
@@ -32,14 +34,19 @@
 #' @export
 #' @examples
 #' data(example_gwas)
-#' # Define annotation regions
-#' annot <- data.frame(
-#'   chr = c(1, 2, 5),
-#'   start = c(1e6, 50e6, 100e6),
-#'   end = c(5e6, 55e6, 110e6),
+#' # Annotation regions with a category column
+#' annot <- GenomicRanges::GRanges(
+#'   c("chr1:1000000-5000000", "chr2:50000000-55000000",
+#'     "chr5:100000000-110000000"),
 #'   category = c("Enhancer", "Gene", "eQTL")
 #' )
 #' enrichment_manhattan(example_gwas, annotations = annot)
+#'
+#' # The same as a GRangesList, one element per category
+#' annot_list <- GenomicRanges::GRangesList(
+#'   Enhancer = annot[1], Gene = annot[2], eQTL = annot[3]
+#' )
+#' enrichment_manhattan(example_gwas, annotations = annot_list)
 enrichment_manhattan <- function(data,
                                  annotations,
                                  chr = NULL,
@@ -68,33 +75,9 @@ enrichment_manhattan <- function(data,
   }
   data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
 
-  if (is.data.frame(annotations)) {
-    if (!"category" %in% names(annotations)) {
-      annotations$category <- "Annotated"
-    }
-  } else if (is.list(annotations)) {
-    ann_list <- lapply(names(annotations), function(nm) {
-      a <- annotations[[nm]]
-      a$category <- nm
-      a
-    })
-    annotations <- do.call(rbind, ann_list)
-  }
-
-  annotations$chr <- chr_to_int(annotations$chr)
+  annotations <- .as_annotation_ranges(annotations)
   categories <- unique(annotations$category)
-
-  data$annotation <- NA_character_
-  for (i in seq_len(nrow(annotations))) {
-    ann <- annotations[i, ]
-    idx <- which(data$CHR == ann$chr &
-                   data$BP >= ann$start &
-                   data$BP <= ann$end &
-                   is.na(data$annotation))
-    if (length(idx) > 0) {
-      data$annotation[idx] <- ann$category
-    }
-  }
+  data$annotation <- .overlap_category(data$CHR, data$BP, annotations)
 
   annotated_idx <- which(!is.na(data$annotation))
   bg_idx <- which(is.na(data$annotation))
@@ -181,4 +164,48 @@ enrichment_manhattan <- function(data,
   }
 
   plt
+}
+
+# GRanges (optional `category` column) or named GRangesList -> data.frame with
+# chr, start, end and category.
+#' @noRd
+.as_annotation_ranges <- function(x, arg = "annotations",
+                                  call = rlang::caller_env()) {
+  if (is.list(x) && length(x) > 0 &&
+      all(vapply(x, methods::is, logical(1), "GRanges"))) {
+    x <- GenomicRanges::GRangesList(x)
+  }
+  if (methods::is(x, "GRangesList")) {
+    if (is.null(names(x)) || any(!nzchar(names(x)))) {
+      cli_abort("A {.cls GRangesList} in {.arg {arg}} needs names, used as categories.",
+                call = call)
+    }
+    category <- rep(names(x), lengths(x))
+    x <- unlist(x, use.names = FALSE)
+    S4Vectors::mcols(x)$category <- category
+  }
+  if (!methods::is(x, "GRanges")) .abort_not_granges(arg, x, call = call)
+  if (!"category" %in% names(S4Vectors::mcols(x))) {
+    S4Vectors::mcols(x)$category <- "Annotated"
+  }
+  df <- .ranges_to_df(x)
+  df$category <- as.character(df$category)
+  df
+}
+
+# Category of the first annotation region overlapping each variant, NA when
+# there is none.
+#' @noRd
+.overlap_category <- function(chr, bp, ann) {
+  out <- rep(NA_character_, length(chr))
+  if (length(chr) == 0 || nrow(ann) == 0) return(out)
+  levels <- as.character(sort(union(chr, ann$chr)))
+  snp_gr <- GenomicRanges::GRanges(factor(as.character(chr), levels = levels),
+                                   IRanges::IRanges(bp, width = 1L))
+  ann_gr <- GenomicRanges::GRanges(factor(as.character(ann$chr), levels = levels),
+                                   IRanges::IRanges(ann$start, ann$end))
+  hits <- GenomicRanges::findOverlaps(snp_gr, ann_gr, select = "first",
+                                      ignore.strand = TRUE)
+  out[!is.na(hits)] <- ann$category[hits[!is.na(hits)]]
+  out
 }

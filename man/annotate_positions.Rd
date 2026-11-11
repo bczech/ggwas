@@ -4,71 +4,41 @@
 \alias{annotate_positions}
 \title{Map gene IDs or symbols to genome coordinates}
 \usage{
-annotate_positions(
-  ids,
-  source = c("gtf", "biomart", "ensdb", "builtin"),
-  build = c("GRCh38", "GRCh37"),
-  release = NULL,
-  gtf = NULL,
-  ensdb = NULL,
-  id_type = c("ensembl_gene_id", "symbol")
-)
+annotate_positions(ids, annotation, id_type = c("gene_id", "symbol"))
 }
 \arguments{
 \item{ids}{Character vector of gene identifiers (Ensembl gene IDs such as
-\code{"ENSG00000141510"}, or gene symbols such as \code{"TP53"}).}
+\code{"ENSG00000141510"}, Entrez IDs, or gene symbols such as \code{"TP53"}).}
 
-\item{source}{Annotation backend:
-\itemize{
-\item \code{"gtf"} (default) reads a local GTF/GFF3 file via \code{\link[=read_gtf]{read_gtf()}}. Full
-coverage, offline, works for any build you have a file for; requires
-\code{gtf}.
-\item \code{"builtin"} uses the protein-coding genes bundled with ggwas
-(\code{\link[=gene_annotation]{gene_annotation()}}). Offline and dependency-free, but limited to
-protein-coding genes for GRCh38 (release 103) and GRCh37 (release 75).
-\item \code{"biomart"} queries Ensembl online (any release/build). Needs the
-\pkg{biomaRt} package and network access.
-\item \code{"ensdb"} reads an \code{EnsDb} object you pass via \code{ensdb}. Needs the
-\pkg{ensembldb} package and an installed \verb{EnsDb.Hsapiens.*} data package.
-}}
+\item{annotation}{Gene models as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} object, or a
+\code{TxDb} (\pkg{GenomicFeatures}) or \code{EnsDb} (\pkg{ensembldb}) object. Gene
+IDs are read from the \code{gene_id} metadata column (or \code{names()}), symbols
+from \code{gene_name}, \code{symbol} or \code{gene}. GTF and GFF3 files can be read with
+\code{rtracklayer::import()}; keep the \code{type == "gene"} rows.}
 
-\item{build}{Genome build for the \code{"builtin"} and \code{"biomart"} sources:
-\code{"GRCh38"} (default) or \code{"GRCh37"}.}
-
-\item{release}{Ensembl release for \code{source = "biomart"}. \code{NULL} (default)
-uses the current release.}
-
-\item{gtf}{Path to a GTF/GFF3 file (required when \code{source = "gtf"}).}
-
-\item{ensdb}{An \code{EnsDb} object (required when \code{source = "ensdb"}).}
-
-\item{id_type}{Whether \code{ids} are Ensembl gene IDs (\code{"ensembl_gene_id"},
-default) or gene symbols (\code{"symbol"}).}
+\item{id_type}{Whether \code{ids} are gene IDs (\code{"gene_id"}, default) or gene
+symbols (\code{"symbol"}).}
 }
 \value{
-A data.frame with one row per matched identifier and columns \code{id}
-(the input identifier), \code{chr} (integer), \code{start}, \code{end}, \code{strand}, \code{gene}
-(symbol) and \code{gene_id} (Ensembl gene ID). Identifiers that cannot be mapped
-are dropped.
+A \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} with one range per matched identifier and
+metadata columns \code{id} (the input identifier), \code{gene} (symbol) and
+\code{gene_id}. Identifiers that cannot be mapped are dropped.
 }
 \description{
-Look up genomic positions (chromosome, start, end, strand) for a set of
-Ensembl gene IDs or gene symbols. This is the inverse of \code{\link[=annotate_genes]{annotate_genes()}},
-which maps variant positions to the nearest gene; here you start from gene
-identifiers and get their coordinates, ready to feed into \code{\link[=value_manhattan]{value_manhattan()}}
-or any plot that needs \code{chr}/\code{bp}. Several annotation sources are supported,
-trading offline convenience against coverage and the ability to pick an
-arbitrary Ensembl release.
+Look up genomic positions for a set of gene identifiers in a gene
+annotation. This is the inverse of \code{\link[=annotate_genes]{annotate_genes()}}, which maps variant
+positions to the nearest gene; here you start from gene identifiers and get
+their coordinates, for example to feed into \code{\link[=value_manhattan]{value_manhattan()}}.
 }
 \examples{
-# Offline, from a GTF file (uses the tiny example shipped with ggwas)
-f <- system.file("extdata", "example.gtf", package = "ggwas")
-ids <- read_gtf(f)$gene_id
-annotate_positions(ids, source = "gtf", gtf = f)
-
-# From the bundled protein-coding annotation, by symbol
-annotate_positions(c("TP53", "BRCA1"), source = "builtin", id_type = "symbol")
+genes <- GenomicRanges::GRanges(
+  c("chr17:7661779-7687538:-", "chr17:43044295-43170245:-"),
+  gene_id = c("ENSG00000141510", "ENSG00000012048"),
+  gene_name = c("TP53", "BRCA1")
+)
+annotate_positions(c("ENSG00000141510", "ENSG00000012048"), genes)
+annotate_positions(c("TP53", "NOT_A_GENE"), genes, id_type = "symbol")
 }
 \seealso{
-\code{\link[=value_manhattan]{value_manhattan()}}, \code{\link[=read_gtf]{read_gtf()}}, \code{\link[=gene_annotation]{gene_annotation()}}
+\code{\link[=value_manhattan]{value_manhattan()}}, \code{\link[=annotate_genes]{annotate_genes()}}
 }

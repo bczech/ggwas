@@ -10,7 +10,7 @@
 #'   If NULL, auto-detection is attempted.
 #' @param log_p If TRUE, the p-value column contains -log10(p) values that
 #'   will be back-transformed.
-#' @return A tibble with class `gwas_data`.
+#' @return A data.frame with class `gwas_data`.
 #' @export
 #' @examples
 #' df <- data.frame(CHR = c(1, 1, 2), BP = c(1e6, 2e6, 5e6),
@@ -205,22 +205,35 @@ print.gwas_data <- function(x, ...) {
 
 #' @export
 summary.gwas_data <- function(object, ...) {
+  out <- list(
+    n = nrow(object),
+    chromosomes = sort(unique(object$CHR)),
+    lambda = calc_lambda(object$P),
+    min_p = min(object$P, na.rm = TRUE),
+    n_5e8 = sum(object$P < 5e-8, na.rm = TRUE),
+    n_1e5 = sum(object$P < 1e-5, na.rm = TRUE),
+    beta = if ("BETA" %in% names(object)) {
+      c(median = stats::median(object$BETA, na.rm = TRUE),
+        min = min(object$BETA, na.rm = TRUE),
+        max = max(object$BETA, na.rm = TRUE))
+    }
+  )
+  class(out) <- "summary.gwas_data"
+  out
+}
+
+#' @export
+print.summary.gwas_data <- function(x, ...) {
   cat("=== GWAS Data Summary ===\n\n")
-  cat(sprintf("Variants:     %s\n", format(nrow(object), big.mark = ",")))
-  cat(sprintf("Chromosomes:  %s\n", paste(sort(unique(object$CHR)), collapse = ", ")))
-  cat(sprintf("Lambda GC:    %.4f\n", calc_lambda(object$P)))
-  cat(sprintf("Min p-value:  %.2e\n", min(object$P, na.rm = TRUE)))
-
-  sig_5e8 <- sum(object$P < 5e-8, na.rm = TRUE)
-  sig_1e5 <- sum(object$P < 1e-5, na.rm = TRUE)
-  cat(sprintf("Genome-wide significant (p < 5e-8): %d\n", sig_5e8))
-  cat(sprintf("Suggestive (p < 1e-5):              %d\n", sig_1e5))
-
-  if ("BETA" %in% names(object)) {
+  cat(sprintf("Variants:     %s\n", format(x$n, big.mark = ",")))
+  cat(sprintf("Chromosomes:  %s\n", paste(x$chromosomes, collapse = ", ")))
+  cat(sprintf("Lambda GC:    %.4f\n", x$lambda))
+  cat(sprintf("Min p-value:  %.2e\n", x$min_p))
+  cat(sprintf("Genome-wide significant (p < 5e-8): %d\n", x$n_5e8))
+  cat(sprintf("Suggestive (p < 1e-5):              %d\n", x$n_1e5))
+  if (!is.null(x$beta)) {
     cat(sprintf("\nEffect sizes (BETA): median = %.4f, range = [%.4f, %.4f]\n",
-                median(object$BETA, na.rm = TRUE),
-                min(object$BETA, na.rm = TRUE),
-                max(object$BETA, na.rm = TRUE)))
+                x$beta[["median"]], x$beta[["min"]], x$beta[["max"]]))
   }
-  invisible(object)
+  invisible(x)
 }

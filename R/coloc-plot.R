@@ -7,8 +7,9 @@
 #' @param gwas1 First dataset (e.g., GWAS). A `gwas_data` or data.frame.
 #' @param gwas2 Second dataset (e.g., eQTL). Same format.
 #' @param chr,bp,p,snp Column name overrides (applied to both datasets).
-#' @param region_chr Chromosome of the region to plot.
-#' @param region_start,region_end Start and end positions.
+#' @param region The region to plot: a [GenomicRanges::GRanges] of length 1,
+#'   or a string such as `"chr1:1000000-30000000"`. Not needed when
+#'   `lead_snp` is given.
 #' @param lead_snp SNP ID to center on (± flank).
 #' @param flank Flank size in bp around lead_snp.
 #' @param ld Named numeric vector of LD r² values (optional).
@@ -25,7 +26,7 @@
 #' gwas2 <- example_gwas
 #' gwas2$P <- runif(nrow(gwas2))^2
 #' coloc_plot(example_gwas, gwas2,
-#'            region_chr = 1, region_start = 1e6, region_end = 30e6,
+#'            region = "chr1:1000000-30000000",
 #'            top_title = "GWAS", bottom_title = "eQTL")
 coloc_plot <- function(gwas1,
                        gwas2,
@@ -33,9 +34,7 @@ coloc_plot <- function(gwas1,
                        bp = NULL,
                        p = NULL,
                        snp = NULL,
-                       region_chr = NULL,
-                       region_start = NULL,
-                       region_end = NULL,
+                       region = NULL,
                        lead_snp = NULL,
                        flank = 500000,
                        ld = NULL,
@@ -54,19 +53,9 @@ coloc_plot <- function(gwas1,
     gwas2 <- as_gwas_data(gwas2, chr = chr, bp = bp, snp = snp, p = p)
   }
 
-  if (!is.null(lead_snp) && "SNP" %in% names(gwas1)) {
-    lead_row <- gwas1[gwas1$SNP == lead_snp, , drop = FALSE]
-    if (nrow(lead_row) == 0) cli_abort("Lead SNP {.val {lead_snp}} not found.")
-    region_chr <- lead_row$CHR[1]
-    region_start <- lead_row$BP[1] - flank
-    region_end <- lead_row$BP[1] + flank
-  }
+  region <- .resolve_region(gwas1, region, lead_snp, flank)$gr
 
-  if (is.null(region_chr)) cli_abort("Specify {.arg region_chr} or {.arg lead_snp}.")
-  region_start <- max(region_start, 0)
-
-  p_top <- locus_plot(gwas1, region_chr = region_chr,
-                      region_start = region_start, region_end = region_end,
+  p_top <- locus_plot(gwas1, region = region,
                       ld = ld, ld_colors = ld_colors, lead_snp = lead_snp,
                       point_size = point_size) +
     labs(y = expression(-log[10](italic(p))),
@@ -74,8 +63,7 @@ coloc_plot <- function(gwas1,
     ggplot2::theme(axis.text.x = element_blank(),
                    axis.ticks.x = element_blank())
 
-  p_bottom <- locus_plot(gwas2, region_chr = region_chr,
-                         region_start = region_start, region_end = region_end,
+  p_bottom <- locus_plot(gwas2, region = region,
                          ld = ld, ld_colors = ld_colors,
                          point_size = point_size) +
     labs(y = expression(-log[10](italic(p))),

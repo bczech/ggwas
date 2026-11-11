@@ -2,17 +2,23 @@
 #'
 #' Create a standalone gene annotation panel that can be composed with
 #' any ggwas plot using patchwork. Genes are drawn as directional bodies
-#' with strand arrows and labels; when `exon_data` is supplied, each gene is
+#' with strand arrows and labels; when `exons` are supplied, each gene is
 #' rendered as an intron backbone with exon boxes and a strand arrow.
 #'
-#' @param gene_data A data.frame with columns: chr, start, end, gene.
-#'   Optional: strand ("+"/"-").
-#' @param region_chr Chromosome to display (integer or string).
-#' @param region_start,region_end Region boundaries in base pairs.
-#' @param exon_data Optional data.frame of exons (columns chr, start, end,
-#'   gene) matching genes in `gene_data` by the `gene` column. When supplied,
-#'   genes are drawn with exon structure. Read with
-#'   `read_gtf(path, feature_type = "exon")`.
+#' @param genes Gene models as a [GenomicRanges::GRanges] object, or a `TxDb`
+#'   (\pkg{GenomicFeatures}) or `EnsDb` (\pkg{ensembldb}) annotation object.
+#'   Labels are taken from the first metadata column named `gene_name`,
+#'   `symbol`, `gene` or `Name`, falling back to `gene_id` and then to
+#'   `names(genes)`. A `TxDb` only carries gene IDs; add a `gene_name` column
+#'   to `GenomicFeatures::genes(txdb)` to show symbols (see the vignette).
+#'   GTF and GFF3 files can be read with `rtracklayer::import()`.
+#' @param region The region to draw: a [GenomicRanges::GRanges] of length 1,
+#'   or a string such as `"chr6:25000000-34000000"`.
+#' @param exons Optional exon structure: a `GRangesList` of exons split by
+#'   gene ID (as returned by `GenomicFeatures::exonsBy(txdb, by = "gene")`), a
+#'   `GRanges` with a `gene_id` or gene name column, or `TRUE` to take exons
+#'   from `genes` when it is a `TxDb` or `EnsDb`. Exons are matched to genes by
+#'   gene ID.
 #' @param highlight_genes Character vector of gene names to highlight.
 #' @param highlight_color Color for highlighted genes.
 #' @param label_size Text size for gene labels.
@@ -22,30 +28,30 @@
 #'   are kept when the limit is exceeded.
 #' @return A ggplot object. Compose with a Manhattan or locus plot using
 #'   `patchwork::wrap_plots()`.
+#' @seealso [locus_plot()], which adds this track under a regional plot.
 #' @export
 #' @examples
-#' genes <- data.frame(
-#'   chr = c(1, 1, 1), start = c(1e6, 5e6, 8e6),
-#'   end = c(2e6, 6e6, 9e6), gene = c("GeneA", "GeneB", "GeneC"),
-#'   strand = c("+", "-", "+")
+#' library(GenomicRanges)
+#' genes <- GRanges(
+#'   c("chr1:1000000-2000000:+", "chr1:5000000-6000000:-",
+#'     "chr1:8000000-9000000:+"),
+#'   gene_name = c("GeneA", "GeneB", "GeneC")
 #' )
 #'
 #' # Gene-body track
-#' gene_track(genes, region_chr = 1, region_start = 0, region_end = 10e6)
+#' gene_track(genes, region = "chr1:1-10000000")
 #'
-#' # With exon structure
-#' exons <- data.frame(
-#'   chr = 1,
-#'   start = c(1.0e6, 1.5e6, 5.0e6, 5.6e6, 8.1e6),
-#'   end   = c(1.1e6, 1.7e6, 5.2e6, 5.9e6, 8.4e6),
-#'   gene  = c("GeneA", "GeneA", "GeneB", "GeneB", "GeneC")
+#' # With exon structure, one GRanges per gene
+#' exons <- GRangesList(
+#'   GeneA = GRanges(c("chr1:1000000-1100000", "chr1:1500000-1700000")),
+#'   GeneB = GRanges(c("chr1:5000000-5200000", "chr1:5600000-5900000")),
+#'   GeneC = GRanges("chr1:8100000-8400000")
 #' )
-#' gene_track(genes, 1, 0, 10e6, exon_data = exons)
-gene_track <- function(gene_data,
-                       region_chr,
-                       region_start,
-                       region_end,
-                       exon_data = NULL,
+#' names(genes) <- names(exons)
+#' gene_track(genes, "chr1:1-10000000", exons = exons)
+gene_track <- function(genes,
+                       region,
+                       exons = NULL,
                        highlight_genes = NULL,
                        highlight_color = "#E74C3C",
                        label_size = 2.5,
@@ -53,16 +59,15 @@ gene_track <- function(gene_data,
                        show_strand = TRUE,
                        max_genes = 50) {
 
-  region_chr_int <- if (is.character(region_chr)) chr_to_int(region_chr) else region_chr
-  gene_data$chr_int <- if (is.character(gene_data$chr)) {
-    chr_to_int(gene_data$chr)
-  } else {
-    as.integer(gene_data$chr)
-  }
+  reg <- .as_region(region)
+  region_start <- reg$start
+  region_end <- reg$end
+  db <- if (.is_annotation_db(genes)) genes else NULL
 
-  genes <- gene_data[gene_data$chr_int == region_chr_int &
-                       gene_data$end >= region_start &
-                       gene_data$start <= region_end, , drop = FALSE]
+  gene_df <- .ranges_to_df(.as_gene_ranges(genes))
+  genes <- gene_df[gene_df$chr == reg$chr &
+                     gene_df$end >= region_start &
+                     gene_df$start <= region_end, , drop = FALSE]
 
   if (nrow(genes) == 0) {
     return(ggplot() + ggplot2::theme_void() +
@@ -85,13 +90,14 @@ gene_track <- function(gene_data,
     genes$color[genes$gene %in% highlight_genes] <- highlight_color
   }
 
-  has_strand <- "strand" %in% names(genes) && show_strand
+  has_strand <- show_strand
   bar_h <- 0.35
   region_span <- (region_end - region_start) / 1e6
   arrow_w <- region_span * 0.012
 
-  if (!is.null(exon_data)) {
-    plt <- .gene_track_exons(genes, exon_data, region_chr_int,
+  if (!is.null(exons)) {
+    exon_df <- .ranges_to_df(.as_exon_ranges(exons, db = db))
+    plt <- .gene_track_exons(genes, exon_df, reg$chr,
                              region_start, region_end, has_strand, bar_h)
   } else {
     plt <- .gene_track_bodies(genes, region_start, region_end,
@@ -162,15 +168,14 @@ gene_track <- function(gene_data,
 .gene_track_exons <- function(genes, exon_data, region_chr_int,
                               region_start, region_end, has_strand, bar_h) {
   ex <- exon_data
-  ex$chr_int <- if (is.character(ex$chr)) chr_to_int(ex$chr) else as.integer(ex$chr)
-  ex <- ex[ex$chr_int == region_chr_int &
+  ex <- ex[ex$chr == region_chr_int &
              ex$end >= region_start & ex$start <= region_end &
-             ex$gene %in% genes$gene, , drop = FALSE]
+             ex$gene_id %in% genes$gene_id, , drop = FALSE]
   ex$start <- pmax(ex$start, region_start)
   ex$end <- pmin(ex$end, region_end)
 
-  ymap <- stats::setNames(genes$y, genes$gene)
-  cmap <- stats::setNames(genes$color, genes$gene)
+  ymap <- stats::setNames(genes$y, genes$gene_id)
+  cmap <- stats::setNames(genes$color, genes$gene_id)
   exon_h <- bar_h * 0.9
 
   strand_vec <- if (has_strand) genes$strand else rep(".", nrow(genes))
@@ -190,8 +195,8 @@ gene_track <- function(gene_data,
     )
 
   if (nrow(ex) > 0) {
-    ex$y <- ymap[ex$gene]
-    ex$fill <- cmap[ex$gene]
+    ex$y <- ymap[ex$gene_id]
+    ex$fill <- cmap[ex$gene_id]
     plt <- plt + geom_rect(
       data = ex,
       aes(xmin = .data$start / 1e6, xmax = .data$end / 1e6,

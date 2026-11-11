@@ -53,7 +53,7 @@ test_that("print.gwas_data produces output", {
 test_that("summary.gwas_data produces output", {
   df <- data.frame(CHR = c(1, 2), BP = c(100, 200), P = c(0.1, 0.5))
   gd <- as_gwas_data(df)
-  expect_output(summary(gd), "GWAS Data Summary")
+  expect_output(print(summary(gd)), "GWAS Data Summary")
 })
 
 test_that("as_gwas_data auto-detects common column names", {

@@ -31,6 +31,7 @@ common figure styles, but they contain both red and green and are not
 colorblind-safe.
 }
 \examples{
+data(example_gwas)
 gwas_palette("colorblind")
 gwas_palette("nature", n = 5)
 manhattan_plot(example_gwas, colors = gwas_palette("vibrant"))

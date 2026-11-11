@@ -30,12 +30,14 @@ enrichment_manhattan(
 )
 }
 \arguments{
-\item{data}{A \code{gwas_data} object or data.frame.}
+\item{data}{A \code{gwas_data} object, data.frame or \code{GRanges} of variants.}
 
-\item{annotations}{A data.frame or list of data.frames with annotation
-regions. Each must have columns: \code{chr} (integer), \code{start}, \code{end}.
-Optionally: \code{category} (annotation type), \code{name} (region label).
-If a named list, names are used as category labels.}
+\item{annotations}{Annotation regions as a \link[GenomicRanges:GRanges]{GenomicRanges::GRanges} with
+an optional \code{category} metadata column (annotation type), or a named
+\code{GRangesList} (or named list of \code{GRanges}) whose names are used as
+categories. BED, GFF or bigBed
+files can be read with \code{rtracklayer::import()}. A variant falling in
+several regions takes the category of the first one.}
 
 \item{chr, bp, p, snp}{Column name overrides.}
 
@@ -83,12 +85,17 @@ with functional genomics.
 }
 \examples{
 data(example_gwas)
-# Define annotation regions
-annot <- data.frame(
-  chr = c(1, 2, 5),
-  start = c(1e6, 50e6, 100e6),
-  end = c(5e6, 55e6, 110e6),
+# Annotation regions with a category column
+annot <- GenomicRanges::GRanges(
+  c("chr1:1000000-5000000", "chr2:50000000-55000000",
+    "chr5:100000000-110000000"),
   category = c("Enhancer", "Gene", "eQTL")
 )
 enrichment_manhattan(example_gwas, annotations = annot)
+
+# The same as a GRangesList, one element per category
+annot_list <- GenomicRanges::GRangesList(
+  Enhancer = annot[1], Gene = annot[2], eQTL = annot[3]
+)
+enrichment_manhattan(example_gwas, annotations = annot_list)
 }
