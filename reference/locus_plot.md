@@ -12,15 +12,14 @@ locus_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   ld = NULL,
   ld_colors = c("#2166AC", "#67A9CF", "#78C679", "#F4A582", "#D73027"),
   ld_breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1),
-  gene_data = NULL,
+  genes = NULL,
+  exons = NULL,
   gene_height = 0.25,
   point_size = 2,
   lead_snp_shape = 23,
@@ -39,13 +38,12 @@ locus_plot(
 
   Column name overrides.
 
-- region_chr:
+- region:
 
-  Chromosome of the region to plot.
-
-- region_start, region_end:
-
-  Start and end positions.
+  The region to plot: a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  of length 1, or a string such as `"chr1:1000000-20000000"`. Not needed
+  when `lead_snp` is given.
 
 - lead_snp:
 
@@ -68,9 +66,17 @@ locus_plot(
 
   Breaks for LD color bins.
 
-- gene_data:
+- genes:
 
-  A data.frame with columns: chr, start, end, gene, strand.
+  Optional gene models drawn as a track under the plot: a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html),
+  `TxDb` or `EnsDb` object (see
+  [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)).
+
+- exons:
+
+  Optional exon structure for the gene track (see
+  [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)).
 
 - gene_height:
 
@@ -94,12 +100,19 @@ locus_plot(
 
 ## Value
 
-A ggplot object (or patchwork composition if gene_data is provided).
+A ggplot object, or a patchwork composition when `genes` is provided.
 
 ## Examples
 
 ``` r
 data(example_gwas, package = "ggwas")
-locus_plot(example_gwas, region_chr = 1,
-           region_start = 1e6, region_end = 20e6)
+locus_plot(example_gwas, region = "chr1:1000000-20000000")
+
+
+# With a gene track
+genes <- GenomicRanges::GRanges(
+  c("chr1:2000000-4000000:+", "chr1:9000000-12000000:-"),
+  gene_name = c("GeneA", "GeneB")
+)
+locus_plot(example_gwas, region = "chr1:1000000-20000000", genes = genes)
 ```

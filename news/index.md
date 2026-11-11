@@ -1,5 +1,82 @@
 # Changelog
 
+## ggwas 0.99.11
+
+Changes from the Bioconductor review. They break the API of the
+functions listed below.
+
+- Gene models are now `GRanges`, `TxDb` or `EnsDb` objects in
+  [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md),
+  [`locus_plot()`](https://bczech.github.io/ggwas/reference/locus_plot.md),
+  [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md),
+  [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md),
+  [`top_hits()`](https://bczech.github.io/ggwas/reference/top_hits.md)
+  and
+  [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md).
+  A data.frame is no longer accepted.
+- Annotation regions in
+  [`enrichment_manhattan()`](https://bczech.github.io/ggwas/reference/enrichment_manhattan.md)
+  and
+  [`highlight_regions()`](https://bczech.github.io/ggwas/reference/highlight_regions.md)
+  are now `GRanges` (or a named `GRangesList`), and overlaps use
+  [`GenomicRanges::findOverlaps()`](https://rdrr.io/pkg/IRanges/man/findOverlaps-methods.html).
+- [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md),
+  [`locus_plot()`](https://bczech.github.io/ggwas/reference/locus_plot.md),
+  [`coloc_plot()`](https://bczech.github.io/ggwas/reference/coloc_plot.md)
+  and
+  [`finemapping_plot()`](https://bczech.github.io/ggwas/reference/finemapping_plot.md)
+  take one `region` (a `GRanges` or a `"chr:start-end"` string) instead
+  of `region_chr`, `region_start` and `region_end`.
+  [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
+  takes exons as a `GRangesList` from
+  [`exonsBy()`](https://rdrr.io/pkg/GenomicFeatures/man/transcriptsBy.html),
+  or `exons = TRUE` with a `TxDb`/`EnsDb`.
+- The nearest gene is found with
+  [`GenomicRanges::distanceToNearest()`](https://rdrr.io/pkg/IRanges/man/nearest-methods.html),
+  so the distance is now measured to the gene body (0 inside a gene),
+  not to its midpoint.
+- [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md)
+  and
+  [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
+  take chromosome lengths from a `Seqinfo` (`seqinfo =`) and
+  [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md)
+  takes centromeres as `GRanges` (`centromeres =`).
+- [`set_sex_chr_map()`](https://bczech.github.io/ggwas/reference/set_sex_chr_map.md)
+  accepts a `Seqinfo` and numbers X, Y, Z, W and MT from it.
+  `set_sex_chr_map(NULL)` now really turns the mapping off.
+- [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md)
+  takes an `annotation` object and returns a `GRanges`;
+  [`value_manhattan()`](https://bczech.github.io/ggwas/reference/value_manhattan.md)
+  takes `annotation =` and also accepts a `GRanges`.
+- Remove `read_gtf()` (use `rtracklayer::import()`), `gene_annotation()`
+  and the bundled gene tables (use `TxDb`/`EnsDb` packages), and
+  `chr_info_human()`, `chr_info_mouse()`, `chr_info_cattle()` and
+  `chr_info_ucsc()` (use `Seqinfo`).
+- Fix
+  [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
+  placing gene labels over the wrong chromosomes when only some
+  chromosomes have labelled peaks.
+- [`summary()`](https://rdrr.io/r/base/summary.html) of a `gwas_data`
+  object now returns a summary object with its own print method.
+- Set `LazyData: false`, depend on R \>= 4.6.0, add
+  `BiocType: Software`, and drop `inst/CITATION` (Bioconductor generates
+  the citation).
+
+## ggwas 0.99.10
+
+- Add
+  [`value_manhattan()`](https://bczech.github.io/ggwas/reference/value_manhattan.md)
+  to plot any per-feature value (rankings, effect sizes, scores) along
+  the genome in Manhattan style.
+- Add
+  [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md)
+  to map Ensembl gene IDs or symbols to genome coordinates from a GTF,
+  bundled data, biomaRt, or an EnsDb.
+- [`value_manhattan()`](https://bczech.github.io/ggwas/reference/value_manhattan.md)
+  can look up coordinates from a gene-ID column directly via `annotate`
+  and `id`.
+- Bundled gene annotations now include an Ensembl `gene_id` column.
+
 ## ggwas 0.99.9
 
 - Chromosome colours now follow the chromosomes present in the data
@@ -72,10 +149,8 @@
 - Added
   [`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
   comparing variant effects between two studies on their shared variants
-- Added
-  [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
-  with bundled protein-coding genes for GRCh37 and GRCh38, so regional
-  and gene-labelled plots work without a GTF
+- Added `gene_annotation()` with bundled protein-coding genes for GRCh37
+  and GRCh38, so regional and gene-labelled plots work without a GTF
 - [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
   now renders full exon structure when given `exon_data`
 - Sped up `smart_downsample()` with exponential-key weighted sampling
@@ -91,13 +166,8 @@
 - Added
   [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md)
   dual-track comparison of genotyping density vs association signal
-- Added
-  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md),
-  [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md),
-  [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  for built-in chromosome data, and
-  [`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
-  for any UCSC assembly
+- Added `chr_info_human()`, `chr_info_mouse()`, `chr_info_cattle()` for
+  built-in chromosome data, and `chr_info_ucsc()` for any UCSC assembly
 - Used Greek letter on axis labels in volcano and architecture plots
 - Reversed color scale in heatmaps (dark = high values)
 - Filled empty bins in
@@ -156,7 +226,8 @@ Initial Bioconductor pre-release.
 ### Themes and palettes
 
 - Journal themes: Nature, Science, Cell, PLOS, presentation, poster
-- 14 colorblind-safe palettes
+- 14 color palettes, with a colorblind-safe default for chromosome
+  colors
 - Publication presets via
   [`gwas_preset()`](https://bczech.github.io/ggwas/reference/gwas_preset.md)
 

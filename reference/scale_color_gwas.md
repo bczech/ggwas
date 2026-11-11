@@ -1,6 +1,9 @@
-# Colorblind-safe chromosome color scale
+# Chromosome color scale
 
-Scale using colorblind-friendly alternating colors for chromosomes.
+Alternating colors for chromosomes. The default palette ("colorblind")
+is colorblind-safe; see
+[`gwas_palette()`](https://bczech.github.io/ggwas/reference/gwas_palette.md)
+for the other options.
 
 ## Usage
 

@@ -16,9 +16,7 @@ finemapping_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   pip_min_size = 0.3,
@@ -51,9 +49,12 @@ finemapping_plot(
 
   Column name overrides.
 
-- region_chr, region_start, region_end:
+- region:
 
-  Region to plot.
+  The region to plot: a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  of length 1, or a string such as `"chr1:1000000-50000000"`. Not needed
+  when `lead_snp` is given.
 
 - lead_snp:
 
@@ -104,6 +105,5 @@ example_gwas$PIP <- runif(nrow(example_gwas))^4
 example_gwas$PIP[which.min(example_gwas$P)] <- 0.95
 example_gwas$credible_set <- NA
 example_gwas$credible_set[example_gwas$PIP > 0.1] <- 1L
-finemapping_plot(example_gwas, region_chr = 1,
-                 region_start = 1e6, region_end = 50e6)
+finemapping_plot(example_gwas, region = "chr1:1000000-50000000")
 ```

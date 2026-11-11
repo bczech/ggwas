@@ -23,6 +23,7 @@ A list with components: `theme`, `colors`, `point_size`, `alpha`,
 ## Examples
 
 ``` r
+data(example_gwas)
 p <- gwas_preset("publication")
 manhattan_plot(example_gwas, colors = p$colors, point_size = p$point_size) +
   p$theme

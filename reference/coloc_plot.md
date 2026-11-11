@@ -14,9 +14,7 @@ coloc_plot(
   bp = NULL,
   p = NULL,
   snp = NULL,
-  region_chr = NULL,
-  region_start = NULL,
-  region_end = NULL,
+  region = NULL,
   lead_snp = NULL,
   flank = 5e+05,
   ld = NULL,
@@ -43,13 +41,12 @@ coloc_plot(
 
   Column name overrides (applied to both datasets).
 
-- region_chr:
+- region:
 
-  Chromosome of the region to plot.
-
-- region_start, region_end:
-
-  Start and end positions.
+  The region to plot: a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  of length 1, or a string such as `"chr1:1000000-30000000"`. Not needed
+  when `lead_snp` is given.
 
 - lead_snp:
 
@@ -98,6 +95,6 @@ data(example_gwas)
 gwas2 <- example_gwas
 gwas2$P <- runif(nrow(gwas2))^2
 coloc_plot(example_gwas, gwas2,
-           region_chr = 1, region_start = 1e6, region_end = 30e6,
+           region = "chr1:1000000-30000000",
            top_title = "GWAS", bottom_title = "eQTL")
 ```

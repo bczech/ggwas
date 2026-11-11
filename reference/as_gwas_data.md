@@ -42,7 +42,7 @@ as_gwas_data(
 
 ## Value
 
-A tibble with class `gwas_data`.
+A data.frame with class `gwas_data`.
 
 ## Examples
 

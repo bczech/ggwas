@@ -8,18 +8,16 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/bczech/ggwas/blob/v0.99.9/inst/CITATION)
+[`DESCRIPTION`](https://github.com/bczech/ggwas/blob/main/DESCRIPTION)
 
-Czech B (2026). *ggwas: Modern ggplot2 Visualizations for GWAS Summary
-Statistics*.
-[doi:10.5281/zenodo.20815110](https://doi.org/10.5281/zenodo.20815110).
-R package version 0.99.2, <https://github.com/bczech/ggwas>.
+Czech B (2026). *ggwas: Modern ggplot2 Visualizations for Genome-Wide
+Association Studies*. R package version 0.99.11,
+<https://github.com/bczech/ggwas>.
 
     @Manual{,
-      title = {ggwas: Modern ggplot2 Visualizations for GWAS Summary Statistics},
+      title = {ggwas: Modern ggplot2 Visualizations for Genome-Wide Association Studies},
       author = {Bartosz Czech},
       year = {2026},
-      note = {R package version 0.99.2},
+      note = {R package version 0.99.11},
       url = {https://github.com/bczech/ggwas},
-      doi = {10.5281/zenodo.20815110},
     }

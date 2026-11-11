@@ -38,14 +38,17 @@ enrichment_manhattan(
 
 - data:
 
-  A `gwas_data` object or data.frame.
+  A `gwas_data` object, data.frame or `GRanges` of variants.
 
 - annotations:
 
-  A data.frame or list of data.frames with annotation regions. Each must
-  have columns: `chr` (integer), `start`, `end`. Optionally: `category`
-  (annotation type), `name` (region label). If a named list, names are
-  used as category labels.
+  Annotation regions as a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  with an optional `category` metadata column (annotation type), or a
+  named `GRangesList` (or named list of `GRanges`) whose names are used
+  as categories. BED, GFF or bigBed files can be read with
+  `rtracklayer::import()`. A variant falling in several regions takes
+  the category of the first one.
 
 - chr, bp, p, snp:
 
@@ -61,8 +64,8 @@ enrichment_manhattan(
 
 - annotation_colors:
 
-  Named vector of colors for each annotation category. If NULL, uses a
-  colorblind-friendly palette.
+  Named vector of colors for each annotation category. If NULL, colors
+  are taken from `palette`.
 
 - annotation_size:
 
@@ -125,12 +128,18 @@ A ggplot object.
 
 ``` r
 data(example_gwas)
-# Define annotation regions
-annot <- data.frame(
-  chr = c(1, 2, 5),
-  start = c(1e6, 50e6, 100e6),
-  end = c(5e6, 55e6, 110e6),
+# Annotation regions with a category column
+annot <- GenomicRanges::GRanges(
+  c("chr1:1000000-5000000", "chr2:50000000-55000000",
+    "chr5:100000000-110000000"),
   category = c("Enhancer", "Gene", "eQTL")
 )
 enrichment_manhattan(example_gwas, annotations = annot)
+
+
+# The same as a GRangesList, one element per category
+annot_list <- GenomicRanges::GRangesList(
+  Enhancer = annot[1], Gene = annot[2], eQTL = annot[3]
+)
+enrichment_manhattan(example_gwas, annotations = annot_list)
 ```

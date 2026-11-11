@@ -34,12 +34,14 @@ top_hits(
 
 - genes:
 
-  Optional gene annotation data.frame (chr, start, end, gene). If
-  provided, nearest gene is added.
+  Optional gene models as a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html),
+  `TxDb` or `EnsDb` object. If provided, the nearest gene is added (see
+  [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)).
 
 - max_gene_distance:
 
-  Maximum distance to assign a gene.
+  Maximum distance (bp) to the nearest gene.
 
 - n:
 

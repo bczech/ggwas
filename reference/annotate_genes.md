@@ -1,8 +1,7 @@
 # Annotate peaks with nearest gene names
 
-Maps significant SNPs to their nearest gene using a provided gene
-annotation table. Returns the data with a `gene` column, or adds gene
-labels directly to a Manhattan plot.
+Maps significant SNPs to their nearest gene with
+[`GenomicRanges::distanceToNearest()`](https://rdrr.io/pkg/IRanges/man/nearest-methods.html).
 
 ## Usage
 
@@ -21,13 +20,14 @@ annotate_genes(
 
 - data:
 
-  A `gwas_data` object or data.frame.
+  A `gwas_data` object, data.frame or `GRanges` of variants.
 
 - genes:
 
-  A data.frame with gene positions. Required columns: `chr` (integer or
-  "chr1" format), `start`, `end`, `gene` (gene symbol). Optional:
-  `strand`.
+  Gene models as a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html),
+  `TxDb` or `EnsDb` object. Gene names are taken as described in
+  [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md).
 
 - p_threshold:
 
@@ -35,8 +35,9 @@ annotate_genes(
 
 - max_distance:
 
-  Maximum distance (bp) from SNP to gene midpoint to assign annotation.
-  Default 500kb.
+  Maximum distance (bp) between a SNP and the nearest gene. The distance
+  is 0 for a SNP inside a gene and otherwise the gap to the closest gene
+  end. Default 500kb.
 
 - top_n:
 
@@ -49,15 +50,17 @@ annotate_genes(
 
 ## Value
 
-A data.frame with added `nearest_gene` and `gene_distance` columns.
+The input as a `gwas_data` object with added `nearest_gene` and
+`gene_distance` columns.
 
 ## Examples
 
 ``` r
 data(example_gwas)
-genes <- data.frame(
-  chr = c(1, 2, 5), start = c(1e6, 50e6, 80e6),
-  end = c(1.5e6, 51e6, 82e6), gene = c("GENE_A", "GENE_B", "GENE_C")
+genes <- GenomicRanges::GRanges(
+  c("chr1:1000000-1500000", "chr2:50000000-51000000",
+    "chr5:80000000-82000000"),
+  gene_name = c("GENE_A", "GENE_B", "GENE_C")
 )
 annotated <- annotate_genes(example_gwas, genes, top_n = 10)
 head(annotated[!is.na(annotated$nearest_gene), ])

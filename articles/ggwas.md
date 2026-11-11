@@ -22,7 +22,7 @@ multi-panel figures.
 
 `ggwas` was designed with three goals:
 
-1.  **Broad coverage**: 20 plot types in one package, including views
+1.  **Broad coverage**: 21 plot types in one package, including views
     not found in other GWAS plotting packages.
 2.  **Publication-ready defaults**: sensible colors, proper axis
     formatting, and built-in journal themes so plots look good without
@@ -35,17 +35,67 @@ generic tab-separated file. All plot functions return standard ggplot
 objects, so you can add layers, override themes, or combine panels with
 `patchwork` exactly as you would with any other ggplot.
 
+### Place in a Bioconductor workflow
+
+`ggwas` is the plotting step after association testing and annotation.
+It takes its genomic inputs as Bioconductor objects:
+
+- **Variants** as a `data.frame` of summary statistics or as a `GRanges`
+  ([`as_gwas_data()`](https://bczech.github.io/ggwas/reference/as_gwas_data.md)
+  and every plot function accept both;
+  [`as_granges()`](https://bczech.github.io/ggwas/reference/as_granges.md)
+  converts back).
+- **Gene models** as `GRanges`, `TxDb`
+  (*[GenomicFeatures](https://bioconductor.org/packages/3.23/GenomicFeatures)*)
+  or `EnsDb`
+  (*[ensembldb](https://bioconductor.org/packages/3.23/ensembldb)*)
+  objects, for gene tracks, locus plots and nearest-gene labels.
+- **Annotation regions** (enhancers, eQTLs, regions to highlight) as
+  `GRanges` or `GRangesList`. Files in BED, GFF/GTF, bigWig or bigBed
+  format are read with `rtracklayer::import()`
+  (*[rtracklayer](https://bioconductor.org/packages/3.23/rtracklayer)*).
+- **Chromosome lengths and naming** as `Seqinfo` objects
+  (*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*),
+  taken for example from a `TxDb` or a `BSgenome`.
+
+### Related Bioconductor packages
+
+Several Bioconductor packages draw GWAS plots. They differ in scope and
+in the graphics system they build on:
+
+| Package | GWAS plots | Graphics | Main input |
+|----|----|----|----|
+| *[ggmanh](https://bioconductor.org/packages/3.23/ggmanh)* | Manhattan (also binned), QQ | ggplot2 | data.frame, GRanges, GDS |
+| *[GWASTools](https://bioconductor.org/packages/3.23/GWASTools)* | Manhattan, QQ | base R | p-value and chromosome vectors |
+| *[karyoploteR](https://bioconductor.org/packages/3.23/karyoploteR)* | Manhattan on a karyotype ideogram | base R | GRanges |
+| *[ggbio](https://bioconductor.org/packages/3.23/ggbio)* | Manhattan (`plotGrandLinear()`) | ggplot2 | GRanges |
+| *[Gviz](https://bioconductor.org/packages/3.23/Gviz)* | p-values as a data track next to gene tracks | grid | GRanges, TxDb |
+| *[snpStats](https://bioconductor.org/packages/3.23/snpStats)* | QQ (`qq.chisq()`) | base R | chi-squared statistics |
+| **ggwas** | 21 types (below) | ggplot2 | data.frame, GRanges, TxDb, EnsDb, Seqinfo |
+
+`ggwas` overlaps with these packages on the Manhattan and QQ plots. It
+adds Miami, locus zoom with LD and gene track, circular, enrichment and
+multi-trait Manhattan plots, PheWAS, colocalization, fine-mapping,
+genetic correlation and architecture plots, SNP density karyograms, and
+journal themes, all returning ggplot objects. Use
+*[Gviz](https://bioconductor.org/packages/3.23/Gviz)* or
+*[karyoploteR](https://bioconductor.org/packages/3.23/karyoploteR)* when
+you need many stacked genomic data tracks; use `ggwas` when the
+association results are the main subject of the figure.
+
 ## Getting started
 
 ### Installation
 
 ``` r
 
-# From GitHub
-pak::pak("bczech/ggwas")
+# From Bioconductor (once accepted)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ggwas")
 
-# Once available on Bioconductor:
-# BiocManager::install("ggwas")
+# Development version from GitHub
+pak::pak("bczech/ggwas")
 ```
 
 ### Reading data
@@ -58,8 +108,10 @@ BP/POS/GENPOS, P/PVALUE/LOG10P, etc.):
 ``` r
 
 library(ggwas)
-#> ggwas v0.99.9
 library(ggplot2)
+library(GenomicRanges)
+library(GenomeInfoDb)
+library(rtracklayer)
 
 data(example_gwas)
 example_gwas
@@ -70,7 +122,48 @@ example_gwas
 ```
 
 The result is a `gwas_data` object: a data.frame with validated columns
-and a custom print method showing key QC metrics at a glance.
+and a custom print method showing key QC metrics at a glance. The
+example data are simulated, with positions drawn within GRCh38
+chromosome lengths.
+
+Variants stored as a `GRanges` work the same way.
+[`as_granges()`](https://bczech.github.io/ggwas/reference/as_granges.md)
+converts a `gwas_data` object, and any plot function accepts the result:
+
+``` r
+
+gr <- as_granges(example_gwas)
+gr
+#> GRanges object with 8000 ranges and 7 metadata columns:
+#>             seqnames    ranges strand |         SNP          P      BETA
+#>                <Rle> <IRanges>  <Rle> | <character>  <numeric> <numeric>
+#>   rs2678525       16  80841579      * |   rs2678525 0.18988331  -0.01723
+#>   rs8451246        5  80011524      * |   rs8451246 0.05264044  -0.02073
+#>   rs7069507       12  34577737      * |   rs7069507 0.04506835   0.01575
+#>   rs4824759       12  16869788      * |   rs4824759 0.00680649  -0.10267
+#>   rs7209949        7  38647669      * |   rs7209949 0.56527788  -0.00012
+#>         ...      ...       ...    ... .         ...        ...       ...
+#>   rs7761398       11  23750379      * |   rs7761398   0.115608   0.05872
+#>   rs7135121        3  69639436      * |   rs7135121   0.929757   0.04248
+#>   rs6635611       18  40340076      * |   rs6635611   0.788155   0.06943
+#>   rs6641483       13  74927676      * |   rs6641483   0.174590   0.00629
+#>   rs5502842       20  14803036      * |   rs5502842   0.291328   0.06330
+#>                    SE          A1          A2        AF
+#>             <numeric> <character> <character> <numeric>
+#>   rs2678525   0.01314           G           T    0.2522
+#>   rs8451246   0.01070           G           T    0.3089
+#>   rs7069507   0.00786           T           A    0.3404
+#>   rs4824759   0.03794           C           A    0.1418
+#>   rs7209949   0.00021           T           C    0.3506
+#>         ...       ...         ...         ...       ...
+#>   rs7761398   0.03732           C           G    0.1445
+#>   rs7135121   0.48192           T           C    0.3549
+#>   rs6635611   0.25838           G           A    0.3425
+#>   rs6641483   0.00463           T           A    0.2657
+#>   rs5502842   0.05999           C           T    0.1301
+#>   -------
+#>   seqinfo: 22 sequences from an unspecified genome; no seqlengths
+```
 
 For specific tools, dedicated readers handle format quirks
 automatically:
@@ -321,10 +414,13 @@ biological follow-up:
 
 ``` r
 
-locus_plot(example_gwas, region_chr = 1, region_start = 1e6, region_end = 50e6)
+locus_plot(example_gwas, region = "chr1:1000000-50000000")
 ```
 
 ![](ggwas_files/figure-html/locus-1.png)
+
+The region can also be a `GRanges` of length 1. Gene models are added
+with `genes =`, as shown in Section @ref(genomic-tracks).
 
 ## Novel visualizations
 
@@ -422,18 +518,47 @@ gwas_summary(example_gwas)
 
 In manuscripts, rs IDs are less informative than gene names.
 [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
-takes a gene annotation table and labels each lead SNP with its nearest
-gene. In practice, you would extract this table from a GTF file or via
-`biomaRt`. Here we define a small set manually:
+labels each lead SNP with its nearest gene, found with
+[`GenomicRanges::distanceToNearest()`](https://rdrr.io/pkg/IRanges/man/nearest-methods.html).
+Gene models come from any `GRanges`, `TxDb` or `EnsDb` object. Here we
+take the GRCh38 UCSC gene models from
+*[TxDb.Hsapiens.UCSC.hg38.knownGene](https://bioconductor.org/packages/3.23/TxDb.Hsapiens.UCSC.hg38.knownGene)*
+and add gene symbols from
+*[org.Hs.eg.db](https://bioconductor.org/packages/3.23/org.Hs.eg.db)*:
 
 ``` r
 
-genes <- data.frame(
-  chr = c(1, 2, 5, 7, 11, 15, 19, 22),
-  start = c(2e6, 50e6, 80e6, 30e6, 60e6, 40e6, 10e6, 20e6),
-  end = c(3e6, 52e6, 85e6, 35e6, 65e6, 45e6, 15e6, 25e6),
-  gene = c("MTOR", "NRXN1", "TCF7L2", "CDKAL1", "KCNQ1", "FTO", "LDLR", "COMT")
-)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+genes <- genes(txdb)
+genes$gene_name <- mapIds(org.Hs.eg.db, keys = genes$gene_id,
+                          column = "SYMBOL", keytype = "ENTREZID")
+genes <- keepStandardChromosomes(genes, pruning.mode = "coarse")
+genes
+#> GRanges object with 35161 ranges and 2 metadata columns:
+#>             seqnames              ranges strand |     gene_id   gene_name
+#>                <Rle>           <IRanges>  <Rle> | <character> <character>
+#>           1    chr19   58345178-58362751      - |           1        A1BG
+#>          10     chr8   18386273-18401218      + |          10        NAT2
+#>         100    chr20   44584896-44652252      - |         100         ADA
+#>        1000    chr18   27932879-28177946      - |        1000        CDH2
+#>   100008586     chrX   49551278-49568218      + |   100008586     GAGE12F
+#>         ...      ...                 ...    ... .         ...         ...
+#>        9990    chr15   34229784-34338060      - |        9990     SLC12A6
+#>        9991     chr9 112215071-112333653      - |        9991       PTBP3
+#>        9992    chr21   34180729-34371381      + |        9992       KCNE2
+#>        9993    chr22   19036282-19122454      - |        9993       DGCR2
+#>        9997    chr22   50523568-50526461      - |        9997        SCO2
+#>   -------
+#>   seqinfo: 25 sequences (1 circular) from hg38 genome
+```
+
+Because the example associations are simulated, the gene names below
+only show how labelling works:
+
+``` r
 
 manhattan_genes(example_gwas, genes = genes, gene_p_threshold = 0.001)
 ```
@@ -468,16 +593,16 @@ top_hits(example_gwas, p_threshold = 0.001, genes = genes, n = 10)
 #> === Top 10 GWAS Hits ===
 #> 
 #>  SNP       CHR BP        P        BETA     nearest_gene cytoband
-#>  rs4551863 10   12347484 1.19e-14 -0.65050 <NA>         10p2    
-#>  rs6815318 5     8647048 1.67e-14  0.22025 <NA>         5p1     
-#>  rs7084233 9    67050634 2.21e-14  0.09187 <NA>         9q7     
-#>  rs3834775 11   55974589 3.20e-14 -0.44376 <NA>         11q6    
-#>  rs7664467 1   243745976 1.13e-13  0.27479 <NA>         1q25    
-#>  rs5643433 12   25442148 1.27e-13  0.37069 <NA>         12p3    
-#>  rs8682426 8    82835070 6.14e-12  0.31901 <NA>         8q9     
-#>  rs5807931 1    32792647 2.75e-11  0.14800 <NA>         1p4     
-#>  rs4355535 14   80736074 7.20e-11 -0.02754 <NA>         14q9    
-#>  rs8870315 2   123129235 7.36e-11  0.09318 <NA>         2q13
+#>  rs4551863 10   12347484 1.19e-14 -0.65050 CAMK1D       10p2    
+#>  rs6815318 5     8647048 1.67e-14  0.22025 LOC105374647 5p1     
+#>  rs7084233 9    67050634 2.21e-14  0.09187 CNTNAP3P2    9q7     
+#>  rs3834775 11   55974589 3.20e-14 -0.44376 OR10AG1      11q6    
+#>  rs7664467 1   243745976 1.13e-13  0.27479 AKT3-IT1     1q25    
+#>  rs5643433 12   25442148 1.27e-13  0.37069 LMNTD1       12p3    
+#>  rs8682426 8    82835070 6.14e-12  0.31901 LOC105375931 8q9     
+#>  rs5807931 1    32792647 2.75e-11  0.14800 YARS1        1p4     
+#>  rs4355535 14   80736074 7.20e-11 -0.02754 CEP128       14q9    
+#>  rs8870315 2   123129235 7.36e-11  0.09318 LINC01826    2q13
 ```
 
 ### Region highlights
@@ -490,10 +615,8 @@ from linkage studies:
 
 plt <- manhattan_plot(example_gwas)
 
-regions <- data.frame(
-  chr = c(6, 1),
-  start = c(25e6, 5e6),
-  end = c(35e6, 30e6),
+regions <- GRanges(
+  c("chr6:25000000-35000000", "chr1:5000000-30000000"),
   label = c("MHC", "1p36")
 )
 
@@ -506,56 +629,83 @@ highlight_regions(plt, regions, color = "#FFD700", alpha = 0.2)
 
 [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
 creates a standalone gene annotation panel that can be composed with any
-ggwas plot using `patchwork`. Genes are rendered as directional chevrons
-showing strand orientation:
+ggwas plot using `patchwork`. It takes the region as a `GRanges` (or a
+`"chr:start-end"` string) and the gene models as a `GRanges`, `TxDb` or
+`EnsDb`. Genes are drawn as directional chevrons; exons from
+[`exonsBy()`](https://rdrr.io/pkg/GenomicFeatures/man/transcriptsBy.html)
+add the exon structure:
 
 ``` r
 
-genes <- data.frame(
-  chr = c(1, 1, 1, 1, 1),
-  start = c(2e6, 15e6, 40e6, 55e6, 75e6),
-  end = c(8e6, 25e6, 50e6, 65e6, 85e6),
-  gene = c("MTOR", "NRXN1", "TCF7L2", "CDKAL1", "KCNQ1"),
-  strand = c("+", "-", "+", "-", "+")
-)
+region <- GRanges("chr8:81800000-83900000")
+exons <- exonsBy(txdb, by = "gene")
 
-p <- locus_plot(example_gwas, region_chr = 1,
-                region_start = 0, region_end = 100e6, point_size = 1)
-gt <- gene_track(genes, region_chr = 1, region_start = 0, region_end = 100e6,
-                  highlight_genes = "TCF7L2")
-patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.75, 0.25))
+p <- locus_plot(example_gwas, region = region)
+gt <- gene_track(genes, region, exons = exons, highlight_genes = "SNX16")
+patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.7, 0.3))
 ```
 
 ![](ggwas_files/figure-html/gene-track-1.png)
 
-For real data, use
-[`read_gtf()`](https://bczech.github.io/ggwas/reference/read_gtf.md) to
-parse Ensembl or GENCODE annotation files directly, with no `biomaRt`
-needed:
+`locus_plot(..., genes = genes)` builds the same two-panel figure in one
+call. A `TxDb` without symbols can also be passed directly, in which
+case the genes are labelled with their Entrez IDs; an `EnsDb` carries
+symbols itself.
+
+GTF and GFF3 files are read with `rtracklayer::import()`, which handles
+the coordinate conventions of each format. The gene rows are the gene
+models:
 
 ``` r
 
-genes <- read_gtf("Homo_sapiens.GRCh38.113.gtf.gz",
-                   biotype = "protein_coding")
-gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6)
+gtf <- import(system.file("extdata", "example.gtf", package = "ggwas"))
+gtf_genes <- gtf[gtf$type == "gene"]
+gtf_genes
+#> GRanges object with 4 ranges and 6 metadata columns:
+#>       seqnames          ranges strand |   source     type     score     phase
+#>          <Rle>       <IRanges>  <Rle> | <factor> <factor> <numeric> <integer>
+#>   [1]     chr1 1000000-2000000      + |     test     gene        NA      <NA>
+#>   [2]     chr1 5000000-6500000      - |     test     gene        NA      <NA>
+#>   [3]     chr1 8000000-9000000      + |     test     gene        NA      <NA>
+#>   [4]     chr2 3000000-4000000      + |     test     gene        NA      <NA>
+#>            gene_id   gene_name
+#>        <character> <character>
+#>   [1] ENSG00000001       GeneA
+#>   [2] ENSG00000002       GeneB
+#>   [3] ENSG00000003       GeneC
+#>   [4] ENSG00000004       GeneD
+#>   -------
+#>   seqinfo: 2 sequences from an unspecified genome; no seqlengths
+gene_track(gtf_genes, "chr1:1-50000",
+           exons = gtf[gtf$type == "exon"])
 ```
+
+![](ggwas_files/figure-html/read-gtf-1.png)
 
 ### Non-human organisms
 
-By default, ggwas uses human chromosome conventions (23 = X, 24 = Y).
-For other organisms, use
+ggwas stores chromosomes as integer codes; by default 23 = X, 24 = Y and
+26 = MT, as in human data. For other organisms, pass the genome’s
+`Seqinfo` to
 [`set_sex_chr_map()`](https://bczech.github.io/ggwas/reference/set_sex_chr_map.md):
+numbered chromosomes keep their number and the named ones (X, Y, Z, W,
+MT, …) follow the last autosome. A `Seqinfo` can come from a `TxDb`,
+`EnsDb` or `BSgenome` of that organism, or be built directly:
 
 ``` r
 
-# Mouse (20 = X, 21 = Y)
-set_sex_chr_map(c(X = 20L, Y = 21L))
+# Mouse (GRCm39): 19 autosomes, then X, Y and MT
+mouse <- Seqinfo(c(1:19, "X", "Y", "MT"), genome = "GRCm39")
+old <- set_sex_chr_map(mouse)
+getOption("ggwas.sex_chr_map")
+#>  X  Y MT 
+#> 20 21 22
 
 # Disable entirely (all chromosomes as numbers)
 set_sex_chr_map(NULL)
 
-# Restore human default
-set_sex_chr_map()
+# Restore the previous (human) mapping
+set_sex_chr_map(old)
 ```
 
 ## Multi-study comparisons
@@ -603,12 +753,18 @@ preferentially overlap with one annotation type (e.g., liver enhancers
 for lipid traits), that provides evidence for the regulatory mechanism
 and tissue of action:
 
+The annotations are a `GRanges` with a `category` column, or a named
+`GRangesList` with one element per category. Real annotations are
+usually read from BED files with `rtracklayer::import()`; here we make a
+small set by hand:
+
 ``` r
 
-annotations <- data.frame(
-  chr = c(1, 3, 5, 7, 11, 15, 19),
-  start = c(5e6, 20e6, 50e6, 30e6, 60e6, 40e6, 10e6),
-  end = c(30e6, 50e6, 120e6, 80e6, 100e6, 80e6, 40e6),
+annotations <- GRanges(
+  c("chr1:5000000-30000000", "chr3:20000000-50000000",
+    "chr5:50000000-120000000", "chr7:30000000-80000000",
+    "chr11:60000000-100000000", "chr15:40000000-80000000",
+    "chr19:10000000-40000000"),
   category = c("Enhancer", "Gene", "eQTL", "Gene",
                "Enhancer", "eQTL", "Gene")
 )
@@ -685,7 +841,7 @@ eqtl_data$P <- runif(nrow(eqtl_data))^2
 
 coloc_plot(
   example_gwas, eqtl_data,
-  region_chr = 1, region_start = 1e6, region_end = 30e6,
+  region = "chr1:1000000-30000000",
   top_title = "GWAS", bottom_title = "eQTL"
 )
 ```
@@ -717,7 +873,7 @@ fm_data$credible_set[fm_data$PIP > 0.05] <- 1L
 
 finemapping_plot(
   fm_data,
-  region_chr = 1, region_start = 1e6, region_end = 50e6,
+  region = "chr1:1000000-50000000",
   label_pip_above = 0.3
 )
 ```
@@ -824,12 +980,6 @@ effect_compare_plot(example_gwas, replication,
 
 ![](ggwas_files/figure-html/effect-compare-1.png)
 
-Regional and gene-labelled plots can use the bundled protein-coding gene
-models via `gene_annotation("GRCh38")` (or `"GRCh37"`), so no GTF
-download is needed; passing `exon_data` to
-[`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
-draws full exon structure.
-
 ## Genome-wide density
 
 ### SNP density karyogram
@@ -842,19 +992,29 @@ available.
 **Heatmap style** bins variants and colors tiles by count, best for
 large datasets:
 
+Chromosome lengths are taken from the data unless a `Seqinfo` is given.
+Here it comes from the same `TxDb` as the gene models:
+
 ``` r
 
-snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+snp_density(example_gwas, bin_size = 5e6, seqinfo = seqinfo(txdb))
 ```
 
 ![](ggwas_files/figure-html/density-heatmap-1.png)
 
 **Points style** draws individual variants on chromosome outlines, where
-density is visible through natural clustering:
+density is visible through natural clustering. Centromeres are marked
+when their positions are given as a `GRanges`, for example the UCSC
+“Centromeres” track imported with `rtracklayer::import()`. Here we use
+the GRCh38 positions for chromosomes 1 to 3:
 
 ``` r
 
-snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+centromeres <- GRanges(c("chr1:122026460-124932724",
+                         "chr2:92188146-94090557",
+                         "chr3:90772459-93655574"))
+snp_density(example_gwas, style = "points", seqinfo = seqinfo(txdb),
+  centromeres = centromeres)
 ```
 
 ![](ggwas_files/figure-html/density-points-1.png)
@@ -865,7 +1025,7 @@ uniformly:
 ``` r
 
 snp_density(example_gwas, style = "points",
-  color_by = "significance", chr_info = chr_info_human())
+  color_by = "significance", seqinfo = seqinfo(txdb))
 ```
 
 ![](ggwas_files/figure-html/density-significance-1.png)
@@ -875,28 +1035,23 @@ The `palette` argument works with both styles:
 ``` r
 
 snp_density(example_gwas, bin_size = 5e6,
-  palette = "magma", chr_info = chr_info_human())
+  palette = "magma", seqinfo = seqinfo(txdb))
 ```
 
 ![](ggwas_files/figure-html/density-palette-1.png)
 
-#### Species support
+#### Other species
 
-Built-in chromosome data is available for human, mouse, and cattle. For
-other species, use
-[`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
-to fetch data from UCSC:
+Any `Seqinfo` works, so other genomes need no extra data in ggwas. Take
+it from the organism’s `TxDb`, `EnsDb` or `BSgenome` package, or let
+*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*
+fetch it from UCSC or NCBI (this needs internet access, so the chunk is
+not run here):
 
 ``` r
 
-# Built-in (instant, offline)
-snp_density(gwas, chr_info = chr_info_human())   # hg38
-snp_density(gwas, chr_info = chr_info_mouse())   # mm39
-snp_density(gwas, chr_info = chr_info_cattle())  # ARS-UCD1.2
-
-# Any species from UCSC (requires internet)
-snp_density(gwas, chr_info = chr_info_ucsc("canFam6"))   # dog
-snp_density(gwas, chr_info = chr_info_ucsc("susScr11"))  # pig
+pig <- Seqinfo(genome = "susScr11")
+snp_density(pig_gwas, seqinfo = pig)
 ```
 
 ### Density vs signal comparison
@@ -1040,13 +1195,13 @@ ggsave("figure1.png", fig, width = 10, height = 5, dpi = 300)
 ``` r
 
 sessionInfo()
-#> R version 4.6.1 (2026-06-24)
+#> R version 4.6.2 (2026-10-29)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 24.04.5 LTS
+#> Running under: Ubuntu 26.04.1 LTS
 #> 
 #> Matrix products: default
 #> BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-#> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
+#> LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.32.so;  LAPACK version 3.12.0
 #> 
 #> locale:
 #>  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
@@ -1058,25 +1213,67 @@ sessionInfo()
 #> tzcode source: system (glibc)
 #> 
 #> attached base packages:
-#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> [1] stats4    stats     graphics  grDevices utils     datasets  methods  
+#> [8] base     
 #> 
 #> other attached packages:
-#> [1] patchwork_1.3.2  ggplot2_4.0.3    ggwas_0.99.9     BiocStyle_2.40.0
+#>  [1] org.Hs.eg.db_3.23.1                     
+#>  [2] TxDb.Hsapiens.UCSC.hg38.knownGene_3.22.0
+#>  [3] GenomicFeatures_1.64.0                  
+#>  [4] AnnotationDbi_1.74.0                    
+#>  [5] Biobase_2.72.0                          
+#>  [6] patchwork_1.3.2                         
+#>  [7] rtracklayer_1.72.0                      
+#>  [8] GenomeInfoDb_1.48.0                     
+#>  [9] GenomicRanges_1.64.0                    
+#> [10] Seqinfo_1.2.0                           
+#> [11] IRanges_2.46.0                          
+#> [12] S4Vectors_0.50.3                        
+#> [13] BiocGenerics_0.58.1                     
+#> [14] generics_0.1.4                          
+#> [15] ggplot2_4.0.3                           
+#> [16] ggwas_0.99.11                           
+#> [17] BiocStyle_2.40.0                        
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] gtable_0.3.6        jsonlite_2.0.0      compiler_4.6.1     
-#>  [4] BiocManager_1.30.27 Rcpp_1.1.2          gridExtra_2.3.1    
-#>  [7] jquerylib_0.1.4     systemfonts_1.3.2   scales_1.4.0       
-#> [10] textshaping_1.0.5   yaml_2.3.12         fastmap_1.2.0      
-#> [13] R6_2.6.1            labeling_0.4.3      knitr_1.52         
-#> [16] ggrepel_0.9.8       bookdown_0.48       desc_1.4.3         
-#> [19] bslib_0.12.0        RColorBrewer_1.1-3  rlang_1.3.0        
-#> [22] cachem_1.1.0        xfun_0.61           fs_2.1.0           
-#> [25] sass_0.4.10         S7_0.2.2            otel_0.2.0         
-#> [28] viridisLite_0.4.3   cli_3.6.6           pkgdown_2.2.1      
-#> [31] withr_3.0.3         digest_0.6.39       grid_4.6.1         
-#> [34] lifecycle_1.0.5     vctrs_0.7.3         evaluate_1.0.5     
-#> [37] glue_1.8.1          data.table_1.18.6.1 farver_2.1.2       
-#> [40] ragg_1.5.2          rmarkdown_2.32      tools_4.6.1        
-#> [43] htmltools_0.5.9
+#>  [1] viridisLite_0.4.3           farver_2.1.2               
+#>  [3] blob_1.3.0                  Biostrings_2.80.2          
+#>  [5] S7_0.2.2                    bitops_1.1-0               
+#>  [7] fastmap_1.2.0               RCurl_1.98-1.20            
+#>  [9] GenomicAlignments_1.48.0    XML_3.99-0.25              
+#> [11] digest_0.6.39               lifecycle_1.0.5            
+#> [13] KEGGREST_1.52.2             RSQLite_3.53.3             
+#> [15] compiler_4.6.2              rlang_1.3.0                
+#> [17] sass_0.4.10                 tools_4.6.2                
+#> [19] yaml_2.3.12                 data.table_1.18.6.1        
+#> [21] knitr_1.52                  S4Arrays_1.12.1            
+#> [23] labeling_0.4.3              bit_4.6.0                  
+#> [25] curl_8.1.0                  DelayedArray_0.38.2        
+#> [27] RColorBrewer_1.1-3          abind_1.4-8                
+#> [29] BiocParallel_1.46.0         withr_3.0.3                
+#> [31] desc_1.4.3                  grid_4.6.2                 
+#> [33] scales_1.4.0                SummarizedExperiment_1.42.0
+#> [35] cli_3.6.6                   rmarkdown_2.32             
+#> [37] crayon_1.5.3                ragg_1.5.2                 
+#> [39] otel_0.3.0                  httr_1.4.9                 
+#> [41] rjson_0.2.23                DBI_1.3.0                  
+#> [43] cachem_1.1.0                parallel_4.6.2             
+#> [45] BiocManager_1.30.27         XVector_0.52.0             
+#> [47] restfulr_0.0.17             matrixStats_1.5.0          
+#> [49] vctrs_0.7.3                 Matrix_1.7-6               
+#> [51] jsonlite_2.0.0              bookdown_0.48              
+#> [53] bit64_4.8.6                 ggrepel_0.9.8              
+#> [55] systemfonts_1.3.2           jquerylib_0.1.4            
+#> [57] glue_1.8.1                  pkgdown_2.2.1              
+#> [59] codetools_0.2-20            gtable_0.3.6               
+#> [61] BiocIO_1.22.0               UCSC.utils_1.8.0           
+#> [63] htmltools_0.5.9             R6_2.6.1                   
+#> [65] textshaping_1.0.5           evaluate_1.0.5             
+#> [67] lattice_0.23-1              png_0.1-9                  
+#> [69] Rsamtools_2.28.0            cigarillo_1.2.1            
+#> [71] memoise_2.0.1               bslib_0.12.0               
+#> [73] Rcpp_1.1.2                  gridExtra_2.3.1            
+#> [75] SparseArray_1.12.3          xfun_0.62                  
+#> [77] pkgconfig_2.0.3             fs_2.1.0                   
+#> [79] MatrixGenerics_1.24.0
 ```

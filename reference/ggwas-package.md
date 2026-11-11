@@ -1,12 +1,14 @@
-# ggwas: Modern 'ggplot2' Visualizations for Genome-Wide Association Studies
+# ggwas: Modern ggplot2 Visualizations for Genome-Wide Association Studies
 
 Create publication-ready visualizations for genome-wide association
-studies. Provides 20 plot types including Manhattan, QQ, Miami, locus
-zoom, PheWAS, colocalization, fine-mapping, genetic correlation, SNP
-density, and density-signal comparison plots. Reads PLINK, REGENIE,
-GCTA, and GEMMA formats natively. All plot functions return 'ggplot2'
-objects for full customization. Smart downsampling handles datasets with
-10 million+ variants.
+studies. Provides 21 plot types including Manhattan, value Manhattan,
+QQ, Miami, locus zoom, PheWAS, colocalization, fine-mapping, genetic
+correlation, SNP density, and density-signal comparison plots. Reads
+PLINK, REGENIE, GCTA, and GEMMA formats natively and accepts variants as
+'GRanges'. Gene models, annotation regions and chromosome lengths come
+from Bioconductor objects ('GRanges', 'TxDb', 'EnsDb', 'Seqinfo'). All
+plot functions return 'ggplot2' objects for full customization. Smart
+downsampling handles datasets with 10 million+ variants.
 
 ## See also
 

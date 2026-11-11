@@ -1,7 +1,20 @@
 # GWAS Color Palettes
 
-Pre-defined color palettes optimized for GWAS visualizations. All
-palettes are colorblind-friendly by default.
+Pre-defined color palettes for GWAS visualizations. The two-color
+palettes used by default for chromosomes stay distinguishable under the
+common forms of color blindness: "default" (dark blue and light teal,
+used by
+[`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md),
+[`miami_plot()`](https://bczech.github.io/ggwas/reference/miami_plot.md),
+and
+[`circular_manhattan()`](https://bczech.github.io/ggwas/reference/circular_manhattan.md))
+and "colorblind" (Okabe-Ito blue and orange, used by
+[`scale_color_gwas()`](https://bczech.github.io/ggwas/reference/scale_color_gwas.md)
+and
+[`gwas_summary()`](https://bczech.github.io/ggwas/reference/gwas_summary.md)).
+The journal palettes ("nature", "science", "lancet", "nejm", "aaas") and
+"brewer_set1" and "brewer_paired" match common figure styles, but they
+contain both red and green and are not colorblind-safe.
 
 ## Usage
 
@@ -33,6 +46,7 @@ A character vector of hex colors.
 ## Examples
 
 ``` r
+data(example_gwas)
 gwas_palette("colorblind")
 #> [1] "#0072B2" "#E69F00"
 gwas_palette("nature", n = 5)

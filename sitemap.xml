@@ -8,12 +8,11 @@
 <url><loc>https://bczech.github.io/ggwas/index.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/news/index.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/annotate_genes.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/annotate_positions.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/architecture_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/as_granges.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/as_gwas_data.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/calc_lambda.html</loc></url>
-<url><loc>https://bczech.github.io/ggwas/reference/chr_info.html</loc></url>
-<url><loc>https://bczech.github.io/ggwas/reference/chr_info_ucsc.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/circular_manhattan.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/coloc_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/density_signal_plot.html</loc></url>
@@ -23,7 +22,6 @@
 <url><loc>https://bczech.github.io/ggwas/reference/filter_region.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/finemapping_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/forest_plot.html</loc></url>
-<url><loc>https://bczech.github.io/ggwas/reference/gene_annotation.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/gene_track.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/genetic_correlation.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/get_loci.html</loc></url>
@@ -47,7 +45,6 @@
 <url><loc>https://bczech.github.io/ggwas/reference/qq_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gcta_mlma.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gemma.html</loc></url>
-<url><loc>https://bczech.github.io/ggwas/reference/read_gtf.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_gwas_table.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_plink_assoc.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/read_plink_linear.html</loc></url>
@@ -61,6 +58,7 @@
 <url><loc>https://bczech.github.io/ggwas/reference/top_hits.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/trumpet_plot.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/validate_gwas_data.html</loc></url>
+<url><loc>https://bczech.github.io/ggwas/reference/value_manhattan.html</loc></url>
 <url><loc>https://bczech.github.io/ggwas/reference/volcano_plot.html</loc></url>
 </urlset>
 

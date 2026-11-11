@@ -28,8 +28,9 @@ highlight_regions(
 
 - regions:
 
-  A data.frame with columns: `chr` (integer), `start`, `end`. Optional:
-  `label`, `color`, `alpha`.
+  Regions as a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  object. Optional metadata columns: `label`, `color`, `alpha`.
 
 - color:
 
@@ -64,8 +65,8 @@ The ggplot object with region highlights added.
 ``` r
 data(example_gwas)
 plt <- manhattan_plot(example_gwas)
-regions <- data.frame(
-  chr = c(6, 1), start = c(25e6, 5e6), end = c(35e6, 20e6),
+regions <- GenomicRanges::GRanges(
+  c("chr6:25000000-35000000", "chr1:5000000-20000000"),
   label = c("MHC", "1p36")
 )
 highlight_regions(plt, regions)

@@ -28,7 +28,7 @@ manhattan_genes(
 
 - genes:
 
-  Gene annotation data.frame (see
+  Gene models as a `GRanges`, `TxDb` or `EnsDb` object (see
   [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)).
 
 - gene_p_threshold:
@@ -72,10 +72,11 @@ A ggplot object.
 
 ``` r
 data(example_gwas)
-genes <- data.frame(
-  chr = c(1, 2, 5, 7, 11), start = c(1e6, 50e6, 80e6, 30e6, 60e6),
-  end = c(2e6, 52e6, 85e6, 35e6, 65e6),
-  gene = c("BRCA1", "FTO", "TCF7L2", "CDKAL1", "KCNQ1")
+genes <- GenomicRanges::GRanges(
+  c("chr1:1000000-2000000", "chr2:50000000-52000000",
+    "chr5:80000000-85000000", "chr7:30000000-35000000",
+    "chr11:60000000-65000000"),
+  gene_name = c("GENE_A", "GENE_B", "GENE_C", "GENE_D", "GENE_E")
 )
 manhattan_genes(example_gwas, genes = genes, gene_top_n = 5)
 ```

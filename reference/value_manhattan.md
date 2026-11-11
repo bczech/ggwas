@@ -18,12 +18,8 @@ value_manhattan(
   chr = NULL,
   bp = NULL,
   id = NULL,
-  annotate = NULL,
-  build = c("GRCh38", "GRCh37"),
-  release = NULL,
-  gtf = NULL,
-  ensdb = NULL,
-  id_type = c("ensembl_gene_id", "symbol"),
+  annotation = NULL,
+  id_type = c("gene_id", "symbol"),
   label = NULL,
   colors = c("#1A5276", "#76D7C4"),
   point_size = 0.8,
@@ -47,7 +43,10 @@ value_manhattan(
 
 - data:
 
-  A data.frame (or tibble/data.table) with one row per feature.
+  A data.frame (or tibble/data.table) with one row per feature, or a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html)
+  whose metadata columns hold the value (the range start is used as the
+  position).
 
 - value:
 
@@ -56,47 +55,32 @@ value_manhattan(
 - chr, bp:
 
   Column names for chromosome and genomic position (auto-detected if
-  NULL). Ignored when `annotate` is set, because the coordinates are
+  NULL). Ignored when `annotation` is set, because the coordinates are
   then looked up from the gene IDs.
 
 - id:
 
-  Column holding gene identifiers (Ensembl gene IDs or symbols), used
-  when `annotate` is set (auto-detected if NULL).
+  Column holding gene identifiers (gene IDs or symbols), used when
+  `annotation` is set (auto-detected if NULL).
 
-- annotate:
+- annotation:
 
-  Annotation backend to map `id` to genomic coordinates: one of `"gtf"`,
-  `"builtin"`, `"biomart"` or `"ensdb"` (see
+  Optional gene models used to look up coordinates for the `id` column:
+  a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html),
+  `TxDb` or `EnsDb` object (see
   [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md)).
   `NULL` (default) means the data already carry `chr`/`bp` columns.
 
-- build:
-
-  Genome build for `annotate = "builtin"`/`"biomart"`: `"GRCh38"`
-  (default) or `"GRCh37"`.
-
-- release:
-
-  Ensembl release for `annotate = "biomart"` (`NULL` = current).
-
-- gtf:
-
-  Path to a GTF/GFF3 file for `annotate = "gtf"`.
-
-- ensdb:
-
-  An `EnsDb` object for `annotate = "ensdb"`.
-
 - id_type:
 
-  Whether `id` holds Ensembl gene IDs (`"ensembl_gene_id"`, default) or
-  gene symbols (`"symbol"`).
+  Whether `id` holds gene IDs (`"gene_id"`, default) or gene symbols
+  (`"symbol"`).
 
 - label:
 
   Column holding feature labels (e.g. gene symbol), used by `highlight`,
-  `label_ids` and `label_top_n`. When `annotate` is set and `label` is
+  `label_ids` and `label_top_n`. When `annotation` is set and `label` is
   NULL, the looked-up gene symbol is used.
 
 - colors:

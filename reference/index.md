@@ -6,6 +6,8 @@ Standard GWAS visualizations
 
 - [`manhattan_plot()`](https://bczech.github.io/ggwas/reference/manhattan_plot.md)
   : Manhattan plot
+- [`value_manhattan()`](https://bczech.github.io/ggwas/reference/value_manhattan.md)
+  : Manhattan plot of an arbitrary per-feature value
 - [`qq_plot()`](https://bczech.github.io/ggwas/reference/qq_plot.md) :
   QQ plot for GWAS p-values
 - [`miami_plot()`](https://bczech.github.io/ggwas/reference/miami_plot.md)
@@ -50,12 +52,6 @@ Multi-trait, enrichment, and post-GWAS visualizations
   : Forest plot of effect estimates
 - [`effect_compare_plot()`](https://bczech.github.io/ggwas/reference/effect_compare_plot.md)
   : Compare variant effects between two GWAS
-- [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  [`chr_info_mouse()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  [`chr_info_cattle()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  : Chromosome information for common species
-- [`chr_info_ucsc()`](https://bczech.github.io/ggwas/reference/chr_info_ucsc.md)
-  : Fetch chromosome information from UCSC
 
 ## Annotation and analysis
 
@@ -63,10 +59,8 @@ Gene annotation, genomic tracks, region highlights, top hits
 
 - [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md)
   : Gene annotation track
-- [`read_gtf()`](https://bczech.github.io/ggwas/reference/read_gtf.md) :
-  Read gene annotations from GTF/GFF3 file
-- [`gene_annotation()`](https://bczech.github.io/ggwas/reference/gene_annotation.md)
-  : Built-in protein-coding gene annotations
+- [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md)
+  : Map gene IDs or symbols to genome coordinates
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   : Add gene labels to a Manhattan plot
 - [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md)
@@ -125,7 +119,7 @@ Publication-ready styling
   : Chromosome color scale
 - [`scale_color_gwas()`](https://bczech.github.io/ggwas/reference/scale_color_gwas.md)
   [`scale_fill_gwas()`](https://bczech.github.io/ggwas/reference/scale_color_gwas.md)
-  : Colorblind-safe chromosome color scale
+  : Chromosome color scale
 
 ## Data utilities
 

@@ -5,7 +5,7 @@ chromosomes. Two rendering styles are available: `"heatmap"` (default)
 bins variants and colors tiles by count, while `"points"` draws
 individual variant positions on chromosome outlines, where density is
 visible through natural clustering. Optionally marks centromere
-positions when `chr_info` is provided.
+positions when `centromeres` are provided.
 
 ## Usage
 
@@ -18,7 +18,8 @@ snp_density(
   style = c("heatmap", "points"),
   bin_size = 1e+06,
   color_by = c("density", "significance", "uniform"),
-  chr_info = NULL,
+  seqinfo = NULL,
+  centromeres = NULL,
   palette = "viridis",
   point_size = 0.3,
   point_alpha = 0.5,
@@ -54,12 +55,18 @@ snp_density(
   colors by local density, `"significance"` colors by -log10(p), or
   `"uniform"` for a single color.
 
-- chr_info:
+- seqinfo:
 
-  Optional data.frame with columns `chr`, `length`, and optionally
-  `centromere_start`, `centromere_end`. Use
-  [`chr_info_human()`](https://bczech.github.io/ggwas/reference/chr_info.md)
-  for hg38. If NULL, chromosome lengths are inferred from the data.
+  Optional chromosome lengths as a `Seqinfo` object (GenomeInfoDb) or
+  any object that has one, such as a `TxDb`, `EnsDb` or `BSgenome`. If
+  NULL, chromosome lengths are inferred from the data.
+
+- centromeres:
+
+  Optional centromere positions as a
+  [GenomicRanges::GRanges](https://rdrr.io/pkg/GenomicRanges/man/GRanges-class.html),
+  one or more ranges per chromosome (for example the UCSC "Centromeres"
+  track imported with rtracklayer).
 
 - palette:
 
@@ -75,8 +82,7 @@ snp_density(
 
 - show_centromeres:
 
-  If TRUE and centromere positions are available in `chr_info`, draw
-  centromere markers.
+  If TRUE and `centromeres` are given, draw centromere markers.
 
 - downsample_n:
 
@@ -96,25 +102,29 @@ A ggplot object.
 ``` r
 data(example_gwas, package = "ggwas")
 
-# Heatmap style (default)
-snp_density(example_gwas, bin_size = 5e6, chr_info = chr_info_human())
+# Heatmap style (default); chromosome lengths taken from the data
+snp_density(example_gwas, bin_size = 5e6)
 
 
 # Different palette
-snp_density(example_gwas, bin_size = 5e6, palette = "magma",
-  chr_info = chr_info_human())
+snp_density(example_gwas, bin_size = 5e6, palette = "magma")
 
 
-# Points style: individual variants on chromosome outlines
-snp_density(example_gwas, style = "points", chr_info = chr_info_human())
+# Points style with centromere markers (hg38 positions for chr1 and chr2)
+cen <- GenomicRanges::GRanges(
+  c("chr1:122026460-124932724", "chr2:92188146-94090557")
+)
+snp_density(example_gwas, style = "points", centromeres = cen)
 
 
 # Points colored by significance
-snp_density(example_gwas, style = "points", color_by = "significance",
-  chr_info = chr_info_human())
+snp_density(example_gwas, style = "points", color_by = "significance")
 
 
-# Uniform color, no centromeres
-snp_density(example_gwas, style = "points", color_by = "uniform",
-  show_centromeres = FALSE)
+# Full chromosome lengths from a Seqinfo, here taken from a TxDb
+if (requireNamespace("TxDb.Hsapiens.UCSC.hg38.knownGene", quietly = TRUE)) {
+  txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
+  snp_density(example_gwas, bin_size = 5e6,
+    seqinfo = GenomeInfoDb::seqinfo(txdb))
+}
 ```

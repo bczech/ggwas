@@ -7,7 +7,7 @@ Contains 20 genome-wide significant variants for demonstration.
 ## Usage
 
 ``` r
-example_gwas
+data(example_gwas)
 ```
 
 ## Format
@@ -49,6 +49,16 @@ A `gwas_data` data.frame with 8000 rows and 9 columns:
 - AF:
 
   Allele frequency
+
+## Source
+
+Simulated with `data-raw/example_gwas.R` in the package source.
+Positions are drawn within GRCh38 (hg38) chromosome lengths.
+
+## Value
+
+A `gwas_data` data.frame, loaded into the workspace by
+`data(example_gwas)`.
 
 ## Examples
 

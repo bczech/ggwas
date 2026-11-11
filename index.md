@@ -6,14 +6,15 @@ figures.
 
 ## Key features
 
-- **20 plot types**: from classic Manhattan and QQ to post-GWAS
+- **21 plot types**: from classic Manhattan and QQ to post-GWAS
   visualizations (PheWAS, colocalization, fine-mapping, genetic
   correlations, SNP density, forest, effect comparison, and a
   power-contour trumpet plot)
-- **Built-in gene models** (GRCh37/38) and exon-level gene tracks —
-  regional plots without a GTF
-- **Genomic tracks**: composable gene annotation panels from GTF/GFF3
-  files with strand arrows and highlighting
+- **Bioconductor inputs**: variants, gene models and annotation regions
+  as `GRanges`, gene models from `TxDb`/`EnsDb`, chromosome lengths from
+  `Seqinfo`
+- **Genomic tracks**: composable gene annotation panels with exon
+  structure, strand arrows and highlighting
 - **Broken y-axis** for Manhattan plots with extreme p-values
   (`y_truncate`)
 - **Effect-size confidence** mode showing \|beta\| - 2\*SE instead of
@@ -85,12 +86,12 @@ below.
 | SNP density karyogram | No | Yes | No | **Yes** |
 | Density vs signal | No | No | No | **Yes** |
 | Gene track (with exons) | No | No | Yes | **Yes** |
-| Built-in gene models | No | No | Yes | **Yes (GRCh37/38)** |
-| GRanges interoperability | No | No | No | **Yes** |
+| Gene models from TxDb/EnsDb | No | No | No | **Yes** |
+| GRanges/Seqinfo inputs | No | No | No | **Yes** |
 | Region highlights | No | No | No | **Yes** |
 | Top hits (clumping) | No | No | No | **Yes** |
 | Journal themes | No | No | No | **6 themes + 4 presets** |
-| Color palettes | Limited | Limited | Limited | **14 (colorblind-safe)** |
+| Color palettes | Limited | Limited | Limited | **14 (colorblind-safe default)** |
 | Auto-detect formats | No | No | No | **Yes** |
 | Downsampling | No | No | Yes | **Yes** |
 
@@ -98,6 +99,12 @@ below.
 
 ``` r
 
+# From Bioconductor (once accepted)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ggwas")
+
+# Development version from GitHub
 pak::pak("bczech/ggwas")
 ```
 
@@ -117,8 +124,9 @@ gwas <- read_gwas_table("my_results.txt")
 # Manhattan plot
 manhattan_plot(gwas)
 
-# Label top hits with gene names
-manhattan_genes(gwas, genes = my_gene_table, gene_top_n = 10)
+# Label top hits with gene names (gene models as GRanges, TxDb or EnsDb)
+library(EnsDb.Hsapiens.v86)
+manhattan_genes(gwas, genes = EnsDb.Hsapiens.v86, gene_top_n = 10)
 
 # QQ plot with confidence band and lambda
 qq_plot(gwas, show_lambda = TRUE)
@@ -134,6 +142,9 @@ manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 
 ## Supported input formats
 
+GWAS summary statistics. Bioconductor has no readers for these
+tool-specific text formats, so ggwas provides them:
+
 | Format | Function |
 |----|----|
 | Generic (auto-detect) | [`read_gwas_table()`](https://bczech.github.io/ggwas/reference/read_gwas_table.md) |
@@ -142,6 +153,15 @@ manhattan_plot(gwas, colors = p$colors, point_size = p$point_size) + p$theme
 | GCTA MLMA | [`read_gcta_mlma()`](https://bczech.github.io/ggwas/reference/read_gcta_mlma.md) |
 | GEMMA | [`read_gemma()`](https://bczech.github.io/ggwas/reference/read_gemma.md) |
 | Any data.frame | Pass directly with column mapping |
+| `GRanges` (e.g. `rowRanges()` of a VCF read with `VariantAnnotation::readVcf()`) | Pass directly, or [`as_gwas_data()`](https://bczech.github.io/ggwas/reference/as_gwas_data.md) |
+
+Genomic annotation comes from Bioconductor objects and readers:
+
+| Input | Bioconductor source | Used by |
+|----|----|----|
+| Gene models | `TxDb` (`GenomicFeatures`), `EnsDb` (`ensembldb`), or `GRanges` from `rtracklayer::import()` of a GTF/GFF3 | [`gene_track()`](https://bczech.github.io/ggwas/reference/gene_track.md), [`locus_plot()`](https://bczech.github.io/ggwas/reference/locus_plot.md), [`annotate_genes()`](https://bczech.github.io/ggwas/reference/annotate_genes.md), [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md), [`top_hits()`](https://bczech.github.io/ggwas/reference/top_hits.md), [`annotate_positions()`](https://bczech.github.io/ggwas/reference/annotate_positions.md) |
+| Annotation regions (BED, bigBed, …) | `GRanges`/`GRangesList` from `rtracklayer::import()` | [`enrichment_manhattan()`](https://bczech.github.io/ggwas/reference/enrichment_manhattan.md), [`highlight_regions()`](https://bczech.github.io/ggwas/reference/highlight_regions.md) |
+| Chromosome lengths and names | `Seqinfo` (`GenomeInfoDb`), or the [`seqinfo()`](https://rdrr.io/pkg/Seqinfo/man/seqinfo.html) of a `TxDb`, `EnsDb` or `BSgenome` | [`snp_density()`](https://bczech.github.io/ggwas/reference/snp_density.md), [`density_signal_plot()`](https://bczech.github.io/ggwas/reference/density_signal_plot.md), [`set_sex_chr_map()`](https://bczech.github.io/ggwas/reference/set_sex_chr_map.md) |
 
 ## Plot gallery
 
@@ -176,11 +196,11 @@ gwas_summary(gwas)  # multi-panel dashboard
 ``` r
 
 phewas_plot(phewas_results)
-coloc_plot(gwas, eqtl, region_chr = 1, region_start = 1e6, region_end = 2e6)
-finemapping_plot(susie_results, region_chr = 1, region_start = 1e6, region_end = 2e6)
+coloc_plot(gwas, eqtl, region = "chr1:1000000-2000000")
+finemapping_plot(susie_results, region = "chr1:1000000-2000000")
 genetic_correlation(ldsc_matrix, cluster = TRUE)
 architecture_plot(gwas)
-snp_density(gwas, chr_info = chr_info_human())
+snp_density(gwas, seqinfo = seqinfo(txdb))
 density_signal_plot(gwas)
 forest_plot(lead_variants)                       # effect estimates + CI
 effect_compare_plot(discovery, replication)      # beta-vs-beta concordance
@@ -190,25 +210,32 @@ effect_compare_plot(discovery, replication)      # beta-vs-beta concordance
 
 ``` r
 
-# Built-in gene models (GRCh37/38) — no GTF or biomaRt needed
-genes <- gene_annotation("GRCh38")
-# ...or read your own: genes <- read_gtf("Homo_sapiens.GRCh38.110.gtf.gz")
+library(GenomicRanges)
+library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+library(org.Hs.eg.db)
+txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene
 
-# Gene track below a locus plot (add exon_data for exon structure)
-p <- locus_plot(gwas, region_chr = 6, region_start = 25e6, region_end = 35e6)
-gt <- gene_track(genes, region_chr = 6, region_start = 25e6, region_end = 35e6,
-                  highlight_genes = c("HLA-A", "HLA-B"))
+# Gene models with symbols
+genes <- genes(txdb)
+genes$gene_name <- mapIds(org.Hs.eg.db, genes$gene_id, "SYMBOL", "ENTREZID")
+# ...or from a GTF: gtf <- rtracklayer::import("Homo_sapiens.GRCh38.113.gtf.gz")
+
+# Locus plot with a gene track and exon structure
+region <- GRanges("chr6:25000000-35000000")
+p <- locus_plot(gwas, region = region)
+gt <- gene_track(genes, region, exons = exonsBy(txdb, by = "gene"),
+                 highlight_genes = c("HLA-A", "HLA-B"))
 patchwork::wrap_plots(p, gt, ncol = 1, heights = c(0.8, 0.2))
 
 # Label peaks with nearest gene names (instead of rs IDs)
-manhattan_genes(gwas, genes = gene_table, arrow = TRUE)
+manhattan_genes(gwas, genes = genes, arrow = TRUE)
 
 # Extract independent top hits with gene mapping
-top_hits(gwas, genes = gene_table, p_threshold = 5e-8)
+top_hits(gwas, genes = genes, p_threshold = 5e-8)
 
 # Highlight genomic regions
 plt <- manhattan_plot(gwas)
-highlight_regions(plt, data.frame(chr = 6, start = 25e6, end = 34e6, label = "MHC"))
+highlight_regions(plt, GRanges("chr6:25000000-34000000", label = "MHC"))
 ```
 
 ### Themes and palettes
@@ -234,21 +261,7 @@ manhattan_plot(gwas, colors = gwas_palette("nature"))
 
 Smart downsampling keeps every significant variant and spatially bins
 the denser background, capping the number of plotted points. Render time
-therefore stays roughly flat as datasets grow, while base-R (`qqman`,
-`CMplot`) and other ggplot2 tools (`topr`) scale with variant count.
-Median of 5 runs on the GIANT height GWAS, Manhattan render time in
-seconds:
-
-| Variants | qqman | CMplot | topr | ggwas    |
-|----------|-------|--------|------|----------|
-| 50k      | 0.33  | 0.21   | 0.26 | **0.19** |
-| 200k     | 1.31  | 0.70   | 0.73 | **0.53** |
-| 500k     | 3.12  | 1.65   | 2.01 | **1.26** |
-| 1M       | 6.56  | 3.37   | 3.96 | **1.48** |
-| 1.37M    | 9.15  | 6.32   | 6.61 | **1.30** |
-
-![Manhattan render time vs dataset size for qqman, CMplot, topr and
-ggwas](reference/figures/benchmark.png)
+therefore stays roughly flat as datasets grow.
 
 ``` r
 
@@ -269,10 +282,10 @@ vignette("ggwas")
 
 ## Citation
 
-    Czech B (2026). ggwas: Modern ggplot2 Visualizations for Genome-Wide
-    Association Studies. R package version 0.99.2.
-    https://github.com/bczech/ggwas
-    doi: 10.5281/zenodo.20815110
+``` r
+
+citation("ggwas")
+```
 
 ## License
 
