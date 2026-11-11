@@ -48,11 +48,23 @@ test_that("manhattan_genes labels peaks with gene names", {
   expect_equal(text[[length(text)]]$data$nearest_gene, "TEST_GENE")
 })
 
-test_that("manhattan_genes works with arrow style", {
-  genes <- GenomicRanges::GRanges("chr1:1000000-2000000", gene_name = "TEST")
-  plt <- manhattan_genes(example_gwas, genes = genes,
-    gene_p_threshold = 0.01, arrow = TRUE, label_face = "italic")
-  expect_s3_class(plt, "ggplot")
+test_that("manhattan_genes draws arrows with arrow = TRUE", {
+  df <- data.frame(CHR = 1, BP = seq(1e6, 5e6, length.out = 20),
+                   P = c(1e-9, rep(0.5, 19)), SNP = paste0("rs", 1:20))
+  genes <- GenomicRanges::GRanges("chr1:900000-1100000", gene_name = "TEST")
+  plt <- manhattan_genes(df, genes = genes, gene_p_threshold = 1e-5,
+                         arrow = TRUE, label_face = "italic")
+  has_arrow <- any(vapply(plt$layers, function(l) {
+    inherits(l$geom, "GeomSegment") && !is.null(l$geom_params$arrow)
+  }, logical(1)))
+  expect_true(has_arrow)
+})
+
+test_that("annotate_genes returns no genes when nothing passes the threshold", {
+  df <- data.frame(CHR = 1, BP = 1.5e6, P = 0.5, SNP = "rs1")
+  result <- annotate_genes(df, make_genes(), p_threshold = 1e-8)
+  expect_true(is.na(result$nearest_gene))
+  expect_false(".row" %in% names(result))
 })
 
 test_that("manhattan_genes places labels over their peaks", {

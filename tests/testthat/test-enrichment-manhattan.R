@@ -72,3 +72,11 @@ test_that("enrichment_manhattan rejects data.frames and unnamed lists", {
   unnamed <- GenomicRanges::GRangesList(GenomicRanges::GRanges("chr1:1-10"))
   expect_error(enrichment_manhattan(example_gwas, annotations = unnamed), "names")
 })
+
+test_that("enrichment_manhattan downsamples only background points", {
+  df <- make_enrich_df()
+  annot <- GenomicRanges::GRanges("chr1:10000000-20000000", category = "Gene")
+  plt <- enrichment_manhattan(df, annotations = annot, downsample_n = 50)
+  n_annot <- sum(df$CHR == 1 & df$BP >= 10e6 & df$BP <= 20e6)
+  expect_equal(as.integer(annotated_snps(plt)[["Gene"]]), n_annot)
+})
