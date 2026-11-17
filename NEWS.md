@@ -1,3 +1,11 @@
+# ggwas 0.99.13
+
+* `manhattan_genes()` takes gene labels from the plotted points, so labels sit
+  on their peaks also with `chromosomes`, `y_truncate` and
+  `y_metric = "beta_min"`, and labels of chromosomes that are not shown are
+  dropped. Labels use a fixed seed and no overlap limit, so every run shows
+  the same set (#3).
+
 # ggwas 0.99.12
 
 * Examples and the vignette show how to get a `Seqinfo` from NCBI or UCSC by

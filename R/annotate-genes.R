@@ -131,20 +131,19 @@ manhattan_genes <- function(data,
 
   plt <- manhattan_plot(annotated, ...)
 
-  label_data <- annotated[!is.na(annotated$nearest_gene), , drop = FALSE]
+  # Take the labelled variants from the plotted data, so each label uses the
+  # same x and y as its point, whatever manhattan_plot() did to the data
+  # (chromosome subset, y_truncate, y_metric). Labelled variants pass the gene
+  # p-value threshold, so downsampling keeps them.
+  label_data <- plt$data[!is.na(plt$data$nearest_gene), , drop = FALSE]
+  y_col <- if ("LOG10P_plot" %in% names(label_data)) "LOG10P_plot" else "LOG10P"
 
   if (nrow(label_data) > 0) {
-    label_data$LOG10P <- -log10(label_data$P)
-    # Use the chromosome offsets of the plotted data. Recomputing them from the
-    # labelled rows alone would shift labels when chromosomes are missing.
-    offsets <- tapply(plt$data$BP_CUM - plt$data$BP, plt$data$CHR, min)
-    label_data$BP_CUM <- label_data$BP + offsets[as.character(label_data$CHR)]
-
     if (arrow) {
       plt <- plt + ggplot2::geom_segment(
         data = label_data,
         aes(x = .data$BP_CUM, xend = .data$BP_CUM,
-            y = .data$LOG10P + 0.5, yend = .data$LOG10P + 0.1),
+            y = .data[[y_col]] + 0.5, yend = .data[[y_col]] + 0.1),
         arrow = ggplot2::arrow(length = ggplot2::unit(0.15, "cm"),
                                type = "closed"),
         color = arrow_color, linewidth = 0.3,
@@ -152,19 +151,16 @@ manhattan_genes <- function(data,
       ) +
         ggplot2::geom_text(
           data = label_data,
-          aes(x = .data$BP_CUM, y = .data$LOG10P + 0.7,
+          aes(x = .data$BP_CUM, y = .data[[y_col]] + 0.7,
               label = .data$nearest_gene),
           size = label_size, fontface = label_face,
           inherit.aes = FALSE
         )
     } else {
-      plt <- plt + ggrepel::geom_text_repel(
-        data = label_data,
-        aes(x = .data$BP_CUM, y = .data$LOG10P,
-            label = .data$nearest_gene),
-        size = label_size, fontface = label_face,
-        max.overlaps = 20, segment.color = "grey50",
-        inherit.aes = FALSE
+      # Fixed seed and no overlap limit: the same labels on every run.
+      plt <- plt + .snp_repel(
+        aes(x = .data$BP_CUM, y = .data[[y_col]], label = .data$nearest_gene),
+        data = label_data, size = label_size, fontface = label_face
       )
     }
   }
