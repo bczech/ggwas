@@ -25,13 +25,19 @@ numbered chromosomes keep their number, and named ones (X, Y, Z, W, MT,
 scaffolds are ignored.
 }
 \examples{
-# Mouse (GRCm39): 19 autosomes, then X, Y and MT
-mouse <- GenomeInfoDb::Seqinfo(c(1:19, "X", "Y", "MT"), genome = "GRCm39")
+library(GenomeInfoDb)
+
+# Mouse (GRCm39): 19 autosomes, then X, Y and MT. With internet access,
+# take the chromosomes from NCBI instead of typing them:
+#   mouse <- keepStandardChromosomes(Seqinfo(genome = "GRCm39"))
+mouse <- Seqinfo(c(1:19, "X", "Y", "MT"), genome = "GRCm39")
 old <- set_sex_chr_map(mouse)
 getOption("ggwas.sex_chr_map")
 
-# Chicken: Z and W follow the last numbered chromosome
-chicken <- GenomeInfoDb::Seqinfo(c(1:39, "Z", "W", "MT"))
+# Chicken (GRCg6a): W and Z follow the last numbered chromosome, 33.
+# With internet access (unplaced scaffolds are ignored):
+#   chicken <- Seqinfo(genome = "GRCg6a")
+chicken <- Seqinfo(c(1:28, 30:33, "W", "Z", "MT"), genome = "GRCg6a")
 set_sex_chr_map(chicken)
 
 # Disable: all chromosomes shown as numbers

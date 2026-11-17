@@ -530,8 +530,19 @@ ggwas stores chromosomes as integer codes; by default 23 = X, 24 = Y and
 26 = MT, as in human data. For other organisms, pass the genome's
 `Seqinfo` to `set_sex_chr_map()`: numbered chromosomes keep their number
 and the named ones (X, Y, Z, W, MT, ...) follow the last autosome. A
-`Seqinfo` can come from a `TxDb`, `EnsDb` or `BSgenome` of that organism,
-or be built directly:
+`Seqinfo` can come from a `TxDb`, `EnsDb` or `BSgenome` of that organism.
+With internet access, `r BiocStyle::Biocpkg("GenomeInfoDb")` can also fetch
+it from NCBI or UCSC by assembly name, which is the preferred way because
+nothing has to be typed by hand. `keepStandardChromosomes()` drops the
+unplaced scaffolds (ggwas ignores them anyway):
+
+```{r sex-chr-online, eval=FALSE}
+mouse <- keepStandardChromosomes(Seqinfo(genome = "GRCm39"))
+chicken <- Seqinfo(genome = "GRCg6a")
+```
+
+So that this vignette builds without internet access, the mouse
+chromosomes are listed directly here:
 
 ```{r sex-chr}
 # Mouse (GRCm39): 19 autosomes, then X, Y and MT

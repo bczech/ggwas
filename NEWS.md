@@ -1,3 +1,9 @@
+# ggwas 0.99.12
+
+* Examples and the vignette show how to get a `Seqinfo` from NCBI or UCSC by
+  assembly name, and the hg38 example takes chromosome lengths from a `TxDb`.
+* The chicken example in `set_sex_chr_map()` uses the GRCg6a chromosomes.
+
 # ggwas 0.99.11
 
 Changes from the Bioconductor review. They break the API of the functions
