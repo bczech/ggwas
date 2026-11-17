@@ -71,11 +71,49 @@ data(example_gwas, package = "ggwas")
 density_signal_plot(example_gwas, bin_size = 5e6)
 
 
-# Full chromosome lengths from a Seqinfo
-si <- GenomeInfoDb::Seqinfo(paste0("chr", 1:3),
-  seqlengths = c(248956422, 242193529, 198295559), genome = "hg38")
-density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
-  chromosomes = 1:3)
+# Full chromosome lengths from a Seqinfo. With internet access,
+# GenomeInfoDb::Seqinfo(genome = "hg38")[paste0("chr", 1:3)] gives the
+# same object; here it is taken offline from a TxDb package.
+if (requireNamespace("TxDb.Hsapiens.UCSC.hg38.knownGene", quietly = TRUE)) {
+  library(GenomeInfoDb)
+  txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
+  si <- seqinfo(txdb)[paste0("chr", 1:3)]
+  density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
+    chromosomes = 1:3)
+}
+#> Loading required package: BiocGenerics
+#> Loading required package: generics
+#> 
+#> Attaching package: 'generics'
+#> The following objects are masked from 'package:base':
+#> 
+#>     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
+#>     setequal, union
+#> 
+#> Attaching package: 'BiocGenerics'
+#> The following objects are masked from 'package:stats':
+#> 
+#>     IQR, mad, sd, var, xtabs
+#> The following objects are masked from 'package:base':
+#> 
+#>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,
+#>     as.data.frame, basename, cbind, colnames, dirname, do.call,
+#>     duplicated, eval, evalq, get, grep, grepl, is.unsorted, lapply,
+#>     mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+#>     rank, rbind, rownames, sapply, saveRDS, table, tapply, unique,
+#>     unsplit, which.max, which.min
+#> Loading required package: S4Vectors
+#> Loading required package: stats4
+#> 
+#> Attaching package: 'S4Vectors'
+#> The following object is masked from 'package:utils':
+#> 
+#>     findMatches
+#> The following objects are masked from 'package:base':
+#> 
+#>     I, expand.grid, unname
+#> Loading required package: IRanges
+#> Loading required package: Seqinfo
 
 
 # Subset to specific chromosomes

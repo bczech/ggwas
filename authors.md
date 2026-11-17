@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/bczech/ggwas/blob/main/DESCRIPTION)
 
 Czech B (2026). *ggwas: Modern ggplot2 Visualizations for Genome-Wide
-Association Studies*. R package version 0.99.11,
+Association Studies*. R package version 0.99.12,
 <https://github.com/bczech/ggwas>.
 
     @Manual{,
       title = {ggwas: Modern ggplot2 Visualizations for Genome-Wide Association Studies},
       author = {Bartosz Czech},
       year = {2026},
-      note = {R package version 0.99.11},
+      note = {R package version 0.99.12},
       url = {https://github.com/bczech/ggwas},
     }

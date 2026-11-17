@@ -88,39 +88,6 @@ which adds this track under a regional plot.
 
 ``` r
 library(GenomicRanges)
-#> Loading required package: stats4
-#> Loading required package: BiocGenerics
-#> Loading required package: generics
-#> 
-#> Attaching package: 'generics'
-#> The following objects are masked from 'package:base':
-#> 
-#>     as.difftime, as.factor, as.ordered, intersect, is.element, setdiff,
-#>     setequal, union
-#> 
-#> Attaching package: 'BiocGenerics'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     IQR, mad, sd, var, xtabs
-#> The following objects are masked from 'package:base':
-#> 
-#>     Filter, Find, Map, Position, Reduce, anyDuplicated, aperm, append,
-#>     as.data.frame, basename, cbind, colnames, dirname, do.call,
-#>     duplicated, eval, evalq, get, grep, grepl, is.unsorted, lapply,
-#>     mapply, match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
-#>     rank, rbind, rownames, sapply, saveRDS, table, tapply, unique,
-#>     unsplit, which.max, which.min
-#> Loading required package: S4Vectors
-#> 
-#> Attaching package: 'S4Vectors'
-#> The following object is masked from 'package:utils':
-#> 
-#>     findMatches
-#> The following objects are masked from 'package:base':
-#> 
-#>     I, expand.grid, unname
-#> Loading required package: IRanges
-#> Loading required package: Seqinfo
 genes <- GRanges(
   c("chr1:1000000-2000000:+", "chr1:5000000-6000000:-",
     "chr1:8000000-9000000:+"),

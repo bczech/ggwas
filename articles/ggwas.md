@@ -690,7 +690,21 @@ ggwas stores chromosomes as integer codes; by default 23 = X, 24 = Y and
 [`set_sex_chr_map()`](https://bczech.github.io/ggwas/reference/set_sex_chr_map.md):
 numbered chromosomes keep their number and the named ones (X, Y, Z, W,
 MT, …) follow the last autosome. A `Seqinfo` can come from a `TxDb`,
-`EnsDb` or `BSgenome` of that organism, or be built directly:
+`EnsDb` or `BSgenome` of that organism. With internet access,
+*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*
+can also fetch it from NCBI or UCSC by assembly name, which is the
+preferred way because nothing has to be typed by hand.
+[`keepStandardChromosomes()`](https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html)
+drops the unplaced scaffolds (ggwas ignores them anyway):
+
+``` r
+
+mouse <- keepStandardChromosomes(Seqinfo(genome = "GRCm39"))
+chicken <- Seqinfo(genome = "GRCg6a")
+```
+
+So that this vignette builds without internet access, the mouse
+chromosomes are listed directly here:
 
 ``` r
 
@@ -1231,8 +1245,8 @@ sessionInfo()
 #> [12] S4Vectors_0.50.3                        
 #> [13] BiocGenerics_0.58.1                     
 #> [14] generics_0.1.4                          
-#> [15] ggplot2_4.0.3                           
-#> [16] ggwas_0.99.11                           
+#> [15] ggplot2_4.0.4                           
+#> [16] ggwas_0.99.12                           
 #> [17] BiocStyle_2.40.0                        
 #> 
 #> loaded via a namespace (and not attached):
@@ -1263,7 +1277,7 @@ sessionInfo()
 #> [49] vctrs_0.7.3                 Matrix_1.7-6               
 #> [51] jsonlite_2.0.0              bookdown_0.48              
 #> [53] bit64_4.8.6                 ggrepel_0.9.8              
-#> [55] systemfonts_1.3.2           jquerylib_0.1.4            
+#> [55] systemfonts_1.3.3           jquerylib_0.1.4            
 #> [57] glue_1.8.1                  pkgdown_2.2.1              
 #> [59] codetools_0.2-20            gtable_0.3.6               
 #> [61] BiocIO_1.22.0               UCSC.utils_1.8.0           
