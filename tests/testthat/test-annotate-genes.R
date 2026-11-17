@@ -85,3 +85,58 @@ test_that("manhattan_genes places labels over their peaks", {
   peak_x <- plt$data$BP_CUM[plt$data$SNP == "rs120"]
   expect_equal(unname(label$BP_CUM), peak_x)
 })
+
+# Peak on chr3 (rs120, p = 1e-12, BETA = 1, SE = 0.1) with a gene over it.
+make_peak_data <- function() {
+  df <- data.frame(
+    CHR = rep(1:3, each = 50),
+    BP = rep(seq(1e6, 50e6, length.out = 50), 3),
+    P = 0.5, BETA = 0.3, SE = 0.1,
+    SNP = paste0("rs", 1:150)
+  )
+  df$P[df$SNP == "rs120"] <- 1e-12
+  df$BETA[df$SNP == "rs120"] <- 1
+  df
+}
+peak_gene <- function(df) {
+  GenomicRanges::GRanges(
+    paste0("chr3:", df$BP[120] - 1000, "-", df$BP[120] + 1000),
+    gene_name = "CHR3_GENE"
+  )
+}
+gene_label_layer <- function(plt) {
+  text <- Filter(function(l) inherits(l$geom, "GeomTextRepel"), plt$layers)
+  text[[length(text)]]
+}
+
+test_that("manhattan_genes labels are the same on every run", {
+  df <- make_peak_data()
+  layer <- gene_label_layer(manhattan_genes(df, genes = peak_gene(df)))
+  expect_equal(layer$geom_params$seed, 42)
+  expect_equal(layer$geom_params$max.overlaps, Inf)
+})
+
+test_that("manhattan_genes drops labels of chromosomes that are not plotted", {
+  df <- make_peak_data()
+  expect_no_warning(
+    plt <- manhattan_genes(df, genes = peak_gene(df), chromosomes = 1:2)
+  )
+  expect_false(any(vapply(plt$layers, function(l) {
+    inherits(l$geom, "GeomTextRepel")
+  }, logical(1))))
+})
+
+test_that("manhattan_genes puts labels at the y of their point", {
+  df <- make_peak_data()
+  # y_truncate: the peak at 12 is drawn in the compressed band above 5
+  plt <- manhattan_genes(df, genes = peak_gene(df), y_truncate = 5)
+  label <- gene_label_layer(plt)$data
+  peak <- plt$data[plt$data$SNP == "rs120", ]
+  expect_equal(label$LOG10P_plot, peak$LOG10P_plot)
+  expect_lt(peak$LOG10P_plot, 12)
+
+  # y_metric = "beta_min": the peak is at |1| - 2 * 0.1 = 0.8
+  plt <- manhattan_genes(df, genes = peak_gene(df), y_metric = "beta_min")
+  label <- gene_label_layer(plt)$data
+  expect_equal(label$LOG10P, 0.8)
+})
