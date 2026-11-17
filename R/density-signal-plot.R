@@ -24,11 +24,16 @@
 #' data(example_gwas, package = "ggwas")
 #' density_signal_plot(example_gwas, bin_size = 5e6)
 #'
-#' # Full chromosome lengths from a Seqinfo
-#' si <- GenomeInfoDb::Seqinfo(paste0("chr", 1:3),
-#'   seqlengths = c(248956422, 242193529, 198295559), genome = "hg38")
-#' density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
-#'   chromosomes = 1:3)
+#' # Full chromosome lengths from a Seqinfo. With internet access,
+#' # GenomeInfoDb::Seqinfo(genome = "hg38")[paste0("chr", 1:3)] gives the
+#' # same object; here it is taken offline from a TxDb package.
+#' if (requireNamespace("TxDb.Hsapiens.UCSC.hg38.knownGene", quietly = TRUE)) {
+#'   library(GenomeInfoDb)
+#'   txdb <- TxDb.Hsapiens.UCSC.hg38.knownGene::TxDb.Hsapiens.UCSC.hg38.knownGene
+#'   si <- seqinfo(txdb)[paste0("chr", 1:3)]
+#'   density_signal_plot(example_gwas, bin_size = 5e6, seqinfo = si,
+#'     chromosomes = 1:3)
+#' }
 #'
 #' # Subset to specific chromosomes
 #' density_signal_plot(example_gwas, bin_size = 5e6, chromosomes = seq_len(5))
