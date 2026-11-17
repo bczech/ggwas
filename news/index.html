@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggwas</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,6 +32,11 @@
       <small>Source: <a href="https://github.com/bczech/ggwas/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.99.13" id="ggwas-09913">ggwas 0.99.13<a class="anchor" aria-label="anchor" href="#ggwas-09913"></a></h2>
+<ul><li>
+<code><a href="../reference/manhattan_genes.html">manhattan_genes()</a></code> takes gene labels from the plotted points, so labels sit on their peaks also with <code>chromosomes</code>, <code>y_truncate</code> and <code>y_metric = "beta_min"</code>, and labels of chromosomes that are not shown are dropped. Labels use a fixed seed and no overlap limit, so every run shows the same set (<a href="https://github.com/bczech/ggwas/issues/3" class="external-link">#3</a>).</li>
+</ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.12" id="ggwas-09912">ggwas 0.99.12<a class="anchor" aria-label="anchor" href="#ggwas-09912"></a></h2>
 <ul><li>Examples and the vignette show how to get a <code>Seqinfo</code> from NCBI or UCSC by assembly name, and the hg38 example takes chromosome lengths from a <code>TxDb</code>.</li>

@@ -1246,7 +1246,7 @@ sessionInfo()
 #> [13] BiocGenerics_0.58.1                     
 #> [14] generics_0.1.4                          
 #> [15] ggplot2_4.0.4                           
-#> [16] ggwas_0.99.12                           
+#> [16] ggwas_0.99.13                           
 #> [17] BiocStyle_2.40.0                        
 #> 
 #> loaded via a namespace (and not attached):
