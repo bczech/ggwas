@@ -188,12 +188,12 @@ calc_lambda <- function(p) {
     return(list(p = p, logp = .safe_neglog10(p)))
   }
   x <- trimws(x)
-  p <- suppressWarnings(as.numeric(x))
+  p <- .as_number(x)
   logp <- .safe_neglog10(p)
   tiny <- which(!is.na(p) & p < .Machine$double.xmin)
   if (length(tiny) > 0) {
     m <- regmatches(x[tiny],
-                    regexec("^([0-9]*\\.?[0-9]+)[eE]([-+]?[0-9]+)$", x[tiny]))
+                    regexec("^([0-9]+\\.?[0-9]*|\\.[0-9]+)[eE]([-+]?[0-9]+)$", x[tiny]))
     ok <- lengths(m) == 3
     mantissa <- as.numeric(vapply(m[ok], `[`, "", 2))
     exponent <- as.numeric(vapply(m[ok], `[`, "", 3))
@@ -202,6 +202,19 @@ calc_lambda <- function(p) {
     logp[idx] <- -(log10(mantissa[exact]) + exponent[exact])
   }
   list(p = p, logp = logp)
+}
+
+#' Convert text to numbers; anything that is not a number becomes NA
+#' (without the coercion warning of as.numeric()).
+#' @noRd
+.as_number <- function(x) {
+  if (is.factor(x)) x <- as.character(x)
+  if (!is.character(x)) return(as.numeric(x))
+  x <- trimws(x)
+  out <- rep(NA_real_, length(x))
+  num <- grepl("^[-+]?(([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE][-+]?[0-9]+)?|Inf)$", x)
+  out[num] <- as.numeric(x[num])
+  out
 }
 
 #' Format p-values, also those below the double range

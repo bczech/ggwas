@@ -111,3 +111,9 @@ test_that("multitrait_manhattan combines traits with and without LOG10P", {
   plt <- multitrait_manhattan(list(a = gd1, b = gd2))
   expect_equal(max(plt$data$LOG10P), 400)
 })
+
+test_that(".as_number turns non-numbers into NA without a warning", {
+  expect_no_warning(out <- .as_number(c("1.5", " 2e-3 ", "NA", "abc", "", "-1", "Inf", "1.", ".5")))
+  expect_equal(out, c(1.5, 2e-3, NA, NA, NA, -1, Inf, 1, 0.5))
+  expect_equal(.as_number(factor(c("0.1", "x"))), c(0.1, NA))
+})

@@ -103,7 +103,7 @@ as_gwas_data <- function(x,
     result$P <- parsed$p
     logp <- parsed$logp
     if ("LOG10P" %in% names(result)) {
-      logp_col <- suppressWarnings(as.numeric(result$LOG10P))
+      logp_col <- .as_number(result$LOG10P)
       fill <- !is.finite(logp) & is.finite(logp_col)
       logp[fill] <- logp_col[fill]
     }
