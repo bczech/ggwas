@@ -41,7 +41,7 @@ top_hits <- function(data,
   sig <- sig[!is.na(sig$CHR) & !is.na(sig$BP), , drop = FALSE]
   if (nrow(sig) == 0) return(data.frame())
 
-  sig <- sig[order(sig$P), , drop = FALSE]
+  sig <- sig[.order_by_p(sig), , drop = FALSE]
   sig <- .clump_snps(sig, window = clump_window)
   sig <- utils::head(sig, n)
 
@@ -50,6 +50,7 @@ top_hits <- function(data,
     names(sig)
   )
   result <- sig[, out_cols, drop = FALSE]
+  p_formatted <- .format_p(sig$P, .neglog10p(sig))
 
   result$cytoband <- .estimate_cytoband(result$CHR, result$BP)
 
@@ -60,7 +61,7 @@ top_hits <- function(data,
   }
 
   result$CHR_label <- int_to_chr(result$CHR)
-  result$P_formatted <- formatC(result$P, format = "e", digits = 2)
+  result$P_formatted <- p_formatted
 
   rownames(result) <- NULL
   class(result) <- c("gwas_hits", "data.frame")

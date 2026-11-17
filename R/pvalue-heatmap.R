@@ -48,7 +48,7 @@ pvalue_heatmap <- function(data,
     data <- as_gwas_data(data, chr = chr, bp = bp, p = p)
   }
 
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   if (!is.null(chromosomes)) {
     data <- data[data$CHR %in% chromosomes, , drop = FALSE]
@@ -64,12 +64,25 @@ pvalue_heatmap <- function(data,
     cli_abort("Unknown summary_fun: {.val {summary_fun}}")
   )
 
-  bins <- stats::aggregate(data$P, by = list(CHR = data$CHR, bin = data$bin),
-                           FUN = agg_fun)
+  if (summary_fun %in% c("min", "median")) {
+    # Summarise -log10(p), which stays exact below the double range: the
+    # smallest p is the largest -log10(p).
+    logp_fun <- if (summary_fun == "min") {
+      function(x) max(x, na.rm = TRUE)
+    } else {
+      function(x) stats::median(x, na.rm = TRUE)
+    }
+    bins <- stats::aggregate(.neglog10p(data),
+                             by = list(CHR = data$CHR, bin = data$bin),
+                             FUN = logp_fun)
+  } else {
+    bins <- stats::aggregate(data$P, by = list(CHR = data$CHR, bin = data$bin),
+                             FUN = agg_fun)
+  }
   names(bins)[3] <- "value"
 
   if (summary_fun %in% c("min", "median")) {
-    bins$fill_val <- -log10(bins$value)
+    bins$fill_val <- bins$value
     fill_label <- expression(-log[10](italic(p)))
   } else {
     bins$fill_val <- bins$value

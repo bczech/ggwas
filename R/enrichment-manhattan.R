@@ -73,7 +73,7 @@ enrichment_manhattan <- function(data,
   if (!inherits(data, "gwas_data")) {
     data <- as_gwas_data(data, chr = chr, bp = bp, snp = snp, p = p)
   }
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   annotations <- .as_annotation_ranges(annotations)
   categories <- unique(annotations$category)
@@ -90,7 +90,7 @@ enrichment_manhattan <- function(data,
     plot_data <- data
   }
 
-  plot_data$LOG10P <- -log10(plot_data$P)
+  plot_data$LOG10P <- .neglog10p(plot_data)
   plot_data <- add_cumulative_bp(plot_data)
   chr_info <- attr(plot_data, "chr_info")
 
@@ -154,7 +154,7 @@ enrichment_manhattan <- function(data,
   }
 
   if (!is.null(label_top_n) && nrow(fg) > 0 && label_column %in% names(fg)) {
-    top <- fg[order(fg$P), , drop = FALSE]
+    top <- fg[.order_by_p(fg), , drop = FALSE]
     top <- utils::head(top, label_top_n)
     top <- top[!duplicated(top[[label_column]]), , drop = FALSE]
     plt <- plt + .snp_repel(

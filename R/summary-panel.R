@@ -135,8 +135,9 @@ gwas_summary <- function(data,
 #' Build the formatted top-hits table
 #' @noRd
 .top_hits_table <- function(data, n_top) {
-  top <- data[order(data$P), , drop = FALSE]
+  top <- data[.order_by_p(data), , drop = FALSE]
   top <- utils::head(top, n_top)
+  p_formatted <- .format_p(top$P, .neglog10p(top))
 
   display_cols <- intersect(c("SNP", "CHR", "BP", "P", "BETA"), names(top))
   top <- top[, display_cols, drop = FALSE]
@@ -144,8 +145,7 @@ gwas_summary <- function(data,
   if ("CHR" %in% names(top)) top$CHR <- int_to_chr(top$CHR)
   if ("BP" %in% names(top)) top$BP <- format(top$BP, big.mark = ",")
   if ("P" %in% names(top)) {
-    top$P <- ifelse(top$P == 0, "<1e-300",
-                    formatC(top$P, format = "e", digits = 2))
+    top$P <- p_formatted
   }
   if ("BETA" %in% names(top)) top$BETA <- round(top$BETA, 4)
   if ("SE" %in% names(top)) top$SE <- round(top$SE, 4)
@@ -183,7 +183,7 @@ gwas_summary <- function(data,
 #' Create SNP density panel
 #' @noRd
 .make_density_panel <- function(data, colors) {
-  data$LOG10P <- -log10(data$P)
+  data$LOG10P <- .neglog10p(data)
   plt <- ggplot(data, aes(x = .data$LOG10P)) +
     ggplot2::geom_histogram(
       bins = 50, fill = colors[1], color = "white", linewidth = 0.2
@@ -202,14 +202,13 @@ gwas_summary <- function(data,
   n_gw <- sum(data$P < genome_wide, na.rm = TRUE)
   n_sug <- sum(data$P < suggestive, na.rm = TRUE)
   lambda <- calc_lambda(data$P)
-  min_p <- min(data$P, na.rm = TRUE)
   n_chr <- length(unique(data$CHR))
 
   stats_text <- paste0(
     "Total variants: ", format(n_total, big.mark = ","), "\n",
     "Chromosomes: ", n_chr, "\n",
     "Lambda GC: ", sprintf("%.4f", lambda), "\n",
-    "Min p-value: ", formatC(min_p, format = "e", digits = 2), "\n",
+    "Min p-value: ", .min_p_label(data), "\n",
     "Genome-wide sig: ", n_gw, "\n",
     "Suggestive: ", n_sug
   )

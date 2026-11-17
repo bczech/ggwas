@@ -107,7 +107,7 @@ manhattan_plot <- function(data,
     data <- as_gwas_data(data, chr = chr, bp = bp, snp = snp, p = p)
   }
 
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   if (!is.null(chromosomes)) {
     data <- data[data$CHR %in% chromosomes, , drop = FALSE]
@@ -132,7 +132,7 @@ manhattan_plot <- function(data,
     }
     y_label <- expression("|" * hat(beta) * "| - 2 SE")
   } else {
-    data$LOG10P <- -log10(data$P)
+    data$LOG10P <- .neglog10p(data)
     y_label <- expression(-log[10](italic(p)))
   }
 
@@ -199,7 +199,7 @@ manhattan_plot <- function(data,
     label_data <- data[data$SNP %in% label_snps, , drop = FALSE]
   }
   if (!is.null(label_top_n)) {
-    top <- data[order(data$P), , drop = FALSE]
+    top <- data[.order_by_p(data), , drop = FALSE]
     top <- utils::head(top, label_top_n)
     label_data <- if (is.null(label_data)) top else rbind(label_data, top)
   }

@@ -53,15 +53,15 @@ qq_plot <- function(data,
                     title = NULL) {
 
   if (is.numeric(data)) {
-    pvals <- data
+    logp <- .safe_neglog10(data)
   } else {
     if (!inherits(data, "gwas_data") && !is.null(p)) {
-      pvals <- data[[p]]
+      logp <- .safe_neglog10(data[[p]])
     } else if (inherits(data, "gwas_data")) {
-      pvals <- data$P
+      logp <- .neglog10p(data)
     } else {
       data <- as_gwas_data(data, p = p)
-      pvals <- data$P
+      logp <- .neglog10p(data)
     }
   }
 
@@ -72,11 +72,11 @@ qq_plot <- function(data,
                        line_color = line_color, title = title))
   }
 
-  pvals <- pvals[!is.na(pvals) & pvals > 0 & pvals <= 1]
-  pvals <- sort(pvals)
-  n <- length(pvals)
+  # -log10(p) keeps p-values below the double range (see as_gwas_data())
+  logp <- sort(logp[is.finite(logp) & logp >= 0], decreasing = TRUE)
+  n <- length(logp)
 
-  observed <- -log10(pvals)
+  observed <- logp
   expected <- -log10(stats::ppoints(n))
 
   qq_df <- data.frame(expected = expected, observed = observed)
@@ -111,7 +111,7 @@ qq_plot <- function(data,
     theme_gwas()
 
   if (show_lambda) {
-    lambda <- calc_lambda(pvals)
+    lambda <- calc_lambda(10^(-logp))
     label_text <- bquote(lambda[GC] == .(sprintf("%.3f", lambda)))
     if (lambda_position == "topleft") {
       plt <- plt + ggplot2::annotate(
@@ -160,13 +160,12 @@ qq_plot <- function(data,
                         title) {
   groups <- unique(data[[group]])
   qq_list <- lapply(groups, function(g) {
-    pvals <- data$P[data[[group]] == g]
-    pvals <- pvals[!is.na(pvals) & pvals > 0 & pvals <= 1]
-    pvals <- sort(pvals)
-    n <- length(pvals)
+    logp <- .neglog10p(data)[data[[group]] == g]
+    logp <- sort(logp[is.finite(logp) & logp >= 0], decreasing = TRUE)
+    n <- length(logp)
     data.frame(
       expected = -log10(stats::ppoints(n)),
-      observed = -log10(pvals),
+      observed = logp,
       group = g
     )
   })

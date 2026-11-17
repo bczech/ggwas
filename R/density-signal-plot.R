@@ -57,7 +57,7 @@ density_signal_plot <- function(data,
   }
 
   data <- data[!is.na(data$CHR) & !is.na(data$BP) &
-               !is.na(data$P) & data$P > 0, , drop = FALSE]
+               .drawable_p(data), , drop = FALSE]
 
   if (!is.null(chromosomes)) {
     data <- data[data$CHR %in% chromosomes, , drop = FALSE]
@@ -74,11 +74,10 @@ density_signal_plot <- function(data,
     by = list(CHR = data$CHR, bin = data$bin), FUN = length)
   names(density_bins)[3] <- "count"
 
-  signal_bins <- stats::aggregate(data$P,
+  signal_bins <- stats::aggregate(.neglog10p(data),
     by = list(CHR = data$CHR, bin = data$bin),
-    FUN = function(x) min(x, na.rm = TRUE))
-  names(signal_bins)[3] <- "min_p"
-  signal_bins$neglog10p <- -log10(signal_bins$min_p)
+    FUN = function(x) max(x, na.rm = TRUE))
+  names(signal_bins)[3] <- "neglog10p"
 
   all_bins <- do.call(rbind, lapply(chr_info$chr, function(ch) {
     max_bp <- chr_info$length[chr_info$chr == ch]

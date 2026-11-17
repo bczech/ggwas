@@ -34,7 +34,7 @@ smart_downsample <- function(data,
   }
 
   rest <- data[rest_idx, , drop = FALSE]
-  logp <- -log10(rest$P)
+  logp <- .neglog10p(rest)
 
   n_chr <- length(unique(rest$CHR))
   genome_range <- max(data$BP, na.rm = TRUE)
@@ -48,7 +48,7 @@ smart_downsample <- function(data,
   deduped_idx <- rest_idx[unique_bins]
 
   if (length(deduped_idx) > n_rest_target) {
-    deduped_logp <- -log10(data$P[deduped_idx])
+    deduped_logp <- .neglog10p(data)[deduped_idx]
     weights <- 1 + deduped_logp
     # Weighted sampling without replacement via exponential keys
     # (Efraimidis-Spirakis): each item gets key = rexp(1) / weight and the

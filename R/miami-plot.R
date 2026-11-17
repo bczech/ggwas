@@ -69,14 +69,14 @@ miami_plot <- function(top, bottom,
     ggplot2::theme(axis.text.x = element_blank())
 
   bottom_data <- bottom
-  bottom_data <- bottom_data[!is.na(bottom_data$P) & bottom_data$P > 0, , drop = FALSE]
+  bottom_data <- bottom_data[.drawable_p(bottom_data), , drop = FALSE]
 
   if (downsample && nrow(bottom_data) > downsample_n) {
     bottom_data <- smart_downsample(bottom_data, target_n = downsample_n,
                                     keep_snps = c(bottom_highlight, bottom_label))
   }
 
-  bottom_data$LOG10P <- -log10(bottom_data$P)
+  bottom_data$LOG10P <- .neglog10p(bottom_data)
   bottom_data <- add_cumulative_bp(bottom_data)
   chr_info <- attr(bottom_data, "chr_info")
   bottom_data$CHR_F <- factor(bottom_data$CHR)

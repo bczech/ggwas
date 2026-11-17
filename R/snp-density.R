@@ -193,7 +193,12 @@ snp_density <- function(data,
       size = point_size, alpha = point_alpha, color = "#1A5276", shape = 16
     )
   } else if (color_by == "significance" && "P" %in% names(data)) {
-    data$neglog10p <- -log10(pmax(data$P, .Machine$double.xmin))
+    data$neglog10p <- .neglog10p(data)
+    # p = 0 without an exact value: draw at the strongest finite signal
+    inf <- is.infinite(data$neglog10p)
+    if (any(inf) && any(!inf)) {
+      data$neglog10p[inf] <- max(data$neglog10p[!inf], na.rm = TRUE)
+    }
     plt <- plt + geom_point(
       data = data,
       aes(x = .data$bp_mb, y = .data$y_jitter, color = .data$neglog10p),
