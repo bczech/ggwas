@@ -64,9 +64,8 @@ genes <- GenomicRanges::GRanges(
 )
 annotated <- annotate_genes(example_gwas, genes, top_n = 10)
 head(annotated[!is.na(annotated$nearest_gene), ])
-#> Warning: no non-missing arguments to min; returning Inf
 #> A gwas_data object: 0 variants across 0 chromosome
-#>   Min p-value: Inf
+#>   Min p-value: NA
 #>   Lambda GC:   NA
 #>   Columns:     CHR, BP, SNP, P, BETA, SE, A1, A2, AF, nearest_gene, gene_distance
 ```

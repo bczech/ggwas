@@ -2,6 +2,14 @@
 
 ## ggwas 0.99.13
 
+- P-values below the double range (about 1e-323), which R stores as 0,
+  keep their exact -log10(p) in a `LOG10P` column. It is taken from a
+  -log10(p) column, from p-values read as text (e.g. `1e-400`) or from a
+  `LOG10P` column next to `P`, and all plots,
+  [`top_hits()`](https://bczech.github.io/ggwas/reference/top_hits.md)
+  and [`print()`](https://rdrr.io/r/base/print.html) use it. Before,
+  these variants were dropped from the plots
+  ([\#2](https://github.com/bczech/ggwas/issues/2)).
 - [`manhattan_genes()`](https://bczech.github.io/ggwas/reference/manhattan_genes.md)
   takes gene labels from the plotted points, so labels sit on their
   peaks also with `chromosomes`, `y_truncate` and

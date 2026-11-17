@@ -186,6 +186,29 @@ column names:
 manhattan_plot(my_df, chr = "chrom", bp = "position", p = "pval")
 ```
 
+Very strong associations can have p-values below about 1e-323, which R
+stores as 0. ggwas keeps their exact -log10(p) and plots them at their
+real height if the file gives -log10(p) (a `LOG10P` column is detected
+automatically, other names need `log_p = TRUE`) or writes the p-values
+as text, such as `1e-400`:
+
+``` r
+
+extreme <- data.frame(CHR = c(1, 2, 3), BP = 1e6,
+                      LOG10P = c(400, 12, 3), SNP = c("rs1", "rs2", "rs3"))
+extreme <- as_gwas_data(extreme)
+#> Detected a -log10 p-value column (LOG10P); interpreting it as
+#> -log10(p).
+extreme$P
+#> [1] 0e+00 1e-12 1e-03
+top_hits(extreme)[, c("SNP", "P_formatted")]
+#> === Top 2 GWAS Hits ===
+#> 
+#>  SNP P        
+#>  rs1 1.00e-400
+#>  rs2 1.00e-12
+```
+
 ## Core plots
 
 ### Manhattan plot

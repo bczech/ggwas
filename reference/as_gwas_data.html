@@ -75,13 +75,18 @@ If NULL, auto-detection is attempted.</p></dd>
 
 
 <dt id="arg-log-p">log_p<a class="anchor" aria-label="anchor" href="#arg-log-p"></a></dt>
-<dd><p>If TRUE, the p-value column contains -log10(p) values that
-will be back-transformed.</p></dd>
+<dd><p>If TRUE, the p-value column contains -log10(p) values. Use
+this for p-values smaller than R can store (about 1e-323).</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A data.frame with class <code>gwas_data</code>.</p>
+    <p>A data.frame with class <code>gwas_data</code>. P-values below the double
+range are stored as <code>P = 0</code>; their exact -log10(p) is then kept in a
+<code>LOG10P</code> column, which all plots use. It comes from a -log10(p) column
+(<code>log_p = TRUE</code>), from p-values read as text (e.g. <code>"1e-400"</code>, as
+<code><a href="https://rdrr.io/pkg/data.table/man/fread.html" class="external-link">data.table::fread()</a></code> returns them), or from a <code>LOG10P</code> column next to
+the p-values.</p>
     </div>
 
     <div class="section level2">

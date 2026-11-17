@@ -37,12 +37,17 @@ as_gwas_data(
 
 - log_p:
 
-  If TRUE, the p-value column contains -log10(p) values that will be
-  back-transformed.
+  If TRUE, the p-value column contains -log10(p) values. Use this for
+  p-values smaller than R can store (about 1e-323).
 
 ## Value
 
-A data.frame with class `gwas_data`.
+A data.frame with class `gwas_data`. P-values below the double range are
+stored as `P = 0`; their exact -log10(p) is then kept in a `LOG10P`
+column, which all plots use. It comes from a -log10(p) column
+(`log_p = TRUE`), from p-values read as text (e.g. `"1e-400"`, as
+[`data.table::fread()`](https://rdrr.io/pkg/data.table/man/fread.html)
+returns them), or from a `LOG10P` column next to the p-values.
 
 ## Examples
 

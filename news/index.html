@@ -34,7 +34,8 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.99.13" id="ggwas-09913">ggwas 0.99.13<a class="anchor" aria-label="anchor" href="#ggwas-09913"></a></h2>
-<ul><li>
+<ul><li>P-values below the double range (about 1e-323), which R stores as 0, keep their exact -log10(p) in a <code>LOG10P</code> column. It is taken from a -log10(p) column, from p-values read as text (e.g. <code>1e-400</code>) or from a <code>LOG10P</code> column next to <code>P</code>, and all plots, <code><a href="../reference/top_hits.html">top_hits()</a></code> and <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> use it. Before, these variants were dropped from the plots (<a href="https://github.com/bczech/ggwas/issues/2" class="external-link">#2</a>).</li>
+<li>
 <code><a href="../reference/manhattan_genes.html">manhattan_genes()</a></code> takes gene labels from the plotted points, so labels sit on their peaks also with <code>chromosomes</code>, <code>y_truncate</code> and <code>y_metric = "beta_min"</code>, and labels of chromosomes that are not shown are dropped. Labels use a fixed seed and no overlap limit, so every run shows the same set (<a href="https://github.com/bczech/ggwas/issues/3" class="external-link">#3</a>).</li>
 </ul></div>
     <div class="section level2">

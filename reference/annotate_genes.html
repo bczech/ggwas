@@ -100,9 +100,8 @@ the most significant SNP is annotated. Default 1Mb.</p></dd>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">annotated</span> <span class="op">&lt;-</span> <span class="fu">annotate_genes</span><span class="op">(</span><span class="va">example_gwas</span>, <span class="va">genes</span>, top_n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">annotated</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html" class="external-link">is.na</a></span><span class="op">(</span><span class="va">annotated</span><span class="op">$</span><span class="va">nearest_gene</span><span class="op">)</span>, <span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>no non-missing arguments to min; returning Inf</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A gwas_data object: 0 variants across 0 chromosome</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   Min p-value: Inf</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   Min p-value: NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Lambda GC:   NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   Columns:     CHR, BP, SNP, P, BETA, SE, A1, A2, AF, nearest_gene, gene_distance</span>
 </code></pre></div>
