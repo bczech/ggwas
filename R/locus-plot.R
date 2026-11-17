@@ -61,7 +61,7 @@ locus_plot <- function(data,
     data <- as_gwas_data(data, chr = chr, bp = bp, snp = snp, p = p)
   }
 
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   reg <- .resolve_region(data, region, lead_snp, flank)
   region_chr <- reg$chr
@@ -76,7 +76,7 @@ locus_plot <- function(data,
     cli_abort("No variants found in the specified region.")
   }
 
-  region$LOG10P <- -log10(region$P)
+  region$LOG10P <- .neglog10p(region)
 
   if (!is.null(ld) && "SNP" %in% names(region)) {
     region$LD <- ld[region$SNP]

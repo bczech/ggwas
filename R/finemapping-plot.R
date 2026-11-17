@@ -55,7 +55,7 @@ finemapping_plot <- function(data,
   if (!inherits(data, "gwas_data")) {
     data <- as_gwas_data(data, chr = chr, bp = bp, snp = snp, p = p)
   }
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   if (!pip %in% names(data)) {
     cli_abort("Column {.field {pip}} (posterior inclusion probability) not found.")
@@ -72,7 +72,7 @@ finemapping_plot <- function(data,
 
   if (nrow(region) == 0) cli_abort("No variants in specified region.")
 
-  region$LOG10P <- -log10(region$P)
+  region$LOG10P <- .neglog10p(region)
   region$pip_val <- region[[pip]]
   region$pip_val[is.na(region$pip_val)] <- 0
 

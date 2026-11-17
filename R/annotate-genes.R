@@ -47,7 +47,7 @@ annotate_genes <- function(data,
     return(data)
   }
 
-  candidates <- candidates[order(candidates$P), , drop = FALSE]
+  candidates <- candidates[.order_by_p(candidates), , drop = FALSE]
   if (!is.null(clump_window)) {
     candidates <- .clump_snps(candidates, window = clump_window)
   }

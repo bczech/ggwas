@@ -50,7 +50,7 @@ architecture_plot <- function(data,
   if (!"AF" %in% names(data)) cli_abort("Column {.field AF} required.")
 
   data <- data[!is.na(data$BETA) & !is.na(data$AF) &
-                 !is.na(data$P) & data$P > 0, , drop = FALSE]
+                 .drawable_p(data), , drop = FALSE]
 
   data$MAF <- pmin(data$AF, 1 - data$AF)
   data$ABS_BETA <- abs(data$BETA)
@@ -78,7 +78,7 @@ architecture_plot <- function(data,
     ggplot2::theme(legend.position = "right")
 
   if (!is.null(label_top_n) && "SNP" %in% names(data)) {
-    top <- utils::head(data[order(data$P), ], label_top_n)
+    top <- utils::head(data[.order_by_p(data), ], label_top_n)
     plt <- plt + .snp_repel(
       aes(x = .data$MAF, y = .data$ABS_BETA, label = .data$SNP),
       data = top

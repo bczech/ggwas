@@ -131,7 +131,7 @@ trumpet_plot <- function(data,
     ggplot2::theme(legend.position = "right")
 
   if (!is.null(label_top_n) && any(!is.na(data$P)) && any(!is.na(data$SNP))) {
-    top <- utils::head(data[order(data$P), ], label_top_n)
+    top <- utils::head(data[.order_by_p(data), ], label_top_n)
     # significant hits sit near y = 0; lift labels into the open space above
     y_hi <- max(data$Y, na.rm = TRUE)
     plt <- plt + .snp_repel(

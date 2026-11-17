@@ -56,8 +56,8 @@ volcano_plot <- function(data,
     cli_abort("Effect size column (BETA) is required for volcano plots.")
   }
 
-  data <- data[!is.na(data$P) & data$P > 0 & !is.na(data$BETA), , drop = FALSE]
-  data$LOG10P <- -log10(data$P)
+  data <- data[.drawable_p(data) & !is.na(data$BETA), , drop = FALSE]
+  data$LOG10P <- .neglog10p(data)
 
   if (color_by == "significance") {
     data$sig <- ifelse(data$P < p_threshold, "significant", "nonsignificant")
@@ -110,7 +110,7 @@ volcano_plot <- function(data,
     label_data <- data[data$SNP %in% label_snps, , drop = FALSE]
   }
   if (!is.null(label_top_n)) {
-    top <- data[order(data$P), , drop = FALSE]
+    top <- data[.order_by_p(data), , drop = FALSE]
     top <- utils::head(top, label_top_n)
     label_data <- if (is.null(label_data)) top else rbind(label_data, top)
   }

@@ -77,14 +77,14 @@ circular_manhattan <- function(data,
   if (!inherits(data, "gwas_data")) {
     data <- as_gwas_data(data, chr = chr, bp = bp, snp = snp, p = p)
   }
-  data <- data[!is.na(data$P) & data$P > 0, , drop = FALSE]
+  data <- data[.drawable_p(data), , drop = FALSE]
 
   if (downsample && nrow(data) > downsample_n) {
     data <- smart_downsample(data, target_n = downsample_n,
                              keep_snps = c(highlight_snps, label_snps))
   }
 
-  data$LOG10P <- -log10(data$P)
+  data$LOG10P <- .neglog10p(data)
   max_logp <- max(data$LOG10P, na.rm = TRUE) * 1.05
 
   circ <- .compute_circular_coords(data, inner_radius, max_logp, chr_gap_fraction)
@@ -168,7 +168,7 @@ circular_manhattan <- function(data,
     label_data <- data[data$SNP %in% label_snps, , drop = FALSE]
   }
   if (!is.null(label_top_n)) {
-    top <- data[order(data$P), , drop = FALSE]
+    top <- data[.order_by_p(data), , drop = FALSE]
     top <- utils::head(top, label_top_n)
     label_data <- if (is.null(label_data)) top else rbind(label_data, top)
   }
@@ -265,11 +265,11 @@ circular_manhattan <- function(data,
     if (!inherits(d, "gwas_data")) {
       d <- as_gwas_data(d, chr = chr, bp = bp, snp = snp, p = p)
     }
-    d <- d[!is.na(d$P) & d$P > 0, , drop = FALSE]
+    d <- d[.drawable_p(d), , drop = FALSE]
     if (downsample && nrow(d) > downsample_n) {
       d <- smart_downsample(d, target_n = downsample_n)
     }
-    d$LOG10P <- -log10(d$P)
+    d$LOG10P <- .neglog10p(d)
     max_logp <- max(d$LOG10P, na.rm = TRUE) * 1.05
 
     ring_inner <- inner_radius + (r - 1) * ring_width + ring_gap

@@ -28,11 +28,16 @@ statistics from the metadata columns).}
 \item{chr, bp, snp, p, beta, se, a1, a2, af, n, info}{Column names to use.
 If NULL, auto-detection is attempted.}
 
-\item{log_p}{If TRUE, the p-value column contains -log10(p) values that
-will be back-transformed.}
+\item{log_p}{If TRUE, the p-value column contains -log10(p) values. Use
+this for p-values smaller than R can store (about 1e-323).}
 }
 \value{
-A data.frame with class \code{gwas_data}.
+A data.frame with class \code{gwas_data}. P-values below the double
+range are stored as \code{P = 0}; their exact -log10(p) is then kept in a
+\code{LOG10P} column, which all plots use. It comes from a -log10(p) column
+(\code{log_p = TRUE}), from p-values read as text (e.g. \code{"1e-400"}, as
+\code{\link[data.table:fread]{data.table::fread()}} returns them), or from a \code{LOG10P} column next to
+the p-values.
 }
 \description{
 Convert a data.frame to the standardized gwas_data format used by all

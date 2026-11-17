@@ -83,16 +83,16 @@ multitrait_manhattan <- function(...,
     if (!inherits(d, "gwas_data")) {
       d <- as_gwas_data(d, chr = chr, bp = bp, snp = snp, p = p)
     }
-    d <- d[!is.na(d$P) & d$P > 0, , drop = FALSE]
+    d <- d[.drawable_p(d), , drop = FALSE]
     if (downsample && nrow(d) > downsample_n) {
       d <- smart_downsample(d, target_n = downsample_n)
     }
+    d$LOG10P <- .neglog10p(d)
     d$trait <- nm
     d
   })
 
   combined <- do.call(rbind, all_data)
-  combined$LOG10P <- -log10(combined$P)
   combined <- add_cumulative_bp(combined)
   chr_info <- attr(combined, "chr_info")
   combined$trait <- factor(combined$trait, levels = trait_names)
@@ -143,7 +143,7 @@ multitrait_manhattan <- function(...,
         )
 
         if (!is.null(label_shared_n) && "SNP" %in% names(shared_data)) {
-          top_shared <- utils::head(shared_data[order(shared_data$P), ], label_shared_n)
+          top_shared <- utils::head(shared_data[.order_by_p(shared_data), ], label_shared_n)
           plt <- plt + .snp_repel(
             aes(x = .data$BP_CUM, y = .data$LOG10P, label = .data$SNP),
             data = top_shared, color = shared_color, fontface = "bold"

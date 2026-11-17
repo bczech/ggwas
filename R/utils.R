@@ -131,9 +131,108 @@ int_to_chr <- function(x) {
 #' data(example_gwas)
 #' calc_lambda(example_gwas$P)
 calc_lambda <- function(p) {
-  p <- p[!is.na(p) & p > 0 & p <= 1]
+  # p = 0 (below the double range) counts as the most significant, not missing
+  p <- p[!is.na(p) & p >= 0 & p <= 1]
   chisq <- qchisq(p, df = 1, lower.tail = FALSE)
   median(chisq) / qchisq(0.5, df = 1)
+}
+
+#' -log10(p) of every variant
+#'
+#' P-values below the double range (about 5e-324) are stored as 0. For those
+#' variants `as_gwas_data()` keeps the exact -log10(p) in a `LOG10P` column,
+#' and this value is used instead of `-log10(0) = Inf`.
+#' @noRd
+.neglog10p <- function(data) {
+  logp <- .safe_neglog10(data$P)
+  if ("LOG10P" %in% names(data) && is.numeric(data$LOG10P)) {
+    tiny <- !is.na(data$P) & data$P < .Machine$double.xmin &
+      is.finite(data$LOG10P)
+    logp[tiny] <- data$LOG10P[tiny]
+  }
+  logp
+}
+
+#' -log10(p) that gives NA instead of a warning for negative p
+#' @noRd
+.safe_neglog10 <- function(p) {
+  out <- rep(NA_real_, length(p))
+  ok <- !is.na(p) & p >= 0
+  out[ok] <- -log10(p[ok])
+  out
+}
+
+#' Row order from the most to the least significant variant
+#' @noRd
+.order_by_p <- function(data) {
+  order(.neglog10p(data), decreasing = TRUE)
+}
+
+#' Rows with a p-value that can be drawn on the -log10(p) scale
+#' @noRd
+.drawable_p <- function(data) {
+  is.finite(.neglog10p(data))
+}
+
+#' Read p-values, keeping -log10(p) of values below the double range
+#'
+#' `as.numeric("1e-400")` gives 0. For such strings the exponent and mantissa
+#' are read separately, so -log10(p) stays exact.
+#' @param x Numeric, character or factor vector of p-values.
+#' @return A list with `p` (numeric) and `logp` (-log10(p)).
+#' @noRd
+.parse_p <- function(x) {
+  if (is.factor(x)) x <- as.character(x)
+  if (!is.character(x)) {
+    p <- as.numeric(x)
+    return(list(p = p, logp = .safe_neglog10(p)))
+  }
+  x <- trimws(x)
+  p <- .as_number(x)
+  logp <- .safe_neglog10(p)
+  tiny <- which(!is.na(p) & p < .Machine$double.xmin)
+  if (length(tiny) > 0) {
+    m <- regmatches(x[tiny],
+                    regexec("^([0-9]+\\.?[0-9]*|\\.[0-9]+)[eE]([-+]?[0-9]+)$", x[tiny]))
+    ok <- lengths(m) == 3
+    mantissa <- as.numeric(vapply(m[ok], `[`, "", 2))
+    exponent <- as.numeric(vapply(m[ok], `[`, "", 3))
+    exact <- mantissa > 0
+    idx <- tiny[ok][exact]
+    logp[idx] <- -(log10(mantissa[exact]) + exponent[exact])
+  }
+  list(p = p, logp = logp)
+}
+
+#' Convert text to numbers; anything that is not a number becomes NA
+#' (without the coercion warning of as.numeric()).
+#' @noRd
+.as_number <- function(x) {
+  if (is.factor(x)) x <- as.character(x)
+  if (!is.character(x)) return(as.numeric(x))
+  x <- trimws(x)
+  out <- rep(NA_real_, length(x))
+  num <- grepl("^[-+]?(([0-9]+\\.?[0-9]*|\\.[0-9]+)([eE][-+]?[0-9]+)?|Inf)$", x)
+  out[num] <- as.numeric(x[num])
+  out
+}
+
+#' Format p-values, also those below the double range
+#' @param p Numeric p-values.
+#' @param logp Matching -log10(p), used where `p` is below the double range.
+#' @noRd
+.format_p <- function(p, logp = -log10(p), digits = 2) {
+  out <- formatC(p, format = "e", digits = digits)
+  tiny <- !is.na(p) & p < .Machine$double.xmin & is.finite(logp)
+  if (any(tiny)) {
+    exponent <- floor(-logp[tiny])
+    mantissa <- 10^(-logp[tiny] - exponent)
+    carry <- round(mantissa, digits) >= 10
+    mantissa[carry] <- mantissa[carry] / 10
+    exponent[carry] <- exponent[carry] + 1
+    out[tiny] <- sprintf("%.*fe%d", digits, mantissa, exponent)
+  }
+  out
 }
 
 #' Add cumulative base pair positions for genome-wide plotting

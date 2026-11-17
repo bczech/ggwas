@@ -8,9 +8,14 @@
 #'   statistics from the metadata columns).
 #' @param chr,bp,snp,p,beta,se,a1,a2,af,n,info Column names to use.
 #'   If NULL, auto-detection is attempted.
-#' @param log_p If TRUE, the p-value column contains -log10(p) values that
-#'   will be back-transformed.
-#' @return A data.frame with class `gwas_data`.
+#' @param log_p If TRUE, the p-value column contains -log10(p) values. Use
+#'   this for p-values smaller than R can store (about 1e-323).
+#' @return A data.frame with class `gwas_data`. P-values below the double
+#'   range are stored as `P = 0`; their exact -log10(p) is then kept in a
+#'   `LOG10P` column, which all plots use. It comes from a -log10(p) column
+#'   (`log_p = TRUE`), from p-values read as text (e.g. `"1e-400"`, as
+#'   [data.table::fread()] returns them), or from a `LOG10P` column next to
+#'   the p-values.
 #' @export
 #' @examples
 #' df <- data.frame(CHR = c(1, 1, 2), BP = c(1e6, 2e6, 5e6),
@@ -87,10 +92,26 @@ as_gwas_data <- function(x,
   result$CHR <- chr_to_int(result$CHR)
   result$BP <- as.integer(result$BP)
 
+  # Keep -log10(p) exact for p-values below the double range (about 5e-324),
+  # which R stores as 0: from a -log10(p) column, from p-values read as text
+  # (e.g. "1e-400"), or from an extra LOG10P column next to P.
   if (log_p) {
-    result$P <- 10^(-result$P)
+    logp <- as.numeric(result$P)
+    result$P <- 10^(-logp)
+  } else {
+    parsed <- .parse_p(result$P)
+    result$P <- parsed$p
+    logp <- parsed$logp
+    if ("LOG10P" %in% names(result)) {
+      logp_col <- .as_number(result$LOG10P)
+      fill <- !is.finite(logp) & is.finite(logp_col)
+      logp[fill] <- logp_col[fill]
+    }
   }
-  result$P <- as.numeric(result$P)
+  tiny <- !is.na(result$P) & result$P < .Machine$double.xmin & is.finite(logp)
+  if (any(tiny)) {
+    result$LOG10P <- logp
+  }
 
   if (!is.null(result$BETA)) result$BETA <- as.numeric(result$BETA)
   if (!is.null(result$SE)) result$SE <- as.numeric(result$SE)
@@ -173,10 +194,12 @@ validate_gwas_data <- function(x) {
     cli_warn("{n_na_p} NA p-value{?s} detected (will be excluded from plots).")
   }
 
-  n_zero_p <- sum(x$P == 0, na.rm = TRUE)
+  n_zero_p <- sum(x$P == 0 & !.drawable_p(x), na.rm = TRUE)
   if (n_zero_p > 0) {
-    cli_warn("{n_zero_p} p-value{?s} of exactly 0 detected. Consider setting
-             to .Machine$double.xmin.")
+    cli_warn(c(
+      "{n_zero_p} p-value{?s} of exactly 0 detected; {?it/they} will be left out of plots.",
+      "i" = "P-values below about 1e-323 cannot be stored as numbers in R. Supply -log10(p) instead ({.code log_p = TRUE}), or read the p-values as text so they are parsed exactly."
+    ))
   }
 
   n_invalid_p <- sum(x$P < 0 | x$P > 1, na.rm = TRUE)
@@ -187,16 +210,27 @@ validate_gwas_data <- function(x) {
   invisible(x)
 }
 
+#' Smallest p-value as text, exact also below the double range
+#' @noRd
+.min_p_label <- function(x) {
+  logp <- .neglog10p(x)
+  if (!any(is.finite(logp))) {
+    p <- x$P[!is.na(x$P)]
+    return(if (length(p) > 0) .format_p(min(p)) else "NA")
+  }
+  i <- which.max(replace(logp, !is.finite(logp), -Inf))
+  .format_p(x$P[i], logp[i])
+}
+
 #' @export
 print.gwas_data <- function(x, ...) {
   n <- nrow(x)
   n_chr <- length(unique(x$CHR))
-  min_p <- min(x$P, na.rm = TRUE)
   cat(sprintf(
     "A gwas_data object: %s variants across %d chromosome%s\n",
     format(n, big.mark = ","), n_chr, if (n_chr > 1) "s" else ""
   ))
-  cat(sprintf("  Min p-value: %.2e\n", min_p))
+  cat(sprintf("  Min p-value: %s\n", .min_p_label(x)))
   cat(sprintf("  Lambda GC:   %.3f\n", calc_lambda(x$P)))
   cols <- names(x)
   cat(sprintf("  Columns:     %s\n", paste(cols, collapse = ", ")))
@@ -210,6 +244,7 @@ summary.gwas_data <- function(object, ...) {
     chromosomes = sort(unique(object$CHR)),
     lambda = calc_lambda(object$P),
     min_p = min(object$P, na.rm = TRUE),
+    min_p_label = .min_p_label(object),
     n_5e8 = sum(object$P < 5e-8, na.rm = TRUE),
     n_1e5 = sum(object$P < 1e-5, na.rm = TRUE),
     beta = if ("BETA" %in% names(object)) {
@@ -228,7 +263,7 @@ print.summary.gwas_data <- function(x, ...) {
   cat(sprintf("Variants:     %s\n", format(x$n, big.mark = ",")))
   cat(sprintf("Chromosomes:  %s\n", paste(x$chromosomes, collapse = ", ")))
   cat(sprintf("Lambda GC:    %.4f\n", x$lambda))
-  cat(sprintf("Min p-value:  %.2e\n", x$min_p))
+  cat(sprintf("Min p-value:  %s\n", x$min_p_label))
   cat(sprintf("Genome-wide significant (p < 5e-8): %d\n", x$n_5e8))
   cat(sprintf("Suggestive (p < 1e-5):              %d\n", x$n_1e5))
   if (!is.null(x$beta)) {

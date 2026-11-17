@@ -119,7 +119,7 @@ get_loci <- function(data,
     return(sig)
   }
 
-  sig <- sig[order(sig$P), , drop = FALSE]
+  sig <- sig[.order_by_p(sig), , drop = FALSE]
   if (clump) {
     sig <- .clump_snps(sig, window = clump_window)
   }
