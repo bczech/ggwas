@@ -89,7 +89,7 @@ association results are the main subject of the figure.
 
 ``` r
 
-# From Bioconductor (once accepted)
+# From Bioconductor
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("ggwas")
@@ -1275,17 +1275,17 @@ sessionInfo()
 #> loaded via a namespace (and not attached):
 #>  [1] viridisLite_0.4.3           farver_2.1.2               
 #>  [3] blob_1.3.0                  Biostrings_2.80.2          
-#>  [5] S7_0.2.2                    bitops_1.1-0               
+#>  [5] S7_1.0.0                    bitops_1.1-0               
 #>  [7] fastmap_1.2.0               RCurl_1.98-1.20            
 #>  [9] GenomicAlignments_1.48.0    XML_3.99-0.25              
 #> [11] digest_0.6.39               lifecycle_1.0.5            
 #> [13] KEGGREST_1.52.2             RSQLite_3.53.3             
 #> [15] compiler_4.6.2              rlang_1.3.0                
-#> [17] sass_0.4.10                 tools_4.6.2                
+#> [17] sass_0.5.0                  tools_4.6.2                
 #> [19] yaml_2.3.12                 data.table_1.18.6.1        
 #> [21] knitr_1.52                  S4Arrays_1.12.1            
 #> [23] labeling_0.4.3              bit_4.6.0                  
-#> [25] curl_8.1.0                  DelayedArray_0.38.2        
+#> [25] curl_8.2.0                  DelayedArray_0.38.2        
 #> [27] RColorBrewer_1.1-3          abind_1.4-8                
 #> [29] BiocParallel_1.46.0         withr_3.0.3                
 #> [31] desc_1.4.3                  grid_4.6.2                 
@@ -1300,12 +1300,12 @@ sessionInfo()
 #> [49] vctrs_0.7.3                 Matrix_1.7-6               
 #> [51] jsonlite_2.0.0              bookdown_0.48              
 #> [53] bit64_4.8.6                 ggrepel_0.9.8              
-#> [55] systemfonts_1.3.3           jquerylib_0.1.4            
+#> [55] systemfonts_1.3.4           jquerylib_0.1.4            
 #> [57] glue_1.8.1                  pkgdown_2.2.1              
 #> [59] codetools_0.2-20            gtable_0.3.6               
 #> [61] BiocIO_1.22.0               UCSC.utils_1.8.0           
 #> [63] htmltools_0.5.9             R6_2.6.1                   
-#> [65] textshaping_1.0.5           evaluate_1.0.5             
+#> [65] textshaping_1.1.0           evaluate_1.0.5             
 #> [67] lattice_0.23-1              png_0.1-9                  
 #> [69] Rsamtools_2.28.0            cigarillo_1.2.1            
 #> [71] memoise_2.0.1               bslib_0.12.0               
