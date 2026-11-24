@@ -107,7 +107,7 @@ subject of the figure.
 ## Installation
 
 ```{r vig-02, eval=FALSE}
-# From Bioconductor (once accepted)
+# From Bioconductor
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 BiocManager::install("ggwas")
