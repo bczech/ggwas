@@ -90,9 +90,10 @@ breadth below.
 ## Installation
 
 ```r
-# From Bioconductor (once accepted)
+# From Bioconductor devel (ggwas will be in the release from Bioconductor 3.25)
 if (!requireNamespace("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
+BiocManager::install(version = "devel")
 BiocManager::install("ggwas")
 
 # Development version from GitHub
