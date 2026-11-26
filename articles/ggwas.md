@@ -46,16 +46,16 @@ It takes its genomic inputs as Bioconductor objects:
   [`as_granges()`](https://bczech.github.io/ggwas/reference/as_granges.md)
   converts back).
 - **Gene models** as `GRanges`, `TxDb`
-  (*[GenomicFeatures](https://bioconductor.org/packages/3.23/GenomicFeatures)*)
+  (*[GenomicFeatures](https://bioconductor.org/packages/3.24/GenomicFeatures)*)
   or `EnsDb`
-  (*[ensembldb](https://bioconductor.org/packages/3.23/ensembldb)*)
+  (*[ensembldb](https://bioconductor.org/packages/3.24/ensembldb)*)
   objects, for gene tracks, locus plots and nearest-gene labels.
 - **Annotation regions** (enhancers, eQTLs, regions to highlight) as
   `GRanges` or `GRangesList`. Files in BED, GFF/GTF, bigWig or bigBed
   format are read with `rtracklayer::import()`
-  (*[rtracklayer](https://bioconductor.org/packages/3.23/rtracklayer)*).
+  (*[rtracklayer](https://bioconductor.org/packages/3.24/rtracklayer)*).
 - **Chromosome lengths and naming** as `Seqinfo` objects
-  (*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*),
+  (*[GenomeInfoDb](https://bioconductor.org/packages/3.24/GenomeInfoDb)*),
   taken for example from a `TxDb` or a `BSgenome`.
 
 ### Related Bioconductor packages
@@ -65,12 +65,12 @@ in the graphics system they build on:
 
 | Package | GWAS plots | Graphics | Main input |
 |----|----|----|----|
-| *[ggmanh](https://bioconductor.org/packages/3.23/ggmanh)* | Manhattan (also binned), QQ | ggplot2 | data.frame, GRanges, GDS |
-| *[GWASTools](https://bioconductor.org/packages/3.23/GWASTools)* | Manhattan, QQ | base R | p-value and chromosome vectors |
-| *[karyoploteR](https://bioconductor.org/packages/3.23/karyoploteR)* | Manhattan on a karyotype ideogram | base R | GRanges |
-| *[ggbio](https://bioconductor.org/packages/3.23/ggbio)* | Manhattan (`plotGrandLinear()`) | ggplot2 | GRanges |
-| *[Gviz](https://bioconductor.org/packages/3.23/Gviz)* | p-values as a data track next to gene tracks | grid | GRanges, TxDb |
-| *[snpStats](https://bioconductor.org/packages/3.23/snpStats)* | QQ (`qq.chisq()`) | base R | chi-squared statistics |
+| *[ggmanh](https://bioconductor.org/packages/3.24/ggmanh)* | Manhattan (also binned), QQ | ggplot2 | data.frame, GRanges, GDS |
+| *[GWASTools](https://bioconductor.org/packages/3.24/GWASTools)* | Manhattan, QQ | base R | p-value and chromosome vectors |
+| *[karyoploteR](https://bioconductor.org/packages/3.24/karyoploteR)* | Manhattan on a karyotype ideogram | base R | GRanges |
+| *[ggbio](https://bioconductor.org/packages/3.24/ggbio)* | Manhattan (`plotGrandLinear()`) | ggplot2 | GRanges |
+| *[Gviz](https://bioconductor.org/packages/3.24/Gviz)* | p-values as a data track next to gene tracks | grid | GRanges, TxDb |
+| *[snpStats](https://bioconductor.org/packages/3.24/snpStats)* | QQ (`qq.chisq()`) | base R | chi-squared statistics |
 | **ggwas** | 21 types (below) | ggplot2 | data.frame, GRanges, TxDb, EnsDb, Seqinfo |
 
 `ggwas` overlaps with these packages on the Manhattan and QQ plots. It
@@ -78,8 +78,8 @@ adds Miami, locus zoom with LD and gene track, circular, enrichment and
 multi-trait Manhattan plots, PheWAS, colocalization, fine-mapping,
 genetic correlation and architecture plots, SNP density karyograms, and
 journal themes, all returning ggplot objects. Use
-*[Gviz](https://bioconductor.org/packages/3.23/Gviz)* or
-*[karyoploteR](https://bioconductor.org/packages/3.23/karyoploteR)* when
+*[Gviz](https://bioconductor.org/packages/3.24/Gviz)* or
+*[karyoploteR](https://bioconductor.org/packages/3.24/karyoploteR)* when
 you need many stacked genomic data tracks; use `ggwas` when the
 association results are the main subject of the figure.
 
@@ -545,9 +545,9 @@ labels each lead SNP with its nearest gene, found with
 [`GenomicRanges::distanceToNearest()`](https://rdrr.io/pkg/IRanges/man/nearest-methods.html).
 Gene models come from any `GRanges`, `TxDb` or `EnsDb` object. Here we
 take the GRCh38 UCSC gene models from
-*[TxDb.Hsapiens.UCSC.hg38.knownGene](https://bioconductor.org/packages/3.23/TxDb.Hsapiens.UCSC.hg38.knownGene)*
+*[TxDb.Hsapiens.UCSC.hg38.knownGene](https://bioconductor.org/packages/3.24/TxDb.Hsapiens.UCSC.hg38.knownGene)*
 and add gene symbols from
-*[org.Hs.eg.db](https://bioconductor.org/packages/3.23/org.Hs.eg.db)*:
+*[org.Hs.eg.db](https://bioconductor.org/packages/3.24/org.Hs.eg.db)*:
 
 ``` r
 
@@ -714,7 +714,7 @@ ggwas stores chromosomes as integer codes; by default 23 = X, 24 = Y and
 numbered chromosomes keep their number and the named ones (X, Y, Z, W,
 MT, …) follow the last autosome. A `Seqinfo` can come from a `TxDb`,
 `EnsDb` or `BSgenome` of that organism. With internet access,
-*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*
+*[GenomeInfoDb](https://bioconductor.org/packages/3.24/GenomeInfoDb)*
 can also fetch it from NCBI or UCSC by assembly name, which is the
 preferred way because nothing has to be typed by hand.
 [`keepStandardChromosomes()`](https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html)
@@ -1081,7 +1081,7 @@ snp_density(example_gwas, bin_size = 5e6,
 
 Any `Seqinfo` works, so other genomes need no extra data in ggwas. Take
 it from the organism’s `TxDb`, `EnsDb` or `BSgenome` package, or let
-*[GenomeInfoDb](https://bioconductor.org/packages/3.23/GenomeInfoDb)*
+*[GenomeInfoDb](https://bioconductor.org/packages/3.24/GenomeInfoDb)*
 fetch it from UCSC or NCBI (this needs internet access, so the chunk is
 not run here):
 

@@ -55,7 +55,7 @@ Czech</h4>
                   <a class="author_email" href="mailto:#"></a><a href="mailto:bartosz.w.czech@gmail.com" class="email">bartosz.w.czech@gmail.com</a>
       
                   
-            <h4 data-toc-skip class="date">2026-11-24</h4>
+            <h4 data-toc-skip class="date">2026-11-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/bczech/ggwas/blob/main/vignettes/ggwas.Rmd" class="external-link"><code>vignettes/ggwas.Rmd</code></a></small>
       <div class="d-none name"><code>ggwas.Rmd</code></div>
@@ -115,17 +115,17 @@ every plot function accept both; <code><a href="../reference/as_granges.html">as
 back).</li>
 <li>
 <strong>Gene models</strong> as <code>GRanges</code>,
-<code>TxDb</code> (<em><a href="https://bioconductor.org/packages/3.23/GenomicFeatures" class="external-link">GenomicFeatures</a></em>)
-or <code>EnsDb</code> (<em><a href="https://bioconductor.org/packages/3.23/ensembldb" class="external-link">ensembldb</a></em>)
+<code>TxDb</code> (<em><a href="https://bioconductor.org/packages/3.24/GenomicFeatures" class="external-link">GenomicFeatures</a></em>)
+or <code>EnsDb</code> (<em><a href="https://bioconductor.org/packages/3.24/ensembldb" class="external-link">ensembldb</a></em>)
 objects, for gene tracks, locus plots and nearest-gene labels.</li>
 <li>
 <strong>Annotation regions</strong> (enhancers, eQTLs, regions to
 highlight) as <code>GRanges</code> or <code>GRangesList</code>. Files in
 BED, GFF/GTF, bigWig or bigBed format are read with
-<code>rtracklayer::import()</code> (<em><a href="https://bioconductor.org/packages/3.23/rtracklayer" class="external-link">rtracklayer</a></em>).</li>
+<code>rtracklayer::import()</code> (<em><a href="https://bioconductor.org/packages/3.24/rtracklayer" class="external-link">rtracklayer</a></em>).</li>
 <li>
 <strong>Chromosome lengths and naming</strong> as
-<code>Seqinfo</code> objects (<em><a href="https://bioconductor.org/packages/3.23/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>),
+<code>Seqinfo</code> objects (<em><a href="https://bioconductor.org/packages/3.24/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>),
 taken for example from a <code>TxDb</code> or a
 <code>BSgenome</code>.</li>
 </ul>
@@ -150,37 +150,37 @@ and in the graphics system they build on:</p>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><em><a href="https://bioconductor.org/packages/3.23/ggmanh" class="external-link">ggmanh</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/ggmanh" class="external-link">ggmanh</a></em></td>
 <td>Manhattan (also binned), QQ</td>
 <td>ggplot2</td>
 <td>data.frame, GRanges, GDS</td>
 </tr>
 <tr class="even">
-<td><em><a href="https://bioconductor.org/packages/3.23/GWASTools" class="external-link">GWASTools</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/GWASTools" class="external-link">GWASTools</a></em></td>
 <td>Manhattan, QQ</td>
 <td>base R</td>
 <td>p-value and chromosome vectors</td>
 </tr>
 <tr class="odd">
-<td><em><a href="https://bioconductor.org/packages/3.23/karyoploteR" class="external-link">karyoploteR</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/karyoploteR" class="external-link">karyoploteR</a></em></td>
 <td>Manhattan on a karyotype ideogram</td>
 <td>base R</td>
 <td>GRanges</td>
 </tr>
 <tr class="even">
-<td><em><a href="https://bioconductor.org/packages/3.23/ggbio" class="external-link">ggbio</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/ggbio" class="external-link">ggbio</a></em></td>
 <td>Manhattan (<code>plotGrandLinear()</code>)</td>
 <td>ggplot2</td>
 <td>GRanges</td>
 </tr>
 <tr class="odd">
-<td><em><a href="https://bioconductor.org/packages/3.23/Gviz" class="external-link">Gviz</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/Gviz" class="external-link">Gviz</a></em></td>
 <td>p-values as a data track next to gene tracks</td>
 <td>grid</td>
 <td>GRanges, TxDb</td>
 </tr>
 <tr class="even">
-<td><em><a href="https://bioconductor.org/packages/3.23/snpStats" class="external-link">snpStats</a></em></td>
+<td><em><a href="https://bioconductor.org/packages/3.24/snpStats" class="external-link">snpStats</a></em></td>
 <td>QQ (<code>qq.chisq()</code>)</td>
 <td>base R</td>
 <td>chi-squared statistics</td>
@@ -197,8 +197,8 @@ and in the graphics system they build on:</p>
 QQ plots. It adds Miami, locus zoom with LD and gene track, circular,
 enrichment and multi-trait Manhattan plots, PheWAS, colocalization,
 fine-mapping, genetic correlation and architecture plots, SNP density
-karyograms, and journal themes, all returning ggplot objects. Use <em><a href="https://bioconductor.org/packages/3.23/Gviz" class="external-link">Gviz</a></em> or
-<em><a href="https://bioconductor.org/packages/3.23/karyoploteR" class="external-link">karyoploteR</a></em>
+karyograms, and journal themes, all returning ggplot objects. Use <em><a href="https://bioconductor.org/packages/3.24/Gviz" class="external-link">Gviz</a></em> or
+<em><a href="https://bioconductor.org/packages/3.24/karyoploteR" class="external-link">karyoploteR</a></em>
 when you need many stacked genomic data tracks; use <code>ggwas</code>
 when the association results are the main subject of the figure.</p>
 </div>
@@ -579,8 +579,8 @@ for supplementary figures:</p>
 gene, found with <code><a href="https://rdrr.io/pkg/IRanges/man/nearest-methods.html" class="external-link">GenomicRanges::distanceToNearest()</a></code>. Gene
 models come from any <code>GRanges</code>, <code>TxDb</code> or
 <code>EnsDb</code> object. Here we take the GRCh38 UCSC gene models from
-<em><a href="https://bioconductor.org/packages/3.23/TxDb.Hsapiens.UCSC.hg38.knownGene" class="external-link">TxDb.Hsapiens.UCSC.hg38.knownGene</a></em>
-and add gene symbols from <em><a href="https://bioconductor.org/packages/3.23/org.Hs.eg.db" class="external-link">org.Hs.eg.db</a></em>:</p>
+<em><a href="https://bioconductor.org/packages/3.24/TxDb.Hsapiens.UCSC.hg38.knownGene" class="external-link">TxDb.Hsapiens.UCSC.hg38.knownGene</a></em>
+and add gene symbols from <em><a href="https://bioconductor.org/packages/3.24/org.Hs.eg.db" class="external-link">org.Hs.eg.db</a></em>:</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">TxDb.Hsapiens.UCSC.hg38.knownGene</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">org.Hs.eg.db</span><span class="op">)</span></span>
@@ -719,7 +719,7 @@ and 26 = MT, as in human data. For other organisms, pass the genome’s
 chromosomes keep their number and the named ones (X, Y, Z, W, MT, …)
 follow the last autosome. A <code>Seqinfo</code> can come from a
 <code>TxDb</code>, <code>EnsDb</code> or <code>BSgenome</code> of that
-organism. With internet access, <em><a href="https://bioconductor.org/packages/3.23/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>
+organism. With internet access, <em><a href="https://bioconductor.org/packages/3.24/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>
 can also fetch it from NCBI or UCSC by assembly name, which is the
 preferred way because nothing has to be typed by hand.
 <code><a href="https://rdrr.io/pkg/GenomeInfoDb/man/seqlevels-wrappers.html" class="external-link">keepStandardChromosomes()</a></code> drops the unplaced scaffolds
@@ -1024,7 +1024,7 @@ uniformly:</p>
 </h4>
 <p>Any <code>Seqinfo</code> works, so other genomes need no extra data
 in ggwas. Take it from the organism’s <code>TxDb</code>,
-<code>EnsDb</code> or <code>BSgenome</code> package, or let <em><a href="https://bioconductor.org/packages/3.23/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>
+<code>EnsDb</code> or <code>BSgenome</code> package, or let <em><a href="https://bioconductor.org/packages/3.24/GenomeInfoDb" class="external-link">GenomeInfoDb</a></em>
 fetch it from UCSC or NCBI (this needs internet access, so the chunk is
 not run here):</p>
 <div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
