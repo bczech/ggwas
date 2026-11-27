@@ -108,7 +108,7 @@ genetic_correlation <- function(rg_matrix,
   }
 
   upper_mask <- match(as.character(plot_df$trait1), traits) >
-    (n + 1 - match(as.character(plot_df$trait2), traits))
+    match(as.character(plot_df$trait2), traits)
   plot_df$rg[upper_mask] <- NA
 
   plot_df$label <- ""
